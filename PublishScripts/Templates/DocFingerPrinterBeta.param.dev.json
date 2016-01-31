@@ -1,0 +1,32 @@
+{
+  "siteName": {
+    "value": "DocFingerPrinterBeta"
+  },
+  "hostingPlanName": {
+    "value": "DocFingerPrinterAppServicePlan"
+  },
+  "siteLocation": {
+    "value": "East US"
+  },
+  "sku": {
+    "value": "Free"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "serverName": {
+    "value": "fingerprinterdb"
+  },
+  "serverLocation": {
+    "value": "East US"
+  },
+  "administratorLogin": {
+    "value": "tomaziobeaster"
+  },
+  "administratorLoginPassword": {
+    "value": "Mickey21"
+  },
+  "databaseName": {
+    "value": "DocFingerPrinterBeta_db"
+  }
+}
