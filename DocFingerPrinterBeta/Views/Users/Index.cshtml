@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Search for users</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        Username: @Html.TextBox("SearchString") <br />
+        <input type="submit" value="Search" />
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                Username
+            </th>
+            <th>
+                Number of uploads
+            </th>
+        </tr>
+    </table>
+}
+
