@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.HtmlControls;
 
 namespace DocFingerPrinterBeta.Controllers
 {
@@ -13,6 +14,7 @@ namespace DocFingerPrinterBeta.Controllers
         // GET: ImageUpload
         public ActionResult Index()
         {
+            ViewBag.Title = "Upload Page";
             return View();
         }
 
@@ -48,10 +50,10 @@ namespace DocFingerPrinterBeta.Controllers
                     byte[] array = ms.GetBuffer();
                 }
 
+                //Show user encoded file
+                return base.File("C:\\Users\\Public\\test.png", "image/png");
             }
 
-            //file has been uploaded now do opensteg on image to mark it
-            //then redirect back to where ever
             return RedirectToAction("Index", "ImageUpload");
         }
     }
