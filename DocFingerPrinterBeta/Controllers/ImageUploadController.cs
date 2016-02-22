@@ -1,4 +1,5 @@
-﻿using DocFingerPrinterBeta.Models;
+﻿using DocFingerPrinterBeta.DAL;
+using DocFingerPrinterBeta.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
