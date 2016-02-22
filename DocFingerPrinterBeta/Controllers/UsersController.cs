@@ -12,7 +12,7 @@ namespace DocFingerPrinterBeta.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Users Page";
-            var m = "s";
+
             return View();
         }
     }

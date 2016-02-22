@@ -14,18 +14,6 @@ namespace DocFingerPrinterBeta.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            var proc1 = new ProcessStartInfo();
-            string anyCommand = "mkdir test";
-            proc1.UseShellExecute = true;
-
-            proc1.WorkingDirectory = @"C:\Users\Public";
-
-            proc1.FileName = @"C:\Windows\System32\cmd.exe";
-
-            proc1.Arguments = "/c " + anyCommand;
-            proc1.WindowStyle = ProcessWindowStyle.Hidden;
-            Process.Start(proc1);
-
             return View();
         }
         
