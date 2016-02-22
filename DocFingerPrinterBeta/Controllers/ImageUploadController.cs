@@ -32,7 +32,7 @@ namespace DocFingerPrinterBeta.Controllers
 
                 var proc1 = new ProcessStartInfo();
                 string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
-                proc1.UseShellExecute = true;
+                proc1.UseShellExecute = false;
 
                 proc1.WorkingDirectory = @"C:\Users\Public";
 
