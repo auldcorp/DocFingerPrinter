@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(DocFingerPrinterBeta.Startup))]
+[assembly: OwinStartup("DocFingerPrinterConfig", typeof(DocFingerPrinterBeta.Startup))]
 
 namespace DocFingerPrinterBeta
 {
