@@ -1,6 +1,6 @@
-﻿using DocFingerPrinterBeta.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -10,38 +10,45 @@ namespace DocFingerPrinterBeta.Controllers
 {
     public class ImageUploadController : Controller
     {
-
-        private MyDbContext db = new MyDbContext();
         // GET: ImageUpload
         public ActionResult Index()
         {
             return View();
         }
 
+
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
             if (file != null)
             {
-                string image = System.IO.Path.GetFileName(file.FileName);
-                string path = System.IO.Path.Combine(
-                                       Server.MapPath(""), image);
-                
+                string image = Path.GetFileName(file.FileName);
+                string path = Path.Combine(
+                                       Server.MapPath("~/images/profile"), image);
+
                 file.SaveAs(path);
-                Image newImage = null;
+
+                string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
+                string secretTextPath = Path.Combine(Server.MapPath("~/texts"), "secretText.txt");
+
+                var proc1 = new ProcessStartInfo();
+                string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
+                proc1.UseShellExecute = true;
+
+                proc1.WorkingDirectory = @"C:\Users\Public";
+
+                proc1.FileName = @"C:\Windows\System32\cmd.exe";
+
+                proc1.Arguments = "/c " + embedCommand;
+                proc1.WindowStyle = ProcessWindowStyle.Hidden;
+                Process.Start(proc1);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
                     file.InputStream.CopyTo(ms);
                     byte[] array = ms.GetBuffer();
-                    newImage = new Image();
-                    newImage.imageBinary = array;
-                    newImage.filename = image;
-                    db.SaveChanges();
                 }
 
-                
             }
-            db.Images.Add
 
             //file has been uploaded now do opensteg on image to mark it
             //then redirect back to where ever
