@@ -17,6 +17,7 @@ namespace DocFingerPrinterBeta.Controllers
         // GET: ImageUpload
         public ActionResult Index()
         {
+            ViewBag.Title = "Upload Page";
             return View();
         }
 
