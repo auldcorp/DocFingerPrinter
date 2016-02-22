@@ -15,22 +15,21 @@ namespace DocFingerPrinterBeta.Controllers
             return View();
         }
 
-
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
             if (file != null)
             {
                 string image = System.IO.Path.GetFileName(file.FileName);
                 string path = System.IO.Path.Combine(
-                                       Server.MapPath("~/images/profile"), image);
+                                       Server.MapPath(""), image);
                 
                 file.SaveAs(path);
-
                 using (MemoryStream ms = new MemoryStream())
                 {
                     file.InputStream.CopyTo(ms);
                     byte[] array = ms.GetBuffer();
                 }
+                
 
             }
 
