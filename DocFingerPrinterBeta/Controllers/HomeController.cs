@@ -20,20 +20,32 @@ namespace DocFingerPrinterBeta.Controllers
             string ExePath2 = "cmd";
 
 
-            Process myProcess = new Process();
-            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(ExePath2);
+            //Process myProcess = new Process();
+            //ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(ExePath2);
 
-            myProcessStartInfo.Arguments = filePath2;//"C:\\survival_analysis_UAT.pl";
-            myProcessStartInfo.UseShellExecute = false;
-            myProcessStartInfo.RedirectStandardOutput = true;
-            myProcessStartInfo.RedirectStandardError = true;
-            myProcessStartInfo.RedirectStandardInput = true;
+            //myProcessStartInfo.Arguments = filePath2;//"C:\\survival_analysis_UAT.pl";
+            //myProcessStartInfo.UseShellExecute = false;
+            //myProcessStartInfo.RedirectStandardOutput = true;
+            //myProcessStartInfo.RedirectStandardError = true;
+            //myProcessStartInfo.RedirectStandardInput = true;
 
 
-            myProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            myProcessStartInfo.CreateNoWindow = true;
-            myProcess.StartInfo = myProcessStartInfo;
-            myProcess.Start();
+            //myProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //myProcessStartInfo.CreateNoWindow = true;
+            //myProcess.StartInfo = myProcessStartInfo;
+            //myProcess.Start();
+
+            var proc1 = new ProcessStartInfo();
+            string anyCommand = "mkdir test";
+            proc1.UseShellExecute = true;
+
+            proc1.WorkingDirectory = @"C:\Users\Public";
+
+            proc1.FileName = @"C:\Windows\System32\cmd.exe";
+
+            proc1.Arguments = "/c " + anyCommand;
+            proc1.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(proc1);
 
             return View();
         }
