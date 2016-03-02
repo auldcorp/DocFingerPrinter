@@ -7,10 +7,10 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
-    public enum CommandPromptStatus { Success, Error}
+    public enum CommandPromptExitStatus { Success, Error}
     public static class CommandPrompt
     {
-        public static CommandPromptStatus ExecuteCommand(string command, string workingDirectory)
+        public static CommandPromptExitStatus ExecuteCommand(string command, string workingDirectory)
         {
             var procedure = new ProcessStartInfo();
 
@@ -20,8 +20,14 @@ namespace DocFingerPrinterBeta.Static_Classes
             procedure.Arguments = "/c " + command;
             procedure.WindowStyle = ProcessWindowStyle.Hidden;
 
-            Process.Start(procedure);
-            return CommandPromptStatus.Success;
+            var process = new Process() { StartInfo = procedure };
+            process.Start();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+                return CommandPromptExitStatus.Error;
+
+            return CommandPromptExitStatus.Success;
         }
     }
 }
