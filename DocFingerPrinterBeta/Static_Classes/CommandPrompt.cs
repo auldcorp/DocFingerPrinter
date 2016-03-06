@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocFingerPrinterBeta.Responses;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
-    public enum CommandPromptExitStatus { Success, Error}
+
     public static class CommandPrompt
     {
-        public static CommandPromptExitStatus ExecuteCommand(string command, string workingDirectory)
+        public static ResultStatus ExecuteCommand(string command, string workingDirectory)
         {
             var procedure = new ProcessStartInfo();
 
@@ -25,9 +26,9 @@ namespace DocFingerPrinterBeta.Static_Classes
             process.WaitForExit();
 
             if (process.ExitCode != 0)
-                return CommandPromptExitStatus.Error;
+                return ResultStatus.Error;
 
-            return CommandPromptExitStatus.Success;
+            return ResultStatus.Success;
         }
     }
 }

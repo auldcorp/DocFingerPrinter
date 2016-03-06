@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using DocFingerPrinterBeta.Providers;
 using DocFingerPrinterBeta.Models;
+using DocFingerPrinterBeta.DAL;
 
 namespace DocFingerPrinterBeta
 {

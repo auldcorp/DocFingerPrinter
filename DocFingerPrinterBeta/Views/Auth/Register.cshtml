@@ -1,0 +1,26 @@
+﻿@model DocFingerPrinterBeta.ViewModels.RegisterModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+@Html.ValidationSummary(false)
+
+@using (Html.BeginForm())
+{
+    @Html.EditorForModel()
+    <p>
+        <button type="submit">Register</button>
+    </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
