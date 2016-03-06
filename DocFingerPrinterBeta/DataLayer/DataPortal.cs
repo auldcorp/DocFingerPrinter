@@ -38,7 +38,7 @@ namespace DocFingerPrinterBeta.DataLayer
 
                 try
                 {
-                    _dbContext.Images.Add(newImage);
+                    _dbContext.Image.Add(newImage);
                     _dbContext.SaveChanges();
                 }
                 catch (Exception e)

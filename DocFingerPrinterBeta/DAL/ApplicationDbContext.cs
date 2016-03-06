@@ -22,7 +22,7 @@ namespace DocFingerPrinterBeta.DAL
             return new ApplicationDbContext();
         }
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<Image> Image { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

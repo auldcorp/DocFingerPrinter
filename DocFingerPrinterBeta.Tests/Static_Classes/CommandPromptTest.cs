@@ -1,4 +1,5 @@
-﻿using DocFingerPrinterBeta.Static_Classes;
+﻿using DocFingerPrinterBeta.Responses;
+using DocFingerPrinterBeta.Static_Classes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,16 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string rmCommand = "rmdir /S /Q test";
             string workindDir = "C:\\Users\\Public";
 
-            CommandPromptExitStatus cmStatus = CommandPrompt.ExecuteCommand(command, workindDir);
+            ResultStatus cmStatus = CommandPrompt.ExecuteCommand(command, workindDir);
 
             Assert.IsNotNull(cmStatus);
-            Assert.AreEqual(CommandPromptExitStatus.Success, cmStatus);
+            Assert.AreEqual(ResultStatus.Success, cmStatus);
             Assert.IsTrue(Directory.Exists(workindDir + "\\test"));
 
             //Clean-Up
-            CommandPromptExitStatus rmStatus = CommandPrompt.ExecuteCommand(rmCommand, workindDir);
+            ResultStatus rmStatus = CommandPrompt.ExecuteCommand(rmCommand, workindDir);
             Assert.IsNotNull(rmStatus);
-            Assert.AreEqual(CommandPromptExitStatus.Success, rmStatus);
+            Assert.AreEqual(ResultStatus.Success, rmStatus);
             Assert.IsFalse(Directory.Exists(workindDir + "\\test"));
         }
     }
