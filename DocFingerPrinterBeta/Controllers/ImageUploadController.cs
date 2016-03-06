@@ -1,5 +1,7 @@
 ﻿using DocFingerPrinterBeta.DAL;
 using DocFingerPrinterBeta.Models;
+using DocFingerPrinterBeta.Responses;
+using DocFingerPrinterBeta.ServiceLayer;
 using DocFingerPrinterBeta.Static_Classes;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace DocFingerPrinterBeta.Controllers
 {
     public class ImageUploadController : Controller
     {
-        private MyDbContext db = new MyDbContext();
+        private FingerPrinterService _fps = new FingerPrinterService();
         // GET: ImageUpload
         public ActionResult Index()
         {
@@ -30,31 +32,22 @@ namespace DocFingerPrinterBeta.Controllers
             {
                 string image = Path.GetFileName(file.FileName);
                 string path = Path.Combine(Server.MapPath("~/images/profile"), image);
+
                 file.SaveAs(path);
 
-                string dataToEmbed = "this is a test by chaz";
-                string outputFile = "C:\\Users\\Public\\test.png";
-                OpenStego.EmbedData(dataToEmbed, path, outputFile);
+                string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
+                string secretTextPath = Path.Combine(Server.MapPath("~/texts"), "secretText.txt");
+                string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
+                string workingDirectory = @"C:\Users\Public";
 
-                using (MemoryStream ms = new MemoryStream())
+                BaseResponse fileUploadResponse = _fps.FileUpload(embedCommand, workingDirectory, file, image);
+                if (fileUploadResponse.Status == ResultStatus.Error)
                 {
-                    Image newImage = new Image();
-                    file.InputStream.CopyTo(ms);
-                    byte[] array = ms.GetBuffer();
-                    newImage.imageBinary = array;
-                    newImage.filename = image;
-                    try
-                    {
-                        db.Images.Add(newImage);
-                        db.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.Write(e);
-                    }
+                    //do error handling here
                 }
-
             }
+            
+
             ViewBag.Link = "C:\\Users\\Public\\test.png";
             ViewBag.Hidden = "";
 

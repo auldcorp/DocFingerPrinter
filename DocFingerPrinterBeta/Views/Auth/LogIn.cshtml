@@ -1,0 +1,18 @@
+﻿@model DocFingerPrinterBeta.ViewModels.LogInModel
+@{
+    ViewBag.Title = "Log In";
+}
+
+<h2>Log In</h2>
+
+@Html.ValidationSummary(true)
+
+@using (Html.BeginForm())
+{
+    @Html.EditorForModel()
+    <p>
+        <button type="submit">Log In</button>
+    </p>
+}
+
+<p>Don't have an account? <a href="@Url.Action("register")">Register</a></p>
