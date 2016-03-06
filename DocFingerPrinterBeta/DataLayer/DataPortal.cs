@@ -23,10 +23,9 @@ namespace DocFingerPrinterBeta.DataLayer
             _dbContext = new ApplicationDbContext();
         }
 
-        public ResultStatus FileUpload(string command, string workingDirectory, HttpPostedFileBase file, string image)
+        public ResultStatus FileUpload(string imagePath, HttpPostedFileBase file, string imageName)
         {
-
-            var result = CommandPrompt.ExecuteCommand(command, workingDirectory);
+            var result = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -34,7 +33,7 @@ namespace DocFingerPrinterBeta.DataLayer
                 file.InputStream.CopyTo(ms);
                 byte[] array = ms.GetBuffer();
                 newImage.imageBinary = array;
-                newImage.filename = image;
+                newImage.filename = imageName;
 
                 try
                 {

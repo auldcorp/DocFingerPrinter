@@ -30,17 +30,12 @@ namespace DocFingerPrinterBeta.Controllers
         {
             if (file != null)
             {
-                string image = Path.GetFileName(file.FileName);
-                string path = Path.Combine(Server.MapPath("~/images/profile"), image);
+                string imageName = Path.GetFileName(file.FileName);
+                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
 
-                file.SaveAs(path);
+                file.SaveAs(imagePath);
 
-                string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
-                string secretTextPath = Path.Combine(Server.MapPath("~/texts"), "secretText.txt");
-                string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
-                string workingDirectory = @"C:\Users\Public";
-
-                BaseResponse fileUploadResponse = _fps.FileUpload(embedCommand, workingDirectory, file, image);
+                BaseResponse fileUploadResponse = _fps.FileUpload(imageName, file, imageName);
                 if (fileUploadResponse.Status == ResultStatus.Error)
                 {
                     //do error handling here

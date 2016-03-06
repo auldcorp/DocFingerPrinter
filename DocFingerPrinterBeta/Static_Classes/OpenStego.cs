@@ -1,4 +1,5 @@
 ﻿using DocFingerPrinterBeta.Models;
+using DocFingerPrinterBeta.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace DocFingerPrinterBeta.Static_Classes
     {
         public static string OPEN_STEGO_PATH = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
 
-        public static void EmbedData(string embeddedData, string inputFilePath, string outputFilePath)
+        public static ResultStatus EmbedData(string embeddedData, string inputFilePath, string outputFilePath)
         {
             string workingDirectory = @"C:\Users\Public";
             File.WriteAllText(workingDirectory + @"\tempTextFile.txt", embeddedData);
@@ -22,16 +23,17 @@ namespace DocFingerPrinterBeta.Static_Classes
             var result = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
 
             File.Delete(workingDirectory + @"\tempTextFile.txt");
+            return result;
         }
 
-        public static void EmbedDataFromFile(string embeddedDataFilePath, string inputFilePath, string outputFilePath)
+        public static ResultStatus EmbedDataFromFile(string embeddedDataFilePath, string inputFilePath, string outputFilePath)
         {
             string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
             string embedCommand = "java -jar " + openstegoPath + " embed -a RandomLSB -mf \"" + embeddedDataFilePath
                + "\" -cf \"" + inputFilePath + "\" -sf \"" + outputFilePath + "\"";
             string workingDirectory = @"C:\Users\Public";
 
-            var result = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+            return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
         }
     }
 }

@@ -20,13 +20,13 @@ namespace DocFingerPrinterBeta.ServiceLayer
              _dataPortal = new DataPortal();
         }
 
-        public BaseResponse FileUpload(string command, string workingDirectory, HttpPostedFileBase file, string image)
+        public BaseResponse FileUpload(string imagePath, HttpPostedFileBase file, string imageName)
         {
             try
             {
                 return new BaseResponse
                 {
-                    Status = _dataPortal.FileUpload(command, workingDirectory, file, image),
+                    Status = _dataPortal.FileUpload(imagePath, file, imageName),
                     Message = "success"
                 };
             }
@@ -35,7 +35,7 @@ namespace DocFingerPrinterBeta.ServiceLayer
                 return new BaseResponse
                 {
                     Status = ResultStatus.Error,
-                    Message = "An error occured"
+                    Message = e.ToString()
                 };
             }
         }
@@ -57,7 +57,7 @@ namespace DocFingerPrinterBeta.ServiceLayer
                 {
                     Users = null,
                     Status = ResultStatus.Error,
-                    Message = "An error occured"
+                    Message = e.ToString()
                 };
             }
         }
