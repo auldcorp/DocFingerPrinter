@@ -22,6 +22,8 @@ namespace DocFingerPrinterBeta.Static_Classes
 
             var process = new Process() { StartInfo = procedure };
             process.Start();
+
+            //Should probably have this timeout and return error
             process.WaitForExit();
 
             if (process.ExitCode != 0)

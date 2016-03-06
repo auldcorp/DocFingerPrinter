@@ -255,6 +255,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Static_Classes\CommandPrompt.cs" />
+    <Compile Include="Static_Classes\OpenStego.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

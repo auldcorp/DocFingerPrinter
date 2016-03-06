@@ -38,7 +38,7 @@ namespace DocFingerPrinterBeta.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.ToString());
+            Assert.AreEqual("System.Web.Mvc.ViewResult", result.ToString());
         }
     }
 }

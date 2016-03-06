@@ -30,15 +30,11 @@ namespace DocFingerPrinterBeta.Controllers
             {
                 string image = Path.GetFileName(file.FileName);
                 string path = Path.Combine(Server.MapPath("~/images/profile"), image);
-
                 file.SaveAs(path);
 
-                string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
-                string secretTextPath = Path.Combine(Server.MapPath("~/texts"), "secretText.txt");
-                string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
-                string workingDirectory = @"C:\Users\Public";
-
-                var result = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+                string dataToEmbed = "this is a test by chaz";
+                string outputFile = "C:\\Users\\Public\\test.png";
+                OpenStego.EmbedData(dataToEmbed, path, outputFile);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
