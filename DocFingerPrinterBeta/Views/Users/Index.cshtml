@@ -1,4 +1,4 @@
-﻿
+﻿@model DocFingerPrinterBeta.ViewModels.UsersViewModel
 @{
     ViewBag.Title = "Users";
 }
@@ -19,6 +19,17 @@
                 Number of uploads
             </th>
         </tr>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @user.UserName
+                </td>
+                <td>
+                    @user.NumberOfImagesMarked
+                </td>
+            </tr>            
+        }
     </table>
 }
 

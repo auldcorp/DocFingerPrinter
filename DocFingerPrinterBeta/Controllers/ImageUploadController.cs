@@ -1,5 +1,8 @@
 ﻿using DocFingerPrinterBeta.DAL;
 using DocFingerPrinterBeta.Models;
+using DocFingerPrinterBeta.Responses;
+using DocFingerPrinterBeta.ServiceLayer;
+using DocFingerPrinterBeta.Static_Classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,24 +16,24 @@ namespace DocFingerPrinterBeta.Controllers
 {
     public class ImageUploadController : Controller
     {
-        private MyDbContext db = new MyDbContext();
+        private FingerPrinterService _fps = new FingerPrinterService();
         // GET: ImageUpload
         public ActionResult Index()
         {
             ViewBag.Title = "Upload Page";
+            ViewBag.Link = "";
+            ViewBag.Hidden = "display: none";
             return View();
         }
-
 
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
             if (file != null)
             {
-                string image = Path.GetFileName(file.FileName);
-                string path = Path.Combine(
-                                       Server.MapPath("~/images/profile"), image);
+                string imageName = Path.GetFileName(file.FileName);
+                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
 
-                file.SaveAs(path);
+                file.SaveAs(imagePath);
 
                 string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
                 string secretTextPath = Path.Combine(Server.MapPath("~/texts"), "secretText.txt");
@@ -38,7 +41,7 @@ namespace DocFingerPrinterBeta.Controllers
 
                 var proc1 = new ProcessStartInfo();
                 string embedCommand = "java -jar " +openstegoPath + " embed -a RandomLSB -mf \"" +secretTextPath + "\" -cf \"" +path + "\" -sf \"C:\\Users\\Public\\test.png\"";
-                proc1.UseShellExecute = false;
+                proc1.UseShellExecute = true;
 
                 proc1.WorkingDirectory = @"C:\Users\Public";
 
@@ -62,17 +65,15 @@ namespace DocFingerPrinterBeta.Controllers
                     }
                     catch (Exception e)
                     {
-                        Console.Write(e);
+                    //do error handling here
                     }
                 }
 
-                //Show user encoded file
-                return base.File("C:\\Users\\Public\\test.png", "image/png");
-            }
 
-            //file has been uploaded now do opensteg on image to mark it
-            //then redirect back to where ever
-            return RedirectToAction("Index", "ImageUpload");
+            ViewBag.Link = "C:\\Users\\Public\\test.png";
+            ViewBag.Hidden = "";
+
+            return View("Index");
         }
     }
 }
