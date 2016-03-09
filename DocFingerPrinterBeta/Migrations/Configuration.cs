@@ -1,5 +1,6 @@
 namespace DocFingerPrinterBeta.Migrations
 {
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -27,6 +28,15 @@ namespace DocFingerPrinterBeta.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+
+
+            context.Roles.AddOrUpdate(
+                r => r.Id,
+                new Role { Name = "Admin", Id = 1},
+                new Role { Name = "User", Id = 2 }
+            );
+
         }
     }
 }
