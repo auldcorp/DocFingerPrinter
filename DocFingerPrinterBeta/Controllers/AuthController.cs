@@ -26,6 +26,7 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult LogIn(string returnUrl)
         {
             var model = new LogInModel
@@ -37,6 +38,8 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> LogIn(LogInModel model)
         {
             if (!ModelState.IsValid)
@@ -69,6 +72,8 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterModel model)
         {
             if (!ModelState.IsValid)
@@ -85,6 +90,9 @@ namespace DocFingerPrinterBeta.Controllers
 
             if (result.Succeeded)
             {
+                var currentUser = userManager.FindByName(user.UserName);
+                var roleResult = userManager.AddToRole(currentUser.Id, "Admin");
+
                 await SignIn(user);
                 return RedirectToAction("index", "home");
             }
@@ -97,6 +105,8 @@ namespace DocFingerPrinterBeta.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [HttpPost]
         private async Task SignIn(User user)
         {
             var identity = await userManager.CreateIdentityAsync(
