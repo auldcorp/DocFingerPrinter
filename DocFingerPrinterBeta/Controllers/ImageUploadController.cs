@@ -30,7 +30,16 @@ namespace DocFingerPrinterBeta.Controllers
         {
             if (file != null)
             {
+                string imageName = Path.GetFileName(file.FileName);
+                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
 
+                file.SaveAs(imagePath);
+
+                BaseResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName);
+                if (fileUploadResponse.Status == ResultStatus.Error)
+                {
+                    //do error handling here 
+                }
             }
 
             ViewBag.Link = "C:\\Users\\Public\\test.png";
