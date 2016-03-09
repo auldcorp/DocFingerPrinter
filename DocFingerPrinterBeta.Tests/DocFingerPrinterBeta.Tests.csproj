@@ -119,6 +119,7 @@
     <Compile Include="Controllers\HomeControllerTest.cs" />
     <Compile Include="Controllers\ValuesControllerTest.cs" />
     <Compile Include="ServiceLayer\FingerPrinterServiceTest.cs" />
+    <Compile Include="Static_Classes\OpenStegoTest.cs" />
     <Compile Include="Static_Classes\CommandPromptTest.cs" />
   </ItemGroup>
   <ItemGroup>
