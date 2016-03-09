@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
+    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="True" 
                 CompactPaneLength="50" OpenPaneLength="185">
         <SplitView.Pane>
             <StackPanel Background="Gray">
@@ -16,23 +16,24 @@
                      Width="50" Height="50" Background="Transparent" Click="HamburgerButton_Click" />
                     <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button Name="ToggleConnection" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50" Height="50" Background="Transparent"/>
+                <StackPanel Name="embedPanel" Background="DarkGray" Orientation="Horizontal">
+                    <Button Name="embedSignature" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
+                            Height="50" Background="Transparent" Click="embedSignature_Click"/>
                     <TextBlock Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="searchPanel" Background="DarkGray" Orientation="Horizontal">
+                <StackPanel Name="searchPanel" Orientation="Horizontal">
                     <Button x:Name="searchImage" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                            Width="50" Height="50" Background="Transparent"  />
+                            Width="50" Height="50" Background="Transparent" Click="searchImage_Click" />
                     <TextBlock Text="Search Image" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="filesPanel" Orientation="Horizontal">
-                    <Button x:Name="EnumerateChannels" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
-                            Width="50" Height="50" Background="Transparent"  />
+                    <Button x:Name="markedFiles" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
+                            Width="50" Height="50" Background="Transparent" Click="markedFiles_Click" />
                     <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="settingPanel" Orientation="Horizontal">
-                    <Button x:Name="Settings" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
-                            Width="50" Height="50" Background="Transparent"  />
+                    <Button x:Name="settings" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
+                            Width="50" Height="50" Background="Transparent" Click="settings_Click"  />
                     <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>
@@ -44,20 +45,27 @@
                     <RowDefinition Height="8*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <ScrollViewer Name="messageList" Grid.Row="1" HorizontalAlignment="Center"  VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Hidden">
-                    <TextBlock Text="Document Finger Printer" FontSize="20"/>
-                </ScrollViewer>
-                <Popup Grid.Row="0" Name="SettingsPresenter" IsOpen="False" Grid.RowSpan="3" >
+                <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left"  />
+                    <Line Fill="Black" Height="4" Width="200"/>
+                    <TextBlock />
+                    <Button Name="imageChooser" Content="Choose Image" Width="200" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
                     <StackPanel>
-                        
+                        <TextBlock Text="Search Page" FontSize="20"/>
                     </StackPanel>
                 </Popup>
-                <Popup Grid.Row="0" Name="EnumChannelPresenter" IsOpen="False" Grid.RowSpan="3"  >
+                <Popup Grid.Row="1" Name="MarkedFilesPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
                     <StackPanel>
-                        
+                        <TextBlock Text="Mark Files Page" FontSize="20"/>
                     </StackPanel>
                 </Popup>
-
+                <Popup Grid.Row="1" Name="SettingsPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center" >
+                    <StackPanel>
+                        <TextBlock Text="Settings Page" FontSize="20"/>
+                    </StackPanel>
+                </Popup>
             </Grid>
         </SplitView.Content>
     </SplitView>
