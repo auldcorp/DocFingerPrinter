@@ -242,6 +242,10 @@
     <Compile Include="DAL\ApplicationDbContext.cs" />
     <Compile Include="DataLayer\DataPortal.cs" />
     <Compile Include="HelperClasses\UserClaimsIdentityFactory.cs" />
+    <Compile Include="Migrations\201603222049525_Initial.cs" />
+    <Compile Include="Migrations\201603222049525_Initial.Designer.cs">
+      <DependentUpon>201603222049525_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\UserClaim.cs" />
@@ -363,6 +367,11 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603222049525_Initial.resx">
+      <DependentUpon>201603222049525_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

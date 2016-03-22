@@ -38,7 +38,7 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [AllowAnonymous]
         public async Task<ActionResult> LogIn(LogInModel model)
         {
