@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Drawing;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
@@ -34,6 +35,37 @@ namespace DocFingerPrinterBeta.Static_Classes
             string workingDirectory = @"C:\Users\Public";
 
             return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+        }
+
+        public static void WatermarkImage(int corner, string mark, string inputFilePath, string outputFilePath)
+        {
+            /*todo: accomodate for buffers on edges when placing watermark
+                accomodate for color of image/watermark            
+            */
+            using (Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath))
+            using (Graphics imageGraphics = Graphics.FromImage(image))
+            {
+                Point point;
+                if (corner == 0)
+                    point = new Point(0, 0);
+                else if (corner == 1)
+                    //needs to accomodate buffer
+                    point = new Point(image.Width - 50, 0);
+                else if (corner == 2)
+                    //needs to accomodate buffer
+                    point = new Point(0, image.Height - 20);
+                else if (corner == 3)
+                    //needs to accomodate buffer
+                    point = new Point(image.Width - 50, image.Height - 20);
+                else
+                    point = new Point(image.Width / 2, image.Height / 2);
+
+                using (Font arial = new Font("Arial", 10))
+                {
+                    imageGraphics.DrawString(mark, arial, Brushes.White, point);
+                }
+                image.Save(outputFilePath);
+            }
         }
     }
 }
