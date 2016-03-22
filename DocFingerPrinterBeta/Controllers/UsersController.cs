@@ -13,6 +13,7 @@ namespace DocFingerPrinterBeta.Controllers
     {
         private FingerPrinterService _fps = new FingerPrinterService();
         // GET: Users
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var model = new UsersViewModel();

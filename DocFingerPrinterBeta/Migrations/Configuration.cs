@@ -29,14 +29,11 @@ namespace DocFingerPrinterBeta.Migrations
             //    );
             //
 
-
-
             context.Roles.AddOrUpdate(
                 r => r.Id,
                 new Role { Name = "Admin", Id = 1},
                 new Role { Name = "User", Id = 2 }
             );
-
         }
     }
 }

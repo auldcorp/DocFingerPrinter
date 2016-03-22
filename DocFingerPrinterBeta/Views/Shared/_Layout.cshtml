@@ -41,6 +41,10 @@
         @RenderBody()
         <hr />
         <footer>
+            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                <text>@HttpContext.Current.User.Identity.Name logged in</text>
+            }
             <!--<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>-->
         </footer>
     </div>
