@@ -7,19 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="True" 
-                CompactPaneLength="50" OpenPaneLength="185">
+    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
+                CompactPaneLength="50" OpenPaneLength="185" >
         <SplitView.Pane>
-            <StackPanel Background="Gray">
+            <StackPanel Background="Gray" Margin="0,0,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                     Width="50" Height="50" Background="Transparent" Click="HamburgerButton_Click" />
+                     Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" />
                     <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="embedPanel" Background="DarkGray" Orientation="Horizontal">
                     <Button Name="embedSignature" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
                             Height="50" Background="Transparent" Click="embedSignature_Click"/>
-                    <TextBlock Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
+                    <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="searchPanel" Orientation="Horizontal">
                     <Button x:Name="searchImage" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
@@ -45,15 +45,29 @@
                     <RowDefinition Height="8*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center">
-                    <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left"  />
+                <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center" >
+                    <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
                     <Line Fill="Black" Height="4" Width="200"/>
                     <TextBlock />
-                    <Button Name="imageChooser" Content="Choose Image" Width="200" HorizontalAlignment="Center"/>
+                    <Button Name="imageChooser" Content="Choose File" HorizontalAlignment="Stretch" Click="imageChooser_Click"/>
+                    <TextBlock />
+                    <TextBlock />
+                    <TextBlock Text="Choose location of signature:" FontSize="16" HorizontalAlignment="Left"  />
+                    <TextBlock />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Top" FontSize="12" VerticalAlignment="Center" Width="25"/>
+                        <RadioButton Name="topButton" MinWidth="30"  />
+                        <TextBlock Text="Bottom" FontSize="12" VerticalAlignment="Center" Width="45"/>
+                        <RadioButton Name="bottomButton" MinWidth="30" />
+                        <TextBlock Text="Left" FontSize="12" VerticalAlignment="Center" Width="25"/>
+                        <RadioButton Name="leftButton"  MinWidth="30"/>
+                        <TextBlock Text="Right" FontSize="12" VerticalAlignment="Center" Width="30"/>
+                        <RadioButton Name="rightButton"  MinWidth="30"/>
+                    </StackPanel>
                 </StackPanel>
                 <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
                     <StackPanel>
-                        <TextBlock Text="Search Page" FontSize="20"/>
+                        <TextBlock Text="Search Page" FontSize="20" />
                     </StackPanel>
                 </Popup>
                 <Popup Grid.Row="1" Name="MarkedFilesPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
