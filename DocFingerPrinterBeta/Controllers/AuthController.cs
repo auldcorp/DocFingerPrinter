@@ -72,7 +72,7 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterModel model)
         {
