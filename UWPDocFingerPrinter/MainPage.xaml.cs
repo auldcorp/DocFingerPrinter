@@ -5,7 +5,10 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -83,6 +86,43 @@ namespace UWPDocFingerPrinter
             SettingsPresenter.IsOpen = true;
             MarkedFilesPresenter.IsOpen = false;
             embedContent.Opacity = 0;
+        }
+
+        private async void imageChooser_Click(object sender, RoutedEventArgs e)
+        {
+            if (MainPage.EnsureUnsnapped())
+            {
+                FileOpenPicker openPicker = new FileOpenPicker();
+                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                openPicker.FileTypeFilter.Add(".jpg");
+                openPicker.FileTypeFilter.Add(".jpeg");
+                openPicker.FileTypeFilter.Add(".png");
+
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    // Application now has read/write access to the picked file
+                    //OutputTextBlock.Text = "Picked photo: " + file.Name;
+                }
+                else
+                {
+                    //OutputTextBlock.Text = "Operation cancelled.";
+                }
+            }
+        }
+
+        internal static bool EnsureUnsnapped()
+        {
+            // FilePicker APIs will not work if the application is in a snapped state.
+            // If an app wants to show a FilePicker while snapped, it must attempt to unsnap first
+            bool unsnapped = ((ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap());
+            if (!unsnapped)
+            {
+                //NotifyUser("Cannot unsnap the sample.", NotifyType.StatusMessage);
+            }
+
+            return unsnapped;
         }
     }
 }
