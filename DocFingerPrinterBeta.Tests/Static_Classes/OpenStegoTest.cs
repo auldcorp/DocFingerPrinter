@@ -80,16 +80,5 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             OpenStego.WatermarkImage(3, "test", inputFilePath, outputFilePath);
 
         }
-
-        [TestMethod]
-        public void WaterMarkImageCenterTest()
-        {
-            string inputFilePath = "C:\\Users\\Public\\test.png";
-            string outputFilePath = "C:\\Users\\Public\\center.png";
-
-            OpenStego.WatermarkImage(5, "test", inputFilePath, outputFilePath);
-
-        }
-
     }
 }
