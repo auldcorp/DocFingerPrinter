@@ -66,6 +66,15 @@ namespace DocFingerPrinterBeta.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        public ActionResult LogOut()
+        {
+            var authManager = GetAuthenticationManager();
+            authManager.SignOut();
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
