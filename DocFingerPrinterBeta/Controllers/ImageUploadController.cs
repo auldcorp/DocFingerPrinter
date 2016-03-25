@@ -26,6 +26,7 @@ namespace DocFingerPrinterBeta.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
             if (file != null)

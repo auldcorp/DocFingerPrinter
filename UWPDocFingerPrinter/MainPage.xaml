@@ -17,23 +17,23 @@
                     <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="embedPanel" Background="DarkGray" Orientation="Horizontal">
-                    <Button Name="embedSignature" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
-                            Height="50" Background="Transparent" Click="embedSignature_Click"/>
+                    <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
+                            Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
                     <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="searchPanel" Orientation="Horizontal">
-                    <Button x:Name="searchImage" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                            Width="50" Height="50" Background="Transparent" Click="searchImage_Click" />
+                    <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
+                            Width="50" Height="50" Background="Transparent" Click="searchImageIcon_Click" />
                     <TextBlock Text="Search Image" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="filesPanel" Orientation="Horizontal">
-                    <Button x:Name="markedFiles" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
-                            Width="50" Height="50" Background="Transparent" Click="markedFiles_Click" />
+                    <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
+                            Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" />
                     <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="settingPanel" Orientation="Horizontal">
-                    <Button x:Name="settings" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
-                            Width="50" Height="50" Background="Transparent" Click="settings_Click"  />
+                    <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
+                            Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click"  />
                     <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>
@@ -49,21 +49,32 @@
                     <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
                     <Line Fill="Black" Height="4" Width="200"/>
                     <TextBlock />
-                    <Button Name="imageChooser" Content="Choose File" HorizontalAlignment="Stretch" Click="imageChooser_Click"/>
-                    <TextBlock />
+                    <Button Name="imageChooserButton" Content="Choose File" HorizontalAlignment="Stretch" Click="imageChooserButton_Click"/>
+                    <TextBlock Name="fileNameTextBlock" />
                     <TextBlock />
                     <TextBlock Text="Choose location of signature:" FontSize="16" HorizontalAlignment="Left"  />
                     <TextBlock />
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Top" FontSize="12" VerticalAlignment="Center" Width="25"/>
-                        <RadioButton Name="topButton" MinWidth="30"  />
-                        <TextBlock Text="Bottom" FontSize="12" VerticalAlignment="Center" Width="45"/>
-                        <RadioButton Name="bottomButton" MinWidth="30" />
-                        <TextBlock Text="Left" FontSize="12" VerticalAlignment="Center" Width="25"/>
-                        <RadioButton Name="leftButton"  MinWidth="30"/>
-                        <TextBlock Text="Right" FontSize="12" VerticalAlignment="Center" Width="30"/>
-                        <RadioButton Name="rightButton"  MinWidth="30"/>
-                    </StackPanel>
+                    <Grid Height="Auto" Width="Auto">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Top" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="0"  Name="topButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="1"  Text="Bottom" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="1"  Name="bottomButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="2"  Name="leftButton"  MinWidth="20" Width="20" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="0" Grid.Column="3"  Text="Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="3"  Name="rightButton"  MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                    </Grid>
+                    <Button Name="embedSignatureButton" Content="Start Embedding" HorizontalAlignment="Stretch" Click="embedSignatureButton_Click" Margin="0,100,0,0"/>
                 </StackPanel>
                 <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
                     <StackPanel>

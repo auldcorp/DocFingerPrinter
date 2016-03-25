@@ -29,8 +29,7 @@ namespace DocFingerPrinterBeta.Static_Classes
 
         public static ResultStatus EmbedDataFromFile(string embeddedDataFilePath, string inputFilePath, string outputFilePath)
         {
-            string openstegoPath = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
-            string embedCommand = "java -jar " + openstegoPath + " embed -a RandomLSB -mf \"" + embeddedDataFilePath
+            string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + embeddedDataFilePath
                + "\" -cf \"" + inputFilePath + "\" -sf \"" + outputFilePath + "\"";
             string workingDirectory = @"C:\Users\Public";
 

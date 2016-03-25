@@ -21,12 +21,13 @@ using Windows.UI.Xaml.Navigation;
 
 namespace UWPDocFingerPrinter
 {
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        private StorageFile fileToEmbed;
         private SolidColorBrush DarkGrayBrush = new SolidColorBrush(Colors.DarkGray);
         private SolidColorBrush GrayBrush = new SolidColorBrush(Colors.Gray);
 
@@ -40,7 +41,7 @@ namespace UWPDocFingerPrinter
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void embedSignature_Click(object sender, RoutedEventArgs e)
+        private void embedSignatureIcon_Click(object sender, RoutedEventArgs e)
         {
             embedPanel.Background = DarkGrayBrush;
             settingPanel.Background = GrayBrush;
@@ -52,7 +53,7 @@ namespace UWPDocFingerPrinter
             embedContent.Opacity = 1;
         }
 
-        private void searchImage_Click(object sender, RoutedEventArgs e)
+        private void searchImageIcon_Click(object sender, RoutedEventArgs e)
         {
             embedPanel.Background = GrayBrush;
             settingPanel.Background = GrayBrush;
@@ -64,7 +65,7 @@ namespace UWPDocFingerPrinter
             embedContent.Opacity = 0;
         }
 
-        private void markedFiles_Click(object sender, RoutedEventArgs e)
+        private void markedFilesIcon_Click(object sender, RoutedEventArgs e)
         {
             embedPanel.Background = GrayBrush;
             settingPanel.Background = GrayBrush;
@@ -76,7 +77,7 @@ namespace UWPDocFingerPrinter
             embedContent.Opacity = 0;
         }
 
-        private void settings_Click(object sender, RoutedEventArgs e)
+        private void settingsIcon_Click(object sender, RoutedEventArgs e)
         {
             embedPanel.Background = GrayBrush;
             settingPanel.Background = DarkGrayBrush;
@@ -88,7 +89,7 @@ namespace UWPDocFingerPrinter
             embedContent.Opacity = 0;
         }
 
-        private async void imageChooser_Click(object sender, RoutedEventArgs e)
+        private async void imageChooserButton_Click(object sender, RoutedEventArgs e)
         {
             if (MainPage.EnsureUnsnapped())
             {
@@ -99,15 +100,15 @@ namespace UWPDocFingerPrinter
                 openPicker.FileTypeFilter.Add(".jpeg");
                 openPicker.FileTypeFilter.Add(".png");
 
-                StorageFile file = await openPicker.PickSingleFileAsync();
-                if (file != null)
+                fileToEmbed = await openPicker.PickSingleFileAsync();
+                if (fileToEmbed != null)
                 {
                     // Application now has read/write access to the picked file
-                    //OutputTextBlock.Text = "Picked photo: " + file.Name;
+                    fileNameTextBlock.Text = "Picked photo: " + fileToEmbed.Name;
                 }
                 else
                 {
-                    //OutputTextBlock.Text = "Operation cancelled.";
+                    fileNameTextBlock.Text = "Operation cancelled.";
                 }
             }
         }
@@ -123,6 +124,12 @@ namespace UWPDocFingerPrinter
             }
 
             return unsnapped;
+        }
+
+        private async void embedSignatureButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (fileToEmbed != null)
+                await HttpRequest.UploadFile(fileToEmbed);
         }
     }
 }
