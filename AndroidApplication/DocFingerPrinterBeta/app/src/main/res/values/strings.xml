@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">DocFingerPrinterBeta</string>
     <string name="action_settings">Settings</string>
+
+    <string name="log_in">Log In</string>
+    <string name="location_upload">Enter a location</string>
+    <string name="browse_upload">Browse</string>
+    <string name="upload">Upload</string>
 </resources>

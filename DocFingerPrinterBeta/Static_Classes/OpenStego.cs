@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
@@ -43,27 +44,24 @@ namespace DocFingerPrinterBeta.Static_Classes
             */
             using (Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath))
             using (Graphics imageGraphics = Graphics.FromImage(image))
+            using (Font font = new Font("Arial", 10))
             {
-                Point point;
-                if (corner == 0)
-                    point = new Point(0, 0);
-                else if (corner == 1)
-                    //needs to accomodate buffer
-                    point = new Point(image.Width - 50, 0);
-                else if (corner == 2)
-                    //needs to accomodate buffer
-                    point = new Point(0, image.Height - 20);
-                else if (corner == 3)
-                    //needs to accomodate buffer
-                    point = new Point(image.Width - 50, image.Height - 20);
-                else
-                    point = new Point(image.Width / 2, image.Height / 2);
+                Point point = new Point(0, 0);
+                var size = imageGraphics.MeasureString(mark, font);
 
-                using (Font arial = new Font("Arial", 10))
-                {
-                    imageGraphics.DrawString(mark, arial, Brushes.White, point);
-                }
+                if (corner == 1)
+                    point = new Point(image.Width - (int)size.Width, 0);
+                else if (corner == 2)
+                    point = new Point(0, image.Height - (int)size.Height);
+                else if (corner == 3)
+                    point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
+
+                var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
+                imageGraphics.FillRectangle(Brushes.White, rect);
+                imageGraphics.DrawString(mark, font, Brushes.Black, point);
                 image.Save(outputFilePath);
+
+                //give option to maximize contrast of text and or choose color of text/box
             }
         }
     }

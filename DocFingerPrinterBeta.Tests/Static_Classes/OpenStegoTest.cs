@@ -17,8 +17,8 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         public void EmbedDataTest()
         {
             string embededData = "test";
-            string inputFilePath = "C:\\Users\\Public\\small mario.png";
-            string outputFilePath = "C:\\Users\\Public";
+            string inputFilePath = "C:\\Users\\Public\\small-mario.png";
+            string outputFilePath = "C:\\Users\\Public\\test.png";
 
             ResultStatus osStatus = OpenStego.EmbedData(embededData, inputFilePath, outputFilePath);
 
@@ -30,8 +30,8 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         public void EmbededDataFromFileTest()
         {
             string embeddedDataFilePath = "C:\\Users\\Public\\secretText.txt";
-            string inputFilePath = "C:\\Users\\Public\\small mario.png";
-            string outputFilePath = "C:\\Users\\Public";
+            string inputFilePath = "C:\\Users\\Public\\small-mario.png";
+            string outputFilePath = "C:\\Users\\Public\\test.png";
 
             ResultStatus osStatus = OpenStego.EmbedDataFromFile(embeddedDataFilePath, inputFilePath, outputFilePath);
 
@@ -80,16 +80,5 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             OpenStego.WatermarkImage(3, "test", inputFilePath, outputFilePath);
 
         }
-
-        [TestMethod]
-        public void WaterMarkImageCenterTest()
-        {
-            string inputFilePath = "C:\\Users\\Public\\test.png";
-            string outputFilePath = "C:\\Users\\Public\\center.png";
-
-            OpenStego.WatermarkImage(5, "test", inputFilePath, outputFilePath);
-
-        }
-
     }
 }
