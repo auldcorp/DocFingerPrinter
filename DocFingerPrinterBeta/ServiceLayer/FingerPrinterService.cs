@@ -61,5 +61,49 @@ namespace DocFingerPrinterBeta.ServiceLayer
                 };
             }
         }
+
+        public UsersResponse GetUser(int userId)
+        {
+            try
+            {
+                return new UsersResponse
+                {
+                    Users = _dataPortal.GetUser(userId),
+                    Status = ResultStatus.Success,
+                    Message = "success"
+                };
+            }
+            catch (Exception e)
+            {
+                return new UsersResponse
+                {
+                    Users = null,
+                    Status = ResultStatus.Error,
+                    Message = e.ToString()
+                };
+            }
+        }
+
+        public ImagesResponse GetUserImages(int userId)
+        {
+            try
+            {
+                return new ImagesResponse
+                {
+                    Images = _dataPortal.GetUserImages(userId),
+                    Status = ResultStatus.Success,
+                    Message = "success"
+                };
+            }
+            catch (Exception e)
+            {
+                return new ImagesResponse
+                {
+                    Images = null,
+                    Status = ResultStatus.Error,
+                    Message = e.ToString()
+                };
+            }
+        }
     }
 }

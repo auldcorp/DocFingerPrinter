@@ -1,0 +1,13 @@
+﻿@model DocFingerPrinterBeta.ViewModels.UserInfoViewModel
+@{
+    ViewBag.Title = "User Info";
+}
+
+<h2>User Info for @Model.User.UserName</h2>
+
+@foreach (byte[] image in Model.Images)
+{
+    string base64String = Convert.ToBase64String(image);
+
+    <img src="@String.Format("data:image/png;base64,{0}", base64String)" />
+}

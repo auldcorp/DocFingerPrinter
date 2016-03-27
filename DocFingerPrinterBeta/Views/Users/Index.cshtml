@@ -23,7 +23,7 @@
         {
             <tr>
                 <td>
-                    @user.UserName
+                    @Html.ActionLink(@user.UserName, "UserInfo") 
                 </td>
                 <td>
                     @user.NumberOfImagesMarked

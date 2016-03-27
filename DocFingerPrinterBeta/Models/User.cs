@@ -12,7 +12,6 @@ namespace DocFingerPrinterBeta.Models
 {
     public class User : IdentityUser<int, UserLogin, UserRole, UserClaim>
     {
-        public int NumberOfImagesMarked { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, int> manager, string authenticationType)
         {
@@ -21,5 +20,7 @@ namespace DocFingerPrinterBeta.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public int NumberOfImagesMarked { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,6 +35,7 @@
                     <li>@Html.ActionLink("Upload", "Index", "ImageUpload", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Users", "Index", "Users", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Login", "LogIn", "Auth", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("UserInfo", "UserInfo", "Users", new { id = HttpContext.Current.User.Identity.GetUserId<int>(), area = "" }, null)</li>
                     
                 </ul>
             </div>

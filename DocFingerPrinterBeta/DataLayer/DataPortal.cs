@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace DocFingerPrinterBeta.DataLayer
 {
@@ -35,6 +36,7 @@ namespace DocFingerPrinterBeta.DataLayer
                 byte[] array = ms.GetBuffer();
                 newImage.imageBinary = array;
                 newImage.filename = imageName;
+                newImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
 
                 try
                 {
@@ -54,6 +56,21 @@ namespace DocFingerPrinterBeta.DataLayer
         {
             List<User> users = _dbContext.Users.ToList();
             return users;
+        }
+
+        public List<User> GetUser(int id)
+        {
+            var user = _dbContext.Users.Find(id);
+            List<User> users = new List<User>();
+            users.Add(user);
+            return users;
+        }
+
+        public List<byte[]> GetUserImages(int userId)
+        {
+            List<System.Drawing.Image> actualImages = new List<System.Drawing.Image>();
+            var imagesAsBinary = _dbContext.Image.Where(x => x.UserId == userId).Select(x => x.imageBinary).ToList();
+            return imagesAsBinary;
         }
     }
 }
