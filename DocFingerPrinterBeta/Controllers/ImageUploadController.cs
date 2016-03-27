@@ -31,6 +31,7 @@ namespace DocFingerPrinterBeta.Controllers
         [Authorize(Roles = "User, Admin")]
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
+            Tesseract.TesseractEngine test = new Tesseract.TesseractEngine("falseDataPath", "eng");
             if (file != null)
             {
                 string imageName = Path.GetFileName(file.FileName);
