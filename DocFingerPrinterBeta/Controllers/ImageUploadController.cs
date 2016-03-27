@@ -18,6 +18,7 @@ namespace DocFingerPrinterBeta.Controllers
     {
         private FingerPrinterService _fps = new FingerPrinterService();
         // GET: ImageUpload
+        [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
             ViewBag.Title = "Upload Page";
@@ -27,6 +28,7 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User, Admin")]
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
             if (file != null)

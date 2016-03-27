@@ -100,7 +100,7 @@ namespace DocFingerPrinterBeta.Controllers
             if (result.Succeeded)
             {
                 var currentUser = userManager.FindByName(user.UserName);
-                var roleResult = userManager.AddToRole(currentUser.Id, "Admin");
+                var roleResult = userManager.AddToRole(currentUser.Id, "User");
 
                 await SignIn(user);
                 return RedirectToAction("index", "home");
