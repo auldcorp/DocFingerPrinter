@@ -7,18 +7,19 @@
 
 <div>
     @using (Html.BeginForm("FileUpload", "ImageUpload", FormMethod.Post,
-                                 new { enctype = "multipart/form-data" }))
+                                         new { enctype = "multipart/form-data" }))
     {
         <label for="file">Upload Image:</label>
-                <input type="file" name="file" id="file" style="width: 100%;" />
-                <form action="">
-                    <input type="radio" name="position" value="0" /> Top Left<br />
-                    <input type="radio" name="position" value="1" /> Top Right<br />
-                    <input type="radio" name="position" value="2" /> Bottom Left<br />
-                    <input type="radio" name="position" value="3" /> Bottom Right<br />
-                    <input type="radio" name="position" value="4" /> Center<br />
-                </form>
-                <input type="submit" value="Upload" class="submit" />
+        <input type="file" name="file" id="file" style="width: 100%;"/>
+        <input type="radio" name="position1" value="0" />
+        <label for="position1">Top Left</label><br/>
+        <input type="radio" name="position2" value="0" />
+        <label for="position2">Top Right</label><br />
+        <input type="radio" name="position3" value="0" />
+        <label for="position3">Bottom Left</label><br />
+        <input type="radio" name="position4" value="0" />
+        <label for="position4">Bottom Right Left</label><br />
+        <button type = "submit" class="submit">Upload</button>
     }
 </div>
 <div>

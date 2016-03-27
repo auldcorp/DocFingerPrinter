@@ -27,11 +27,13 @@ namespace DocFingerPrinterBeta.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(Roles = "User, Admin")]
         public ActionResult FileUpload(HttpPostedFileBase file)
         {
-            Tesseract.TesseractEngine test = new Tesseract.TesseractEngine("falseDataPath", "eng");
+            
+            var datapath = HttpRuntime.AppDomainAppPath;
+            Tesseract.TesseractEngine test = new Tesseract.TesseractEngine(datapath, "eng");
             if (file != null)
             {
                 string imageName = Path.GetFileName(file.FileName);
