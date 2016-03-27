@@ -23,9 +23,10 @@ namespace DocFingerPrinterBeta.DataLayer
             _dbContext = new ApplicationDbContext();
         }
 
-        public ResultStatus FileUpload(string imagePath, HttpPostedFileBase file, string imageName)
+        public ResultStatus FileUpload(string imagePath, HttpPostedFileBase file, string imageName, int radio)
         {
             var result = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
+            OpenStego.WatermarkImage(radio, "test", imagePath, "C:\\Users\\Public\\test.png");
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -45,6 +46,7 @@ namespace DocFingerPrinterBeta.DataLayer
                     Console.Write(e);
                 }
             }
+
             return result;
         }
 

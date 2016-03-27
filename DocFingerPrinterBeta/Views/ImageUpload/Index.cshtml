@@ -11,14 +11,13 @@
     {
         <label for="file">Upload Image:</label>
         <input type="file" name="file" id="file" style="width: 100%;"/>
-        <input type="radio" name="position1" value="0" />
-        <label for="position1">Top Left</label><br/>
-        <input type="radio" name="position2" value="0" />
-        <label for="position2">Top Right</label><br />
-        <input type="radio" name="position3" value="0" />
-        <label for="position3">Bottom Left</label><br />
-        <input type="radio" name="position4" value="0" />
-        <label for="position4">Bottom Right Left</label><br />
+
+        <label>@Html.RadioButton("radio", 1)Top Right</label><br/>
+        <label>@Html.RadioButton("radio", 3)Bottom Right</label><br/>
+        <label>@Html.RadioButton("radio", 2)Bottom Left</label><br/>
+        <label>@Html.RadioButton("radio", 4)Top left</label><br/>
+
+
         <button type = "submit" class="submit">Upload</button>
     }
 </div>

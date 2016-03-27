@@ -29,11 +29,15 @@ namespace DocFingerPrinterBeta.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
-        public ActionResult FileUpload(HttpPostedFileBase file)
+        public ActionResult FileUpload(HttpPostedFileBase file, int radio)
         {
             
             var datapath = HttpRuntime.AppDomainAppPath;
             Tesseract.TesseractEngine test = new Tesseract.TesseractEngine(datapath, "eng");
+            test.SetVariable("tessedit_char_whitelist", "abcdefghijklmnopqrstuvwxyz");
+            
+
+
             if (file != null)
             {
                 string imageName = Path.GetFileName(file.FileName);
@@ -41,7 +45,7 @@ namespace DocFingerPrinterBeta.Controllers
 
                 file.SaveAs(imagePath);
 
-                BaseResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName);
+                BaseResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
                 if (fileUploadResponse.Status == ResultStatus.Error)
                 {
                     //do error handling here 
