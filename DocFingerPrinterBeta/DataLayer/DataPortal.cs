@@ -37,6 +37,9 @@ namespace DocFingerPrinterBeta.DataLayer
                 newImage.imageBinary = array;
                 newImage.filename = imageName;
                 newImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
+                var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
+                var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+                currentUser.NumberOfImagesMarked++;
 
                 try
                 {
