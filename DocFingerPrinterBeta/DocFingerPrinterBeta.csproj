@@ -332,14 +332,30 @@
     <Content Include="x86\libtesseract304.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="tessdata\eng.cube.fold" />
-    <Content Include="tessdata\eng.cube.lm" />
-    <Content Include="tessdata\eng.cube.nn" />
-    <Content Include="tessdata\eng.cube.params" />
-    <Content Include="tessdata\eng.cube.size" />
-    <Content Include="tessdata\eng.cube.word-freq" />
-    <Content Include="tessdata\eng.tesseract_cube.nn" />
-    <Content Include="tessdata\eng.traineddata" />
+    <Content Include="tessdata\eng.cube.fold">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.cube.lm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.cube.nn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.cube.params">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.cube.size">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.cube.word-freq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.tesseract_cube.nn">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\docfingerprint - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\DocFingerPrinterBeta.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
