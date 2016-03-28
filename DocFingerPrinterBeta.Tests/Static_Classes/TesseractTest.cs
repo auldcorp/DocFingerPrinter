@@ -65,5 +65,16 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             int expected = 286;
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void convertFullMarkToInt()
+        {
+            string str = "|///||||/#|||/|/";
+            int[] actual = TesseractDetection.convertFullMarkToInt(str);
+            int[] expected = new int[2];
+            expected[0] = 286;
+            expected[1] = 58;
+            Assert.AreEqual(expected.ToString(), actual.ToString());
+        }
     }
 }
