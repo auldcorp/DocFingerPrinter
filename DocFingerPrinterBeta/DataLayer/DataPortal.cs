@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Drawing;
+using System.Data.Entity;
 
 namespace DocFingerPrinterBeta.DataLayer
 {
@@ -29,9 +30,10 @@ namespace DocFingerPrinterBeta.DataLayer
         {
             var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
             var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+            currentUser.NumberOfImagesMarked++;
 
             var result = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
-            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked + 1);
+            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
             OpenStego.WatermarkImage(radio, signature, imagePath, "C:\\Users\\Public\\test.png");
 
             //get marked image binary
@@ -43,10 +45,9 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.imageBinary = markedImageBinary;
             markedImage.filename = imageName;
             markedImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
-            
+            markedImage.User = currentUser;
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
-            currentUser.NumberOfImagesMarked++;
-
+            
             //create, initialize new original Image then save to db
             using (MemoryStream ms2 = new MemoryStream())
             {
@@ -55,9 +56,8 @@ namespace DocFingerPrinterBeta.DataLayer
                 byte[] array = ms2.GetBuffer();
                 newImage.imageBinary = array;
                 newImage.filename = imageName;
-                newImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
-                currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
-                currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+                newImage.UserId = currentUserId;
+
                 currentUser.NumberOfImagesMarked++;
 
                 try
@@ -82,10 +82,12 @@ namespace DocFingerPrinterBeta.DataLayer
             string imageText = TesseractDetection.getText(imagePath);
             if (!String.IsNullOrEmpty(imageText))
             {
+                imageText = TesseractDetection.removeNewLineCharacters(imageText);
+                imageText = TesseractDetection.removeWhiteSpaces(imageText);
                 string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
                 if (imageSignature.Length > 1)
                 {
-                    Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).FirstOrDefault();
+                    Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
                     if (markedImage != null)
                     {
                         result.UserName = markedImage.User.UserName;

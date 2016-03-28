@@ -13,7 +13,7 @@ namespace DocFingerPrinterBeta.DAL
     {
         public ApplicationDbContext() : base("DefaultConnection")
         {
-            Configuration.LazyLoadingEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
             Configuration.ProxyCreationEnabled = false;
         }
 
