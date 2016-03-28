@@ -97,6 +97,20 @@ namespace DocFingerPrinterBeta.Static_Classes
             return strReturn;
         }
 
+        public static string convertIntToBinarySignature(int x)
+        {
+            string result = "";
+            string binary = Convert.ToString(x, 2);
+            for (int i=0; i < binary.Length; i++)
+            {
+                if (binary[i] == '0')
+                    result += "/";
+                else
+                    result += "|";
+            }
+            return result;
+        }
+
         //Pass in only valued characters from the marking scheme
         public static int convertToInt(string str)
         {

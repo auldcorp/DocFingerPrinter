@@ -27,8 +27,12 @@ namespace DocFingerPrinterBeta.DataLayer
 
         public ResultStatus FileUpload(string imagePath, HttpPostedFileBase file, string imageName, int radio)
         {
+            var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
+            var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+
             var result = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
-            OpenStego.WatermarkImage(radio, "test", imagePath, "C:\\Users\\Public\\test.png");
+            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked + 1);
+            OpenStego.WatermarkImage(radio, signature, imagePath, "C:\\Users\\Public\\test.png");
 
             //get marked image binary
             var markedDrawingImage = System.Drawing.Image.FromFile("C:\\Users\\Public\\test.png");
@@ -39,8 +43,7 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.imageBinary = markedImageBinary;
             markedImage.filename = imageName;
             markedImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
-            var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
-            var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+            
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
             currentUser.NumberOfImagesMarked++;
 
