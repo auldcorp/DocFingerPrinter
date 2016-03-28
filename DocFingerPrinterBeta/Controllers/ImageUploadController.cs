@@ -5,7 +5,9 @@ using DocFingerPrinterBeta.ServiceLayer;
 using DocFingerPrinterBeta.Static_Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -45,8 +47,8 @@ namespace DocFingerPrinterBeta.Controllers
                 }
                 else
                 {
-                    ViewBag.Link = Server.MapPath("..")+"/ImageDisplay/"+fileUploadResponse.SignedImageId;
-                    ViewBag.Hidden = "";
+                    var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
+                    return File(imageData, "image/png");
                 }
             }
 
