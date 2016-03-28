@@ -11,7 +11,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         [TestMethod]
         public void getTextTest()
         {
-            string imagePath = Directory.GetCurrentDirectory() + "\\Images\\Profile\\bottomright.png";
+            string imagePath = Directory.GetCurrentDirectory() + "\\Images\\Profile\\landscapeMarked.png";
             string str = TesseractDetection.getText(imagePath);
             str = TesseractDetection.removeWhiteSpaces(str);
             str = TesseractDetection.removeNewLineCharacters(str);
@@ -67,13 +67,11 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         }
 
         [TestMethod]
-        public void convertFullMarkToInt()
+        public void convertFullMarkToStringTest()
         {
-            string str = "|///||||/#|||/|/";
-            int[] actual = TesseractDetection.convertFullMarkToInt(str);
-            int[] expected = new int[2];
-            expected[0] = 286;
-            expected[1] = 58;
+            string str = "\\|///||||/#|||/|/";
+            string actual = TesseractDetection.convertFullMarkToString(str);
+            string expected = "286#58";
             Assert.AreEqual(expected.ToString(), actual.ToString());
         }
     }

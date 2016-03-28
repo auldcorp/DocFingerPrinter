@@ -64,16 +64,14 @@ namespace DocFingerPrinterBeta.Static_Classes
         }
         
         //Returns an array of the userID followed by the imageID
-        public static int[] convertFullMarkToInt(string str)
+        public static string convertFullMarkToString(string str)
         {
             string userIDStr = getUserIDString(str);
             string imageIDStr = getImageIDString(str);
             int userIDInt = convertToInt(userIDStr);
             int imageIDInt = convertToInt(imageIDStr);
-            int[] mark = new int[2];
-            mark[0] = userIDInt;
-            mark[1] = imageIDInt;
-            return mark;
+            string result = (userIDInt + "#" + imageIDInt);
+            return result;
         }
 
         public static string getImageIDString(string str)
