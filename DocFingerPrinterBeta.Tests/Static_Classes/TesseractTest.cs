@@ -38,5 +38,32 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             Assert.IsNotNull(str);
             Assert.AreEqual("|/|", str);
         }
+
+        [TestMethod]
+        public void convertToIntTest()
+        {
+            string str = "|||/|/";
+            int actual = TesseractDetection.convertToInt(str);
+            int expected = 58;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void convertToIntErrorTest()
+        {
+            string str = "|/dkd|/";
+            int actual = TesseractDetection.convertToInt(str);
+            int expected = 0;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void convertToIntZeroStartTest()
+        {
+            string str = "/|///||||/";
+            int actual = TesseractDetection.convertToInt(str);
+            int expected = 286;
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

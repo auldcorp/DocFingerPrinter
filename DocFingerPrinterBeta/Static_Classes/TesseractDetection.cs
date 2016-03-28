@@ -62,6 +62,19 @@ namespace DocFingerPrinterBeta.Static_Classes
                 return getUserIDString(str);
             return strReturn;
         }
+        
+        //Returns an array of the userID followed by the imageID
+        public static int[] convertFullMarkToInt(string str)
+        {
+            string userIDStr = getUserIDString(str);
+            string imageIDStr = getImageIDString(str);
+            int userIDInt = convertToInt(userIDStr);
+            int imageIDInt = convertToInt(imageIDStr);
+            int[] mark = new int[2];
+            mark[0] = userIDInt;
+            mark[1] = imageIDInt;
+            return mark;
+        }
 
         public static string getImageIDString(string str)
         {
@@ -82,6 +95,31 @@ namespace DocFingerPrinterBeta.Static_Classes
             if (strReturn == "" && i < str.Length)
                 return getImageIDString(strReturn);
             return strReturn;
+        }
+
+        //Pass in only valued characters from the marking scheme
+        public static int convertToInt(string str)
+        {
+            int value = 0;
+            int b = 0;
+            for (int i = 0; i < str.Length; i++)
+            {
+                switch (str[i])
+                {
+                    case '|':
+                    case 'l':
+                        b = 1;
+                        break;
+                    case '/':
+                        b = 0;
+                        break;
+                    default:
+                        return 0;
+                }
+                int exponent = str.Length - i - 1;
+                value += b * (int) (Math.Pow(2, exponent));
+            }
+            return value;
         }
     }
 }
