@@ -38,15 +38,19 @@ namespace DocFingerPrinterBeta.Controllers
 
                 file.SaveAs(imagePath);
 
-                BaseResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
+                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
                 if (fileUploadResponse.Status == ResultStatus.Error)
                 {
                     //do error handling here 
                 }
+                else
+                {
+                    ViewBag.Link = fileUploadResponse.SignedImage;
+                    ViewBag.Hidden = "";
+                }
             }
 
-            ViewBag.Link = "C:\\Users\\Public\\test.png";
-            ViewBag.Hidden = "";
+            
 
             return View("Index");
         }

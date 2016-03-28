@@ -269,6 +269,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\DetectionResponse.cs" />
+    <Compile Include="Responses\FileUploadResponse.cs" />
     <Compile Include="Responses\ImagesResponse.cs" />
     <Compile Include="Responses\UsersResponse.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -411,6 +412,7 @@
     <Content Include="Views\Auth\LogOut.cshtml" />
     <Content Include="Views\Users\UserInfo.cshtml" />
     <Content Include="Views\Detection\Index.cshtml" />
+    <Content Include="Views\ImageUpload\ImageDisplay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

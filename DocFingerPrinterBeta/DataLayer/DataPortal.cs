@@ -26,15 +26,16 @@ namespace DocFingerPrinterBeta.DataLayer
             _dbContext = new ApplicationDbContext();
         }
 
-        public ResultStatus FileUpload(string imagePath, HttpPostedFileBase file, string imageName, int radio)
+        public FileUploadResponse FileUpload(string imagePath, HttpPostedFileBase file, string imageName, int radio)
         {
+            FileUploadResponse response = new FileUploadResponse();
             var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
             var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
             currentUser.NumberOfImagesMarked++;
 
-            var result = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
+            response.Status = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
             string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
-            OpenStego.WatermarkImage(radio, signature, imagePath, "C:\\Users\\Public\\test.png");
+            response.SignedImage = OpenStego.WatermarkImage(radio, signature, imagePath);
 
             //get marked image binary
             var markedDrawingImage = System.Drawing.Image.FromFile("C:\\Users\\Public\\test.png");
@@ -69,10 +70,12 @@ namespace DocFingerPrinterBeta.DataLayer
                 catch (Exception e)
                 {
                     Console.Write(e);
+                    response.Status = ResultStatus.Error;
+                    response.Message = e.ToString();
                 }
             }
 
-            return result;
+            return response;
         }
 
         public DetectionResponse DetectSignature(string imagePath)
