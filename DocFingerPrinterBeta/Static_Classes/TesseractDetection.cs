@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Web;
 using Tesseract;
+using System.Web.Hosting;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
@@ -11,8 +12,9 @@ namespace DocFingerPrinterBeta.Static_Classes
     {
         public static string getText(string inputFilePath)
         {
+            string rootPath = HostingEnvironment.ApplicationPhysicalPath;
             Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath);
-            TesseractEngine ocr = new TesseractEngine("tessdata", "eng", EngineMode.TesseractOnly);
+            TesseractEngine ocr = new TesseractEngine(rootPath, "eng", EngineMode.TesseractOnly);
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
             Page page = ocr.Process(image, PageSegMode.Auto);
