@@ -11,7 +11,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         [TestMethod]
         public void getTextTest()
         {
-            string imagePath = Directory.GetCurrentDirectory() + "\\Images\\Profile\\landscapeMarked.png";
+            string imagePath = Directory.GetCurrentDirectory() + "\\Images\\Profile\\bottomright.png";
             string str = TesseractDetection.getText(imagePath);
             str = TesseractDetection.removeWhiteSpaces(str);
             str = TesseractDetection.removeNewLineCharacters(str);

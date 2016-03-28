@@ -9,6 +9,7 @@ namespace DocFingerPrinterBeta.Models
     {
         public int Id { get; set; }
         public string filename { get; set; }
+        public string UniqueMark { get; set; }
         public byte[] imageBinary { get; set; }
         public virtual User User { get; set; }
         public int UserId { get; set; }
