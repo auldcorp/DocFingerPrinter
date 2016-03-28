@@ -36,12 +36,12 @@ namespace DocFingerPrinterBeta.Static_Classes
             return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
         }
 
-        public static System.Drawing.Image WatermarkImage(int corner, string mark, string inputFilePath)
+        public static byte[] WatermarkImage(int corner, string mark, string inputFilePath)
         {
             /*todo: accomodate for buffers on edges when placing watermark
                 accomodate for color of image/watermark            
             */
-            System.Drawing.Image signedImage;
+            byte[] bytes;
 
             using (Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath))
             using (Graphics imageGraphics = Graphics.FromImage(image))
@@ -61,11 +61,16 @@ namespace DocFingerPrinterBeta.Static_Classes
                 var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
                 imageGraphics.FillRectangle(Brushes.White, rect);
                 imageGraphics.DrawString(mark, font, Brushes.Black, point);
-
-                signedImage = image;
+                
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                    bytes = stream.ToArray();
+                }
+                
                 //give option to maximize contrast of text and or choose color of text/box
             }
-            return signedImage;
+            return bytes;
         }
     }
 }

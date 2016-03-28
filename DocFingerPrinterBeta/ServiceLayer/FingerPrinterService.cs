@@ -117,5 +117,28 @@ namespace DocFingerPrinterBeta.ServiceLayer
                 };
             }
         }
+
+        public ImageBinaryResponse GetImageById(int id)
+        {
+            try
+            {
+                return new ImageBinaryResponse
+                {
+                    ImageBinary = _dataPortal.GetImageById(id),
+                    Status = ResultStatus.Success,
+                    Message = "success"
+                };
+            }
+            catch(Exception e)
+            {
+                return new ImageBinaryResponse
+                {
+                    ImageBinary = null,
+                    Status = ResultStatus.Error,
+                    Message = e.ToString() 
+                };
+            }
+
+        }
     }
 }

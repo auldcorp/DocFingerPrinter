@@ -45,7 +45,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string inputFilePath = "C:\\Users\\Public\\test.png";
             string outputFilePath = "C:\\Users\\Public\\topleft.png";
 
-            OpenStego.WatermarkImage(0, "test", inputFilePath, outputFilePath);
+            //OpenStego.WatermarkImage(0, "test", inputFilePath, outputFilePath);
 
             //assert that image was actually watermarked
 
@@ -57,7 +57,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string inputFilePath = "C:\\Users\\Public\\test.png";
             string outputFilePath = "C:\\Users\\Public\\topright.png";
 
-            OpenStego.WatermarkImage(1, "test", inputFilePath, outputFilePath);
+            //OpenStego.WatermarkImage(1, "test", inputFilePath, outputFilePath);
 
         }
 
@@ -67,7 +67,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string inputFilePath = "C:\\Users\\Public\\test.png";
             string outputFilePath = "C:\\Users\\Public\\bottomleft.png";
 
-            OpenStego.WatermarkImage(2, "test", inputFilePath, outputFilePath);
+            //OpenStego.WatermarkImage(2, "test", inputFilePath, outputFilePath);
 
         }
 
@@ -77,7 +77,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string inputFilePath = "C:\\Users\\Public\\test.png";
             string outputFilePath = "C:\\Users\\Public\\bottomright.png";
 
-            OpenStego.WatermarkImage(3, "test", inputFilePath, outputFilePath);
+            //OpenStego.WatermarkImage(3, "test", inputFilePath, outputFilePath);
 
         }
     }

@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Drawing;
 using System.Data.Entity;
+using System.Drawing.Imaging;
 
 namespace DocFingerPrinterBeta.DataLayer
 {
@@ -35,11 +36,11 @@ namespace DocFingerPrinterBeta.DataLayer
 
             response.Status = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
             string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
-            response.SignedImage = OpenStego.WatermarkImage(radio, signature, imagePath);
-
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath);
+            response.Status = ResultStatus.Success;
             //get marked image binary
-            var markedDrawingImage = System.Drawing.Image.FromFile("C:\\Users\\Public\\test.png");
-            byte[] markedImageBinary = ImageToByte(markedDrawingImage);
+            
+            
 
             //create, initialize new markedImage then save to db
             Models.Image markedImage = new Models.Image();
@@ -74,7 +75,7 @@ namespace DocFingerPrinterBeta.DataLayer
                     response.Message = e.ToString();
                 }
             }
-            
+            response.SignedImageId = markedImage.Id;
 
             return response;
         }
@@ -133,11 +134,12 @@ namespace DocFingerPrinterBeta.DataLayer
             return imagesAsBinary;
         }
 
-        public static byte[] ImageToByte(System.Drawing.Image img)
+        public byte[] GetImageById(int id)
         {
-            ImageConverter converter = new ImageConverter();
-            return (byte[])converter.ConvertTo(img, typeof(byte[]));
+            Models.Image image = _dbContext.Image.Where(x => x.Id == id).FirstOrDefault();
+            return image.imageBinary;
         }
+
 
     }
 }

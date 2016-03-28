@@ -25,7 +25,6 @@ namespace DocFingerPrinterBeta.Controllers
 
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
-
             DetectionResponse response = _fps.DetectSignature(file.FileName);
             if(response.Status == ResultStatus.Success)
             {

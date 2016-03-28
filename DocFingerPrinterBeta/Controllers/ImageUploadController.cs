@@ -45,14 +45,21 @@ namespace DocFingerPrinterBeta.Controllers
                 }
                 else
                 {
-                    ViewBag.Link = fileUploadResponse.SignedImage;
+                    ViewBag.Link = Server.MapPath("..")+"/ImageDisplay/"+fileUploadResponse.SignedImageId;
                     ViewBag.Hidden = "";
                 }
             }
 
-            
-
             return View("Index");
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ImageDisplay(int id)
+        {
+            var imageData = _fps.GetImageById(id).ImageBinary;
+            return File(imageData, "image/png"); // Might need to adjust the content type based on your actual image type
+        }
+
     }
 }

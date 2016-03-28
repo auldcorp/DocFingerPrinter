@@ -8,6 +8,6 @@ namespace DocFingerPrinterBeta.Responses
 {
     public class FileUploadResponse : BaseResponse
     {
-        public System.Drawing.Image SignedImage { get; set; }
+        public int SignedImageId { get; set; }
     }
 }
