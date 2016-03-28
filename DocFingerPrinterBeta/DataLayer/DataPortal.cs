@@ -39,6 +39,7 @@ namespace DocFingerPrinterBeta.DataLayer
                 newImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
                 var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
                 var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+                newImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
                 currentUser.NumberOfImagesMarked++;
 
                 try

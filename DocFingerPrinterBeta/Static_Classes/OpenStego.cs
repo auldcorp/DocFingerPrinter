@@ -44,7 +44,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             */
             using (Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath))
             using (Graphics imageGraphics = Graphics.FromImage(image))
-            using (Font font = new Font("Arial", 10))
+            using (Font font = new Font("Sans", 40))
             {
                 Point point = new Point(0, 0);
                 var size = imageGraphics.MeasureString(mark, font);
@@ -57,7 +57,7 @@ namespace DocFingerPrinterBeta.Static_Classes
                     point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
 
                 var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
-                imageGraphics.FillRectangle(Brushes.White, rect);
+                //imageGraphics.FillRectangle(Brushes.White, rect);
                 imageGraphics.DrawString(mark, font, Brushes.Black, point);
                 image.Save(outputFilePath);
 
