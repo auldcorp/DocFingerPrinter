@@ -12,7 +12,7 @@ namespace DocFingerPrinterBeta.Static_Classes
         public static string getText(string inputFilePath)
         {
             Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath);
-            TesseractEngine ocr = new TesseractEngine("tessdata", "eng");
+            TesseractEngine ocr = new TesseractEngine("tessdata", "eng", EngineMode.TesseractOnly);
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
             Page page = ocr.Process(image, PageSegMode.Auto);

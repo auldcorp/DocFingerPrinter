@@ -35,8 +35,26 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string imagePath = Directory.GetCurrentDirectory() + "\\Images\\Profile\\landscapeMarked.png";
             string str = TesseractDetection.getText(imagePath);
             str = TesseractDetection.getImageIDString(str);
+            //str = convertlToVert(str);
             Assert.IsNotNull(str);
             Assert.AreEqual("|/|", str);
+        }
+
+        private string convertlToVert(string str)
+        {
+            string result = "";
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == 'l')
+                {
+                    result += '|';
+                }
+                else
+                {
+                    result += str[i];
+                }
+            }
+            return result;
         }
 
         [TestMethod]
