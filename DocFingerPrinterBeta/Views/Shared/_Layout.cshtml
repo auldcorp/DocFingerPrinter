@@ -36,7 +36,7 @@
                     <li>@Html.ActionLink("Users", "Index", "Users", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Login", "LogIn", "Auth", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("UserInfo", "UserInfo", "Users", new { id = HttpContext.Current.User.Identity.GetUserId<int>(), area = "" }, null)</li>
-                    
+                    <li>@Html.ActionLink("Detect Signature", "Index", "Detection", new { area = "" }, null)</li>
                 </ul>
             </div>
         </div>

@@ -72,6 +72,37 @@ namespace DocFingerPrinterBeta.DataLayer
             return result;
         }
 
+        public DetectionResponse DetectSignature(string imagePath)
+        {
+            DetectionResponse result = new DetectionResponse();
+            string imageText = TesseractDetection.getText(imagePath);
+            if (!String.IsNullOrEmpty(imageText))
+            {
+                string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
+                if (imageSignature.Length > 1)
+                {
+                    Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).FirstOrDefault();
+                    if (markedImage != null)
+                    {
+                        result.UserName = markedImage.User.UserName;
+                        int imageNo;
+                        bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
+                        if (parseSuccess)
+                        {
+                            result.ImageNumber = imageNo;
+                            result.Status = ResultStatus.Success;
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                result.Status = ResultStatus.Error;
+            }
+            return result;
+        }
+
         public List<User> GetUsers()
         {
             List<User> users = _dbContext.Users.ToList();

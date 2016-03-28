@@ -40,6 +40,22 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        public DetectionResponse DetectSignature(string imagePath)
+        {
+            try
+            {
+                return _dataPortal.DetectSignature(imagePath);
+            }
+            catch (Exception e)
+            {
+                return new DetectionResponse
+                {
+                    Status = ResultStatus.Error,
+                    Message = e.ToString()
+                };
+            }
+        }
+
         public UsersResponse GetUsers()
         {
             try
