@@ -25,8 +25,7 @@ namespace DocFingerPrinterBeta.Controllers
 
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
-            string imagePath = Path.Combine(Server.MapPath("~/images/profile"), Path.GetFileName(file.FileName));
-            DetectionResponse response = _fps.DetectSignature(imagePath);
+            DetectionResponse response = _fps.DetectSignature(file.FileName);
             if(response.Status == ResultStatus.Success)
             {
                 if (response.UserName != null)
