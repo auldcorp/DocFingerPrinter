@@ -20,7 +20,6 @@ namespace DocFingerPrinterBeta.Static_Classes
             File.WriteAllText(workingDirectory + @"\tempTextFile.txt", embeddedData);
             string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + workingDirectory
                + "\\tempTextFile.txt\" -cf \"" + inputFilePath + "\" -sf \"" + outputFilePath + "\"";
-           
 
             var result = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
 
@@ -46,6 +45,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             using (Graphics imageGraphics = Graphics.FromImage(image))
             using (Font font = new Font("Sans", 40))
             {
+                
                 Point point = new Point(0, 0);
                 var size = imageGraphics.MeasureString(mark, font);
 
@@ -57,7 +57,7 @@ namespace DocFingerPrinterBeta.Static_Classes
                     point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
 
                 var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
-                //imageGraphics.FillRectangle(Brushes.White, rect);
+                imageGraphics.FillRectangle(Brushes.White, rect);
                 imageGraphics.DrawString(mark, font, Brushes.Black, point);
                 image.Save(outputFilePath);
 
