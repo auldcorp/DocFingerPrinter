@@ -71,6 +71,7 @@ namespace DocFingerPrinterBeta.DataLayer
                     Console.Write(e);
                 }
             }
+            
 
             return result;
         }
