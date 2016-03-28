@@ -15,6 +15,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             string rootPath = HostingEnvironment.ApplicationPhysicalPath;
             Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath);
             TesseractEngine ocr = new TesseractEngine(rootPath, "eng", EngineMode.TesseractOnly);
+            ocr.SetVariable("tessedit_char_whitelist", "\\/|#");
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
             Page page = ocr.Process(image, PageSegMode.Auto);
@@ -106,7 +107,7 @@ namespace DocFingerPrinterBeta.Static_Classes
                 if (binary[i] == '0')
                     result += "/";
                 else
-                    result += "|";
+                    result += "| ";
             }
             return result;
         }
