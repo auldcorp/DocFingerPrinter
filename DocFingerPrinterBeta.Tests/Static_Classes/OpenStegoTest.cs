@@ -40,6 +40,15 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         }
 
         [TestMethod]
+        public void ExtractDataTest()
+        {
+            string inputFilePath = "C:\\Users\\Public\\test.png";
+            string result = OpenStego.ExtractDataFromFile(inputFilePath);
+
+            Assert.AreEqual(result, "test");
+        }
+
+        [TestMethod]
         public void WaterMarkImageTopLeftTest()
         {
             string inputFilePath = "C:\\Users\\Public\\test.png";
