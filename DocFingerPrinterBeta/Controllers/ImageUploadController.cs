@@ -37,18 +37,24 @@ namespace DocFingerPrinterBeta.Controllers
             {
                 string imageName = Path.GetFileName(file.FileName);
                 string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
-
                 file.SaveAs(imagePath);
 
-                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
-                if (fileUploadResponse.Status == ResultStatus.Error)
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    //do error handling here 
-                }
-                else
-                {
-                    var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
-                    return File(imageData, "image/png");
+                    file.InputStream.CopyTo(ms);
+                    byte[] fileArray = ms.GetBuffer();
+                    ms.Close();
+
+                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio);
+                    if (fileUploadResponse.Status == ResultStatus.Error)
+                    {
+                        //do error handling here 
+                    }
+                    else
+                    {
+                        var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
+                        return File(imageData, "image/png");
+                    }
                 }
             }
 
@@ -57,19 +63,32 @@ namespace DocFingerPrinterBeta.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
-        public ActionResult MobileFileUpload(HttpPostedFileBase file, int radio)
+        public ActionResult MobileFileUpload(string fileBytes, string fileName, int radio)
         {
-            if (file != null)
+            if (!string.IsNullOrEmpty(fileBytes))
             {
-                string imageName = Path.GetFileName(file.FileName);
-                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
+                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), fileName);
 
-                file.SaveAs(imagePath);
+                string[] byteToConvert = fileBytes.Split('.');
+                List<byte> fileBytesList = new List<byte>();
+                byteToConvert.ToList()
+                        .Where(x => !string.IsNullOrEmpty(x))
+                        .ToList()
+                        .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
 
-                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
+                byte[] imageBytes = fileBytesList.ToArray();
+                Bitmap image;
+                using (Stream imageStream = new MemoryStream(imageBytes))
+                {
+                    image = new Bitmap(imageStream);
+                    imageStream.Close();
+                    image.Save(imagePath);
+                }
+
+                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio);
                 if (fileUploadResponse.Status == ResultStatus.Error)
                 {
-                    //do error handling here 
+                    return Json(fileUploadResponse.Message);
                 }
                 else
                 {
@@ -78,7 +97,7 @@ namespace DocFingerPrinterBeta.Controllers
                 }
             }
 
-            return View("Index");
+            return Json("Error: File input cannot be null.");
         }
 
         [AllowAnonymous]

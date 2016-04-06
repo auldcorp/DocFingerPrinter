@@ -20,11 +20,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
              _dataPortal = new DataPortal();
         }
 
-        public FileUploadResponse FileUpload(string imagePath, HttpPostedFileBase file, string imageName, int radio)
+        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
         {
             try
             {
-                return _dataPortal.FileUpload(imagePath, file, imageName, radio);       
+                return _dataPortal.FileUpload(imagePath, fileBytes, imageName, radio);       
             }
             catch (Exception e)
             {

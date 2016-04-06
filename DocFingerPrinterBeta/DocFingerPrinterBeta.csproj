@@ -251,6 +251,10 @@
     <Compile Include="Migrations\201603222049525_Initial.Designer.cs">
       <DependentUpon>201603222049525_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604062023395_AddOriginalAndMarkedBinariesInSameImage.cs" />
+    <Compile Include="Migrations\201604062023395_AddOriginalAndMarkedBinariesInSameImage.Designer.cs">
+      <DependentUpon>201604062023395_AddOriginalAndMarkedBinariesInSameImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\UserClaim.cs" />
@@ -430,6 +434,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201603222049525_Initial.resx">
       <DependentUpon>201603222049525_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604062023395_AddOriginalAndMarkedBinariesInSameImage.resx">
+      <DependentUpon>201604062023395_AddOriginalAndMarkedBinariesInSameImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
