@@ -64,6 +64,33 @@ namespace DocFingerPrinterBeta.Controllers
             return View();
         }
 
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<ActionResult> MobileLogIn(string email, string password)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(false);
+            }
+
+            var user = await userManager.FindAsync(email, password);
+
+            if (user != null)
+            {
+                var identity = await userManager.CreateIdentityAsync(
+                    user, DefaultAuthenticationTypes.ApplicationCookie);
+
+                GetAuthenticationManager().SignIn(identity);
+
+                return Json(true);
+            }
+
+            // user authN failed
+            ModelState.AddModelError("", "Invalid email or password");
+            return Json(false);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public ActionResult LogOut()

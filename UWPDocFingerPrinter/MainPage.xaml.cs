@@ -128,8 +128,15 @@ namespace UWPDocFingerPrinter
 
         private async void embedSignatureButton_Click(object sender, RoutedEventArgs e)
         {
+            int corner = 4;
+            if ((bool)topRightButton.IsChecked)
+                corner = 1;
+            else if ((bool)bottomLeftButton.IsChecked)
+                corner = 2;
+            else if ((bool)bottomRightButton.IsChecked)
+                corner = 3;
             if (fileToEmbed != null)
-                await HttpRequest.UploadFile(fileToEmbed);
+                await HttpRequest.UploadFile(fileToEmbed, corner);
         }
     }
 }

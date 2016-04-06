@@ -45,7 +45,7 @@
                     <RowDefinition Height="8*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center" >
+                <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center" Width="500px" >
                     <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
                     <Line Fill="Black" Height="4" Width="200"/>
                     <TextBlock />
@@ -65,14 +65,14 @@
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Top" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <RadioButton Grid.Row="1" Grid.Column="0"  Name="topButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Row="0" Grid.Column="1"  Text="Bottom" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <RadioButton Grid.Row="1" Grid.Column="1"  Name="bottomButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <RadioButton Grid.Row="1" Grid.Column="2"  Name="leftButton"  MinWidth="20" Width="20" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="3"  Text="Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        <RadioButton Grid.Row="1" Grid.Column="3"  Name="rightButton"  MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Top Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="0"  Name="topLeftButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="1"  Text="Top Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="1"  Name="topRightButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="Bottom Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="2"  Name="bottomLeftButton"  MinWidth="20" Width="20" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="0" Grid.Column="3"  Text="Botttom Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Row="1" Grid.Column="3"  Name="bottomRightButton"  MinWidth="20" Width="20" HorizontalAlignment="Center" />
                     </Grid>
                     <Button Name="embedSignatureButton" Content="Start Embedding" HorizontalAlignment="Stretch" Click="embedSignatureButton_Click" Margin="0,100,0,0"/>
                 </StackPanel>

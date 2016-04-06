@@ -55,6 +55,32 @@ namespace DocFingerPrinterBeta.Controllers
             return View("Index");
         }
 
+        [HttpPost]
+        [Authorize(Roles = "User, Admin")]
+        public ActionResult MobileFileUpload(HttpPostedFileBase file, int radio)
+        {
+            if (file != null)
+            {
+                string imageName = Path.GetFileName(file.FileName);
+                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
+
+                file.SaveAs(imagePath);
+
+                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, file, imageName, radio);
+                if (fileUploadResponse.Status == ResultStatus.Error)
+                {
+                    //do error handling here 
+                }
+                else
+                {
+                    var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
+                    return File(imageData, "image/png");
+                }
+            }
+
+            return View("Index");
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public ActionResult ImageDisplay(int id)
