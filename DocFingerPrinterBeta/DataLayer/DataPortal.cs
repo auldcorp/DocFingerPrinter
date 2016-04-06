@@ -82,9 +82,15 @@ namespace DocFingerPrinterBeta.DataLayer
 
         public DetectionResponse DetectSignature(string imagePath)
         {
-            DetectionResponse result = new DetectionResponse();
+            DetectionResponse result1 = new DetectionResponse();
+            DetectionResponse result2 = new DetectionResponse();
+            string extractText = OpenStego.ExtractDataFromFile(imagePath);
             string imageText = TesseractDetection.getText(imagePath);
-            if (!String.IsNullOrEmpty(imageText))
+            if (!String.IsNullOrEmpty(extractText))
+            {
+                //extract string detected
+            }
+            else if (!String.IsNullOrEmpty(imageText))
             {
                 imageText = TesseractDetection.removeNewLineCharacters(imageText);
                 imageText = TesseractDetection.removeWhiteSpaces(imageText);
@@ -94,23 +100,22 @@ namespace DocFingerPrinterBeta.DataLayer
                     Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
                     if (markedImage != null)
                     {
-                        result.UserName = markedImage.User.UserName;
+                        result2.UserName = markedImage.User.UserName;
                         int imageNo;
                         bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
                         if (parseSuccess)
                         {
-                            result.ImageNumber = imageNo;
-                            result.Status = ResultStatus.Success;
+                            result2.ImageNumber = imageNo;
+                            result2.Status = ResultStatus.Success;
                         }
                     }
                 }
-
             }
             else
             {
-                result.Status = ResultStatus.Error;
+                result2.Status = ResultStatus.Error;
             }
-            return result;
+            return result2;
         }
 
         public List<User> GetUsers()

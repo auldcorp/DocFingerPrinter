@@ -36,6 +36,20 @@ namespace DocFingerPrinterBeta.Static_Classes
             return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
         }
 
+        public static string ExtractDataFromFile(string inputFilePath)
+        {
+            string workingDirectory = @"C:\Users\Public";
+            string extractCommand = "java -jar " + OPEN_STEGO_PATH + " extract -a RandomLSB -sf \"" + inputFilePath + "\" -xd \"" + workingDirectory + "\\data\"";
+            string result = "";
+
+            ResultStatus r = CommandPrompt.ExecuteCommand(extractCommand, workingDirectory);
+            if (r == ResultStatus.Success)
+            {
+                result = System.IO.File.ReadAllText(workingDirectory + "\\data\\tempTextFile.txt");
+            }
+            return result;
+        }
+
         public static byte[] WatermarkImage(int corner, string mark, string inputFilePath)
         {
             /*todo: accomodate for buffers on edges when placing watermark
