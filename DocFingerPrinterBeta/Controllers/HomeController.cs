@@ -8,8 +8,15 @@ using System.Web.Mvc;
 
 namespace DocFingerPrinterBeta.Controllers
 {
+    /// <summary>
+    /// controller that takes user to home page
+    /// </summary>
     public class HomeController : Controller
     {
+        /// <summary>
+        /// home page
+        /// </summary>
+        /// <returns>home page</returns>
         [AllowAnonymous]
         public ActionResult Index()
         {

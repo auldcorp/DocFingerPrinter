@@ -17,7 +17,9 @@ using System.Drawing.Imaging;
 
 namespace DocFingerPrinterBeta.DataLayer
 {
-
+    /// <summary>
+    /// class that handles DB crud operations
+    /// </summary>
     public class DataPortal
     {
         private ApplicationDbContext _dbContext;
@@ -27,7 +29,14 @@ namespace DocFingerPrinterBeta.DataLayer
             _dbContext = new ApplicationDbContext();
         }
 
-
+        /// <summary>
+        /// takes in an image marks that image and saves it the DB
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <param name="fileBytes"></param>
+        /// <param name="imageName"></param>
+        /// <param name="radio"></param>
+        /// <returns>id of uploaded image</returns>
         public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
         {
             FileUploadResponse response = new FileUploadResponse();
@@ -66,6 +75,11 @@ namespace DocFingerPrinterBeta.DataLayer
             return response;
         }
 
+        /// <summary>
+        /// takes in an image and looks to see if it is marked, if it is returns the user asscoiated with that image
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <returns>username and image number</returns>
         public DetectionResponse DetectSignature(string imagePath)
         {
             DetectionResponse result1 = new DetectionResponse();
@@ -104,12 +118,21 @@ namespace DocFingerPrinterBeta.DataLayer
             return result2;
         }
 
+        /// <summary>
+        /// gets list of users registered in the DB
+        /// </summary>
+        /// <returns>list of registered users</returns>
         public List<User> GetUsers()
         {
             List<User> users = _dbContext.Users.ToList();
             return users;
         }
 
+        /// <summary>
+        /// gets user with param id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>returns users with param id</returns>
         public List<User> GetUser(int id)
         {
             var user = _dbContext.Users.Find(id);
@@ -118,6 +141,11 @@ namespace DocFingerPrinterBeta.DataLayer
             return users;
         }
 
+        /// <summary>
+        /// gets images associated with user with userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>list of images associated with certain user</returns>
         public List<byte[]> GetUserImages(int userId)
         {
             List<System.Drawing.Image> actualImages = new List<System.Drawing.Image>();
@@ -125,6 +153,11 @@ namespace DocFingerPrinterBeta.DataLayer
             return imagesAsBinary;
         }
 
+        /// <summary>
+        /// gets image with param id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>image with associated id</returns>
         public byte[] GetImageById(int id)
         {
             Models.Image image = _dbContext.Image.Where(x => x.Id == id).FirstOrDefault();

@@ -19,10 +19,19 @@ using System.Web.UI.HtmlControls;
 
 namespace DocFingerPrinterBeta.Controllers
 {
+
+    /// <summary>
+    /// controller that handles image uploading/marking
+    /// </summary>
     public class ImageUploadController : Controller
     {
         private FingerPrinterService _fps = new FingerPrinterService();
+       
         // GET: ImageUpload
+        /// <summary>
+        /// image upload page
+        /// </summary>
+        /// <returns>image upload page</returns>
         [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
@@ -33,6 +42,12 @@ namespace DocFingerPrinterBeta.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// uploads file and marks file during FileUpload
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="radio"></param>
+        /// <returns>page of uploaded image unless error occurs</returns>
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
         public ActionResult FileUpload(HttpPostedFileBase file, int radio)
@@ -81,6 +96,13 @@ namespace DocFingerPrinterBeta.Controllers
             return View("Index", model);
         }
 
+        /// <summary>
+        /// same as FileUpload except for mobile
+        /// </summary>
+        /// <param name="fileBytes"></param>
+        /// <param name="fileName"></param>
+        /// <param name="radio"></param>
+        /// <returns>json containing image file uploaded</returns>
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
         public ActionResult MobileFileUpload(string fileBytes, string fileName, int radio)
@@ -124,6 +146,11 @@ namespace DocFingerPrinterBeta.Controllers
             return Json("Error: File input cannot be null.");
         }
 
+        /// <summary>
+        /// displays image based on id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>page of image with id param</returns>
         [AllowAnonymous]
         [HttpGet]
         public ActionResult ImageDisplay(int id)

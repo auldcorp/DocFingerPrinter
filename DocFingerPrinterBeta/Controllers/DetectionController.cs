@@ -10,11 +10,18 @@ using System.Web.Mvc;
 
 namespace DocFingerPrinterBeta.Controllers
 {
+    /// <summary>
+    /// controller that handles mark detection
+    /// </summary>
     public class DetectionController : Controller
     {
         private FingerPrinterService _fps = new FingerPrinterService();
 
         // GET: Detection
+        /// <summary>
+        /// image detection home page
+        /// </summary>
+        /// <returns>image detection page</returns>
         [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
@@ -25,6 +32,11 @@ namespace DocFingerPrinterBeta.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// reads in image file and runs DetectSignature on that file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>page displaying who uploaded file belongs to</returns>
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
             if (file == null || !file.ContentType.Contains("image"))

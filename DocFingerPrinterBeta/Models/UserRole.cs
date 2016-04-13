@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DocFingerPrinterBeta.Models
 {
+    /// <summary>
+    /// userRole model
+    /// </summary>
     public class UserRole : IdentityUserRole<int>
     {
     }

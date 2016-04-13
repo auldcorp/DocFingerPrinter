@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DocFingerPrinterBeta.DAL
 {
+    /// <summary>
+    /// DB context for communicating with DB and defining tables in DB
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<User, Role, int, UserLogin, UserRole, UserClaim>
     {
         public ApplicationDbContext() : base("DefaultConnection")
@@ -24,7 +27,7 @@ namespace DocFingerPrinterBeta.DAL
 
         public DbSet<Image> Image { get; set; }
 
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

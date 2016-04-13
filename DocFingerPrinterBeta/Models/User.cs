@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity;
 
 namespace DocFingerPrinterBeta.Models
 {
+    /// <summary>
+    /// user model
+    /// </summary>
     public class User : IdentityUser<int, UserLogin, UserRole, UserClaim>
     {
 
