@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
@@ -113,6 +114,7 @@ namespace DocFingerPrinterBeta.Controllers
         {
             var authManager = GetAuthenticationManager();
             authManager.SignOut();
+            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return View();
         }
 
