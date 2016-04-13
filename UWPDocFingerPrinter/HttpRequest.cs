@@ -5,20 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace UWPDocFingerPrinter
 {
     public static class HttpRequest
     {
-        private static string username = "";
-        private static string password = "";
+        private static Cookie authCookie;
         public async static Task<bool> UploadFile(StorageFile file, int corner)
         {
             UriBuilder builder = new UriBuilder();
@@ -30,7 +31,9 @@ namespace UWPDocFingerPrinter
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
             //req.Credentials = new NetworkCredential(username, password);
-
+            CookieContainer cookies = new CookieContainer();
+            //cookies.Add(builder.Uri, authCookie);
+            req.CookieContainer = cookies;
             byte[] fileBytes = null;
             uint fileSize = 0;
             using (IRandomAccessStreamWithContentType fileStream = await file.OpenReadAsync())
@@ -55,19 +58,32 @@ namespace UWPDocFingerPrinter
             await stream.WriteAsync(postData, 0, postData.Length);
             stream.Dispose();
 
-            HttpWebResponse result = (HttpWebResponse) await req.GetResponseAsync();
+            WebResponse result = await req.GetResponseAsync();
             
             if (result.ContentType.Substring(0, 5).Equals("image"))
             {
-                var responseStream = result.GetResponseStream();
-                byte[] byteResponse = new byte[result.ContentLength];
-                responseStream.Read(byteResponse, 0, byteResponse.Length);
-                responseStream.Dispose();
-    
-                await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name);
+                var randomAccessStream = new InMemoryRandomAccessStream();
+                byte[] byteResponse = new byte[500];
+                int read = 0;
+                using (var responseStream = result.GetResponseStream())
+                {
+                    do
+                    {
+                        read = await responseStream.ReadAsync(byteResponse, 0, byteResponse.Length);
+                        await randomAccessStream.WriteAsync(byteResponse.AsBuffer());
+                    } while (read != 0);
+
+                    await randomAccessStream.FlushAsync();
+                    randomAccessStream.Seek(0);
+                }
+
+                byte[] imageBytes = new byte[randomAccessStream.Size];
+                await randomAccessStream.ReadAsync(imageBytes.AsBuffer(), (uint)imageBytes.Length, InputStreamOptions.None);
+
+                await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name, CreationCollisionOption.ReplaceExisting);
                 StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.GetFileAsync(file.Name);
                 Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
-                await writeToFile.WriteAsync(byteResponse, 0, byteResponse.Length);
+                await writeToFile.WriteAsync(imageBytes, 0, imageBytes.Length);
                 writeToFile.Dispose();
                 return true;
             }
@@ -76,28 +92,42 @@ namespace UWPDocFingerPrinter
             return false;
         }
 
-        public async static Task<bool> LogIn(string user, string pass)
+        public async static Task<bool> LogIn(string username, string password)
         {
-            username = user;
-            password = pass;
-            var myClient = new HttpClient();
-            //var myRequest = new HttpRequestMessage(HttpMethod.Get, "http://docfingerprint.cloudapp.net/Auth/LogIn");
- 
-            //MultipartContent content = new MultipartContent();
-            //StringContent paramUsername = new StringContent(username);
-            //StringContent paramPassword = new StringContent(password);
+            bool success = false;
+            
+            CookieContainer cookies = new CookieContainer();
+            
+
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
             builder.Host = "docfingerprint.cloudapp.net";
             builder.Path = "/Auth/MobileLogIn";
-            builder.Query = "email=" + username + "&password=" + password;
-            
+
             Uri uri = builder.Uri;
-            //content.Add(paramUsername);
-            //content.Add(paramPassword);
-            HttpResponseMessage response = await myClient.PostAsync(uri.ToString(), null);
-            string responseContent = await response.Content.ReadAsStringAsync();
-            return responseContent.Equals("true");
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.CookieContainer = cookies;
+            var stream = await request.GetRequestStreamAsync();
+
+            StringBuilder serializedBytes = new StringBuilder();
+
+            string postParameters = "email=" + username + "&password=" + password;
+            byte[] postData = Encoding.UTF8.GetBytes(postParameters);
+            await stream.WriteAsync(postData, 0, postData.Length);
+            stream.Dispose();
+            HttpWebResponse result =(HttpWebResponse) await request.GetResponseAsync();
+
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+
+                if (result.Cookies[".ASPXAUTH"] != null)
+                    authCookie = result.Cookies[".ASPXAUTH"];
+
+                success = true;
+            }
+            return success;
         }
     }
 }

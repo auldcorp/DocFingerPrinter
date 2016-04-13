@@ -24,7 +24,8 @@
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="300px" VerticalAlignment="Center">
             <TextBlock Text="DocFingerPrinter" FontFamily="Helvetica" Foreground="White" FontSize="22" Margin="0,0,0,20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
             <TextBox Name="username" PlaceholderText="Username" />
-            <PasswordBox Name="password" PlaceholderText="Password" />
+            <PasswordBox Name="password" PlaceholderText="Password" KeyDown="password_KeyDown" />
+
             <Button Name="SubmitButton" Content="Login"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,20,0,0" Click="SubmitButton_Click" />
         </StackPanel>
 

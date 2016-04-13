@@ -1,18 +1,30 @@
 ﻿using DocFingerPrinterBeta.Models;
+using DocFingerPrinterBeta.Providers;
 using DocFingerPrinterBeta.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace DocFingerPrinterBeta.Controllers
 {
     public class AuthController : Controller
     {
+        private static Token _myToken;
+        private const string ApiUri = "http://docfingerprint.cloudapp.net/";
         private readonly UserManager<User, int> userManager;
 
         public AuthController()
@@ -67,11 +79,12 @@ namespace DocFingerPrinterBeta.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<ActionResult> MobileLogIn(string email, string password)
+        public async Task<HttpResponseBase> MobileLogIn(string email, string password)
         {
             if (!ModelState.IsValid)
             {
-                return Json(false);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                return Response;
             }
 
             var user = await userManager.FindAsync(email, password);
@@ -81,14 +94,18 @@ namespace DocFingerPrinterBeta.Controllers
                 var identity = await userManager.CreateIdentityAsync(
                     user, DefaultAuthenticationTypes.ApplicationCookie);
 
-                GetAuthenticationManager().SignIn(identity);
+                GetAuthenticationManager().SignIn(new AuthenticationProperties() { ExpiresUtc = new DateTime(2018, 12, 25) },identity);
+                FormsAuthenticationTicket ticket;
+                ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
+                string encTicket = FormsAuthentication.Encrypt(ticket);
 
-                return Json(true);
+                Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                Response.StatusCode = (int) HttpStatusCode.OK;
+                return Response;
             }
+            Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return Response;
 
-            // user authN failed
-            ModelState.AddModelError("", "Invalid email or password");
-            return Json(false);
         }
 
         [HttpGet]
@@ -175,5 +192,6 @@ namespace DocFingerPrinterBeta.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }
