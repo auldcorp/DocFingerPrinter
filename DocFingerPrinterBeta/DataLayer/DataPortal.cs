@@ -27,6 +27,7 @@ namespace DocFingerPrinterBeta.DataLayer
             _dbContext = new ApplicationDbContext();
         }
 
+
         public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
         {
             FileUploadResponse response = new FileUploadResponse();

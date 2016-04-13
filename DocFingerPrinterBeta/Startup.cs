@@ -19,7 +19,6 @@ namespace DocFingerPrinterBeta
 
         public void Configuration(IAppBuilder app)
         {
-            
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
@@ -39,6 +38,8 @@ namespace DocFingerPrinterBeta
 
                 return usermanager;
             };
+
+            ConfigureAuth(app);
         }
     }
 }
