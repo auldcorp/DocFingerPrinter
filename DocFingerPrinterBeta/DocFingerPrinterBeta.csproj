@@ -282,6 +282,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Static_Classes\CommandPrompt.cs" />
     <Compile Include="Static_Classes\TesseractDetection.cs" />
+    <Compile Include="ViewModels\FileUploadViewModel.cs" />
     <Compile Include="ViewModels\LogInModel.cs" />
     <Compile Include="ViewModels\RegisterModel.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />

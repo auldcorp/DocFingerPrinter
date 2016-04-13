@@ -3,6 +3,7 @@ using DocFingerPrinterBeta.Models;
 using DocFingerPrinterBeta.Responses;
 using DocFingerPrinterBeta.ServiceLayer;
 using DocFingerPrinterBeta.Static_Classes;
+using DocFingerPrinterBeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,18 +26,30 @@ namespace DocFingerPrinterBeta.Controllers
         [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
+            var model = new FileUploadViewModel();
             ViewBag.Title = "Upload Page";
             ViewBag.Link = "";
             ViewBag.Hidden = "display: none";
-            return View();
+            return View(model);
         }
 
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
         public ActionResult FileUpload(HttpPostedFileBase file, int radio)
         {
+            var model = new FileUploadViewModel();
             if (file != null)
             {
+                var fileContentType = file.ContentType;
+                if (!fileContentType.Contains("image"))
+                {
+                    model.errorMessage = "You must select a jpeg or png file to upload";
+                    ViewBag.Title = "Upload Page";
+                    ViewBag.Link = "";
+                    ViewBag.Hidden = "display: none";
+                    return View("Index", model);
+                }
+
                 string imageName = Path.GetFileName(file.FileName);
                 string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
                 file.SaveAs(imagePath);
@@ -60,7 +73,12 @@ namespace DocFingerPrinterBeta.Controllers
                 }
             }
 
-            return View("Index");
+            model = new FileUploadViewModel();
+            model.errorMessage = "You must select a jpeg or png file to upload";
+            ViewBag.Title = "Upload Page";
+            ViewBag.Link = "";
+            ViewBag.Hidden = "display: none";
+            return View("Index", model);
         }
 
         [HttpPost]

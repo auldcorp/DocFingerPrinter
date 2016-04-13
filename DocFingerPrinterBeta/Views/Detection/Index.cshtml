@@ -13,6 +13,9 @@
         <input type="file" name="file" id="file" style="width: 100%;" />
 
         <button type="submit" class="submit">Run Signature Detection</button>
+        <div style="@Model.ShowErrorMessage(Model.errorMessage)" class="alert-danger">
+            <strong>Error: </strong>@Model.errorMessage
+        </div>
     }
 </div>
 <div>

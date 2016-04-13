@@ -1,5 +1,6 @@
 ﻿using DocFingerPrinterBeta.Responses;
 using DocFingerPrinterBeta.ServiceLayer;
+using DocFingerPrinterBeta.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,14 +18,24 @@ namespace DocFingerPrinterBeta.Controllers
         [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
+            var model = new FileUploadViewModel();
             ViewBag.Hidden = "display: none";
             ViewBag.UserName = "";
             ViewBag.ImageNumber = "";
-            return View();
+            return View(model);
         }
 
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
+            if (file == null || !file.ContentType.Contains("image"))
+            {
+                var model = new FileUploadViewModel();
+                model.errorMessage = "You must select a jpeg or png file to upload";
+                ViewBag.Hidden = "display: none";
+                ViewBag.UserName = "";
+                ViewBag.ImageNumber = "";
+                return View("Index", model);
+            }
             DetectionResponse response = _fps.DetectSignature(file.FileName);
             if(response.Status == ResultStatus.Success)
             {
