@@ -75,6 +75,7 @@
                         <RadioButton Grid.Row="1" Grid.Column="3"  Name="bottomRightButton"  MinWidth="20" Width="20" HorizontalAlignment="Center" />
                     </Grid>
                     <Button Name="embedSignatureButton" Content="Start Embedding" HorizontalAlignment="Stretch" Click="embedSignatureButton_Click" Margin="0,100,0,0"/>
+                    <Image Name="embedPicture" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </StackPanel>
                 <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
                     <StackPanel>

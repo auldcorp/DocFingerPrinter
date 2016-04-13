@@ -136,7 +136,10 @@ namespace UWPDocFingerPrinter
             else if ((bool)bottomRightButton.IsChecked)
                 corner = 3;
             if (fileToEmbed != null)
-                await HttpRequest.UploadFile(fileToEmbed, corner);
+            {
+                bool success = await HttpRequest.UploadFile(fileToEmbed, corner);
+            }
+                
         }
     }
 }

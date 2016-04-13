@@ -37,7 +37,7 @@ namespace DocFingerPrinterBeta
             {
                 TokenEndpointPath = new PathString("/Token"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AuthorizeEndpointPath = new PathString("/Auth/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true

@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.HtmlControls;
@@ -93,7 +95,11 @@ namespace DocFingerPrinterBeta.Controllers
                 else
                 {
                     var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
-                    return File(imageData, "image/png");
+                    StringBuilder serializedBytes = new StringBuilder();
+                    imageData.ToList().ForEach(x => serializedBytes.AppendFormat("{0}.", Convert.ToUInt32(x)));
+                    string responseString = serializedBytes.ToString();
+                    byte[] responseData = Encoding.UTF8.GetBytes(responseString);
+                    return new FileContentResult(responseData,"image/png");
                 }
             }
 
