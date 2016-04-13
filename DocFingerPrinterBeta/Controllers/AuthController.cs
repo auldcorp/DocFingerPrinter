@@ -23,7 +23,7 @@ namespace DocFingerPrinterBeta.Controllers
 {
     public class AuthController : Controller
     {
-        private static Token _myToken;
+        //private static Token _myToken;
         private const string ApiUri = "http://docfingerprint.cloudapp.net/";
         private readonly UserManager<User, int> userManager;
 
