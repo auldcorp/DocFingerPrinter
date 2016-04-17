@@ -35,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\DocFingerPrinterBeta.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -282,6 +283,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Static_Classes\CommandPrompt.cs" />
     <Compile Include="Static_Classes\TesseractDetection.cs" />
+    <Compile Include="ViewModels\FileUploadViewModel.cs" />
     <Compile Include="ViewModels\LogInModel.cs" />
     <Compile Include="ViewModels\RegisterModel.cs" />
     <Compile Include="ViewModels\UserInfoViewModel.cs" />
@@ -297,10 +299,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\profile\landscape.jpg" />
-    <Content Include="images\profile\landscapeMarked.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="images\profile\Small-mario.png" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />

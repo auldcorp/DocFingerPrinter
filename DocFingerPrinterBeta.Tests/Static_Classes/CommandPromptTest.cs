@@ -13,7 +13,7 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
     [TestClass]
     public class CommandPromptTest
     {
-        [TestMethod]
+        /*[TestMethod]
         public void MkDirRmDirTest()
         {
             string command = "mkdir test";
@@ -32,5 +32,6 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             Assert.AreEqual(ResultStatus.Success, rmStatus);
             Assert.IsFalse(Directory.Exists(workindDir + "\\test"));
         }
+        */
     }
 }

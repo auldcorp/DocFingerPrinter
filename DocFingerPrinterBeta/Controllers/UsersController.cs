@@ -10,10 +10,18 @@ using Microsoft.AspNet.Identity;
 
 namespace DocFingerPrinterBeta.Controllers
 {
+    /// <summary>
+    /// controller that handles user information
+    /// </summary>
     public class UsersController : Controller
     {
         private FingerPrinterService _fps = new FingerPrinterService();
         // GET: Users
+
+        /// <summary>
+        /// list of users page
+        /// </summary>
+        /// <returns>page with a list of users</returns>
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
@@ -25,6 +33,11 @@ namespace DocFingerPrinterBeta.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// page of logged in user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>page with userInfo for currently logged in user</returns>
         [Authorize(Roles = "User, Admin")]
         public ActionResult UserInfo(int id)
         {

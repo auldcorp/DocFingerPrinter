@@ -6,6 +6,9 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.ViewModels
 {
+    /// <summary>
+    /// view model for the user info screen
+    /// </summary>
     public class UserInfoViewModel
     {
         public List<byte[]> Images { get; set; }

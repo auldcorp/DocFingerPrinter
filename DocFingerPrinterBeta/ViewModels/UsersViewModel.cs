@@ -6,6 +6,9 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.ViewModels
 {
+    /// <summary>
+    /// view model for the list of users screen
+    /// </summary>
     public class UsersViewModel
     {
         public List<User> Users { get; set; }

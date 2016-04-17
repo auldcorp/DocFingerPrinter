@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DocFingerPrinterBeta.ViewModels
 {
+    /// <summary>
+    /// view model for the register screen
+    /// </summary>
     public class RegisterModel
     {
         [Required]

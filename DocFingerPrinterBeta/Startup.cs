@@ -13,6 +13,10 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DocFingerPrinterBeta
 {
+    /// <summary>
+    /// class that handles startup configuration of the application, including
+    /// connecting to the DB and setting up the authentication scheme/server
+    /// </summary>
     public partial class Startup
     {
         public static Func<UserManager<User, int>> UserManagerFactory { get; private set; }

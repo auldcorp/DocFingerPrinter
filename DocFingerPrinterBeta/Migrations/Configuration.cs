@@ -6,6 +6,9 @@ namespace DocFingerPrinterBeta.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
+    /// <summary>
+    /// class that handles database migrations/seeding
+    /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<DocFingerPrinterBeta.DAL.ApplicationDbContext>
     {
         public Configuration()

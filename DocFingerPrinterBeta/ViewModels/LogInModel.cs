@@ -8,6 +8,9 @@ using System.Web.Mvc;
 
 namespace DocFingerPrinterBeta.ViewModels
 {
+    /// <summary>
+    /// view model for login screen
+    /// </summary>
     public class LogInModel
     {
         [Required]

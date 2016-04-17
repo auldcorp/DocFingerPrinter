@@ -5,6 +5,9 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.Models
 {
+    /// <summary>
+    /// image model
+    /// </summary>
     public class Image
     {
         public int Id { get; set; }

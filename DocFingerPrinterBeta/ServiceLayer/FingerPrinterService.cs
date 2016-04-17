@@ -11,6 +11,9 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.ServiceLayer
 {
+    /// <summary>
+    /// service layer to handle returning responses to controllers based on results from data portal
+    /// </summary>
     public class FingerPrinterService
     {
         private DataPortal _dataPortal;
@@ -20,6 +23,14 @@ namespace DocFingerPrinterBeta.ServiceLayer
              _dataPortal = new DataPortal();
         }
 
+        /// <summary>
+        /// calls dataPortal.FileUpload to upload file
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <param name="fileBytes"></param>
+        /// <param name="imageName"></param>
+        /// <param name="radio"></param>
+        /// <returns>appropriate response based on whether an error occured or not</returns>
         public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
         {
             try
@@ -36,6 +47,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// calls dataPortal.DetectSignature to detect the signature on the image
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <returns>appropriate response based on whether an error occured or not</returns>
         public DetectionResponse DetectSignature(string imagePath)
         {
             try
@@ -52,6 +68,10 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// calls dataPortal.GetUsers
+        /// </summary>
+        /// <returns>users along with appropriate response based on whether an error occured or not</returns>
         public UsersResponse GetUsers()
         {
             try
@@ -74,6 +94,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// calls dataPortal.GetUser
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>user along with appropriate response based on whether an error occured or not</returns>
         public UsersResponse GetUser(int userId)
         {
             try
@@ -96,6 +121,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// calls dataPortal.GetUserImages
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>user images along with appropriate response based on whether an error occured or not</returns>
         public ImagesResponse GetUserImages(int userId)
         {
             try
@@ -118,6 +148,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// calls dataPortal.GetImageById
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>specific image along with appropriate response based on whether an error occured or not</returns>
         public ImageBinaryResponse GetImageById(int id)
         {
             try

@@ -8,6 +8,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DocFingerPrinterBeta.Models
 {
+    /// <summary>
+    /// claim model
+    /// </summary>
     public class UserClaim : IdentityUserClaim<int>
     {
     }
