@@ -10,10 +10,20 @@ using System.Drawing.Drawing2D;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
+    /// <summary>
+    /// class to handle all openstego commands/marking and embedding
+    /// </summary>
     public static class OpenStego
     {
         public static string OPEN_STEGO_PATH = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
 
+        /// <summary>
+        /// embeds param embeddedData into image
+        /// </summary>
+        /// <param name="embeddedData"></param>
+        /// <param name="inputFilePath"></param>
+        /// <param name="outputFilePath"></param>
+        /// <returns></returns>
         public static ResultStatus EmbedData(string embeddedData, string inputFilePath, string outputFilePath)
         {
             string workingDirectory = @"C:\Users\Public";
@@ -27,6 +37,13 @@ namespace DocFingerPrinterBeta.Static_Classes
             return result;
         }
 
+        /// <summary>
+        /// embeds data in embeddedDataFilePath into the image
+        /// </summary>
+        /// <param name="embeddedDataFilePath"></param>
+        /// <param name="inputFilePath"></param>
+        /// <param name="outputFilePath"></param>
+        /// <returns></returns>
         public static ResultStatus EmbedDataFromFile(string embeddedDataFilePath, string inputFilePath, string outputFilePath)
         {
             string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + embeddedDataFilePath
@@ -36,6 +53,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
         }
 
+        /// <summary>
+        /// extracts data from the file if the files has previously had data embedded from it
+        /// </summary>
+        /// <param name="inputFilePath"></param>
+        /// <returns></returns>
         public static string ExtractDataFromFile(string inputFilePath)
         {
             string workingDirectory = @"C:\Users\Public";
@@ -50,6 +72,13 @@ namespace DocFingerPrinterBeta.Static_Classes
             return result;
         }
 
+        /// <summary>
+        /// physically marks text onto the image
+        /// </summary>
+        /// <param name="corner"></param>
+        /// <param name="mark"></param>
+        /// <param name="inputFilePath"></param>
+        /// <returns></returns>
         public static byte[] WatermarkImage(int corner, string mark, string inputFilePath)
         {
             /*todo: accomodate for buffers on edges when placing watermark

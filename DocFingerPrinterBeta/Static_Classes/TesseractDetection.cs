@@ -8,8 +8,16 @@ using System.Web.Hosting;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
+    /// <summary>
+    /// class to handle all tesseract library calls
+    /// </summary>
     public class TesseractDetection
     {
+        /// <summary>
+        /// pulls marked from param inputFilePath image
+        /// </summary>
+        /// <param name="inputFilePath"></param>
+        /// <returns>encodes text</returns>
         public static string getText(string inputFilePath)
         {
             string rootPath = HostingEnvironment.ApplicationPhysicalPath;
@@ -23,6 +31,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return text;
         }
 
+        /// <summary>
+        /// takes the string str and removes any whitespaces
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>param str minus whitespaces</returns>
         public static string removeWhiteSpaces(string str)
         {
             string strReturn = "";
@@ -34,6 +47,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return strReturn;
         }
 
+        /// <summary>
+        /// takes the string str and removes any new lines characters
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>param str minus newlines characters</returns>
         public static string removeNewLineCharacters(string str)
         {
             string strReturn = "";
@@ -45,6 +63,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return strReturn;
         }
 
+        /// <summary>
+        /// takes the encoded string param str and returns the user Id associated with it
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>the users id associated with the encoded string str</returns>
         public static string getUserIDString(string str)
         {
             int i = 0;
@@ -65,8 +88,12 @@ namespace DocFingerPrinterBeta.Static_Classes
                 return getUserIDString(str);
             return strReturn;
         }
-        
-        //Returns an array of the userID followed by the imageID
+
+        /// <summary>
+        /// Returns an array of the userID followed by the imageID
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>an array of the userdId followed by the imageId</returns>
         public static string convertFullMarkToString(string str)
         {
             string userIDStr = getUserIDString(str);
@@ -77,6 +104,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return result;
         }
 
+        /// <summary>
+        /// takes the encoded string param str and returns the image Id associated with it
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>imageId associated with the encoding</returns>
         public static string getImageIDString(string str)
         {
             int i = 0;
@@ -98,6 +130,12 @@ namespace DocFingerPrinterBeta.Static_Classes
             return strReturn;
         }
 
+
+        /// <summary>
+        /// converts integer to binary signature
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public static string convertIntToBinarySignature(int x)
         {
             string result = "";
@@ -112,6 +150,11 @@ namespace DocFingerPrinterBeta.Static_Classes
             return result;
         }
 
+        /// <summary>
+        /// converts encoded string to integers
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         //Pass in only valued characters from the marking scheme
         public static int convertToInt(string str)
         {

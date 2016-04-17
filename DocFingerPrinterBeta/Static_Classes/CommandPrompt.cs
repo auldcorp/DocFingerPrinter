@@ -8,9 +8,18 @@ using System.Web;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
-
+    /// <summary>
+    /// class that handles execution of command prompt processes
+    /// </summary>
     public static class CommandPrompt
     {
+
+        /// <summary>
+        /// executes param command by spawning a process and inputting a specified command
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="workingDirectory"></param>
+        /// <returns></returns>
         public static ResultStatus ExecuteCommand(string command, string workingDirectory)
         {
             var procedure = new ProcessStartInfo();
