@@ -9,10 +9,9 @@
 
     <Grid Background="BlueViolet"  >
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="200" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -20,7 +19,7 @@
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        
+        <ProgressRing Name="ProgressRing" Grid.Row="1" Grid.Column="1" IsActive="False"  Width="50" Height="50" />
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="300px" VerticalAlignment="Center">
             <TextBlock Text="DocFingerPrinter" FontFamily="Helvetica" Foreground="White" FontSize="22" Margin="0,0,0,20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
             <TextBox Name="username" PlaceholderText="Username" />
@@ -28,8 +27,7 @@
 
             <Button Name="SubmitButton" Content="Login"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,20,0,0" Click="SubmitButton_Click" />
         </StackPanel>
-
-        <HyperlinkButton Content="Sign Up for DocFingerPrinter" NavigateUri="http://docfingerprint.cloudapp.net/Auth/register" Foreground="White" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+        <HyperlinkButton Content="Sign Up for DocFingerPrinter" NavigateUri="http://docfingerprint.cloudapp.net/Auth/register" Foreground="White" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
 
     </Grid>
 </Page>

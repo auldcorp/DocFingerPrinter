@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -75,8 +78,23 @@ namespace UWPDocFingerPrinter
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                //rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                rootFrame.Navigate(typeof(Login), e.Arguments);
+                string filePath = ApplicationData.Current.LocalFolder.Path + "/authToken.txt";
+                if (File.Exists(filePath))
+                {
+                    var fileStream = File.OpenRead(filePath);
+                    byte[] dataBytes = new byte[fileStream.Length];
+                    fileStream.Read(dataBytes, 0, dataBytes.Length);
+                    string authToken = Encoding.UTF8.GetString(dataBytes);
+                    Cookie authCookie = new Cookie(".ASPXAUTH", authToken, "/","docfingerprint.cloudapp.net");
+                    authCookie.Path = "/";
+                    authCookie.Expired = false;
+                    authCookie.Expires = DateTime.MinValue;
+                    authCookie.Version = 0;
+                    HttpRequest.authCookie = authCookie;
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                }
+                else
+                    rootFrame.Navigate(typeof(Login), e.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();

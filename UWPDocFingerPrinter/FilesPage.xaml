@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="UWPDocFingerPrinter.FilesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDocFingerPrinter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
+                CompactPaneLength="50" OpenPaneLength="185" >
+        <SplitView.Pane>
+            <StackPanel Background="Gray" Margin="0,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                     Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" />
+                    <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Name="embedPanel" Orientation="Horizontal">
+                    <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
+                            Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
+                    <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Name="searchPanel" Orientation="Horizontal">
+                    <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
+                            Width="50" Height="50" Background="Transparent" Click="searchImageIcon_Click" />
+                    <TextBlock Text="Search Image" FontSize="14" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Name="filesPanel" Background="DarkGray" Orientation="Horizontal">
+                    <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
+                            Width="50" Height="50" Background="Transparent" />
+                    <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Name="settingPanel" Orientation="Horizontal">
+                    <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
+                            Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click" />
+                    <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+        </SplitView.Pane>
+        <SplitView.Content>
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="12*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Marked Files" FontSize="25" Grid.Row="0" Grid.ColumnSpan="8" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <ScrollViewer Name="scollViewer" Grid.Row="1" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Hidden" >
+                    <StackPanel Name="vertStackPanel" HorizontalAlignment="Center" >
+
+                    </StackPanel>
+                </ScrollViewer>
+                
+            </Grid>
+            
+        </SplitView.Content>
+    </SplitView>
+</Page>

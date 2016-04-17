@@ -22,5 +22,6 @@ namespace DocFingerPrinterBeta.Models
         }
 
         public int NumberOfImagesMarked { get; set; }
+        public string AuthTokenValue { get; set; }
     }
 }

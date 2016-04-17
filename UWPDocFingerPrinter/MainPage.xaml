@@ -42,19 +42,20 @@
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="Auto" Width="Auto" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="8*" />
+                    <RowDefinition Height="10*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
+                <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                     Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Margin="0,0,0,10" Visibility="Collapsed" />
                 <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center" Width="500px" >
-                    <TextBlock Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
-                    <Line Fill="Black" Height="4" Width="200"/>
+                    <TextBlock Name="titleTextBox" Text="Embed Signature into image" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
                     <TextBlock />
                     <Button Name="imageChooserButton" Content="Choose File" HorizontalAlignment="Stretch" Click="imageChooserButton_Click"/>
                     <TextBlock Name="fileNameTextBlock" />
                     <TextBlock />
-                    <TextBlock Text="Choose location of signature:" FontSize="16" HorizontalAlignment="Left"  />
-                    <TextBlock />
-                    <Grid Height="Auto" Width="Auto">
+                    <TextBlock Name="chooseLocationTextbox" Text="Choose location of signature:" FontSize="16" HorizontalAlignment="Left"  />
+
+                    <Grid Name="RadioBoxGrid" Height="Auto" Width="Auto" Margin="0,10,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
@@ -65,31 +66,32 @@
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Top Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="topLeftText" Grid.Row="0" Grid.Column="0" Text="Top Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <RadioButton Grid.Row="1" Grid.Column="0"  Name="topLeftButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Row="0" Grid.Column="1"  Text="Top Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="topRightText" Grid.Row="0" Grid.Column="1"  Text="Top Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <RadioButton Grid.Row="1" Grid.Column="1"  Name="topRightButton" MinWidth="20" Width="20" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Row="0" Grid.Column="2"  Text="Bottom Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="bottomLeftText" Grid.Row="0" Grid.Column="2"  Text="Bottom Left" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <RadioButton Grid.Row="1" Grid.Column="2"  Name="bottomLeftButton"  MinWidth="20" Width="20" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Row="0" Grid.Column="3"  Text="Botttom Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Name="bottomRightText" Grid.Row="0" Grid.Column="3"  Text="Botttom Right" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         <RadioButton Grid.Row="1" Grid.Column="3"  Name="bottomRightButton"  MinWidth="20" Width="20" HorizontalAlignment="Center" />
                     </Grid>
-                    <Button Name="embedSignatureButton" Content="Start Embedding" HorizontalAlignment="Stretch" Click="embedSignatureButton_Click" Margin="0,100,0,0"/>
-                    <Image Name="embedPicture" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Button Name="embedSignatureButton" Content="Start Embedding" HorizontalAlignment="Stretch" Click="embedSignatureButton_Click" Margin="0,50,0,0"/>
+                    <ProgressRing Name="progressRing" Width="Auto" Visibility="Collapsed" />
                 </StackPanel>
-                <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
+                <Popup Grid.Row="1" Name="SearchPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center" HorizontalOffset="-185"  >
                     <StackPanel>
                         <TextBlock Text="Search Page" FontSize="20" />
                     </StackPanel>
                 </Popup>
-                <Popup Grid.Row="1" Name="MarkedFilesPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center"  >
+                <Popup Grid.Row="1" Name="MarkedFilesPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center" HorizontalOffset="-185" >
                     <StackPanel>
                         <TextBlock Text="Mark Files Page" FontSize="20"/>
                     </StackPanel>
                 </Popup>
-                <Popup Grid.Row="1" Name="SettingsPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center" >
+                <Popup Grid.Row="1" Name="SettingsPresenter" IsOpen="False" Grid.RowSpan="3" HorizontalAlignment="Center" HorizontalOffset="-185" >
                     <StackPanel>
-                        <TextBlock Text="Settings Page" FontSize="20"/>
+                        <TextBlock Text="Settings" FontSize="24" Margin="0,0,0,0"/>
+                        
                     </StackPanel>
                 </Popup>
             </Grid>

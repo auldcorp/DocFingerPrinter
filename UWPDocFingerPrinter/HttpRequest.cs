@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -19,9 +20,10 @@ namespace UWPDocFingerPrinter
 {
     public static class HttpRequest
     {
-        private static Cookie authCookie;
+        public static Cookie authCookie;
         public async static Task<bool> UploadFile(StorageFile file, int corner)
         {
+            bool success = false;
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
             builder.Host = "docfingerprint.cloudapp.net";
@@ -30,9 +32,9 @@ namespace UWPDocFingerPrinter
             var req = (HttpWebRequest)WebRequest.Create(builder.Uri);
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
-            //req.Credentials = new NetworkCredential(username, password);
             CookieContainer cookies = new CookieContainer();
-            //cookies.Add(builder.Uri, authCookie);
+            Uri cookieUri = new Uri("http://docFingerprint.cloudapp.net");
+            cookies.Add(cookieUri, authCookie);
             req.CookieContainer = cookies;
             byte[] fileBytes = null;
             uint fileSize = 0;
@@ -57,39 +59,52 @@ namespace UWPDocFingerPrinter
             byte[] postData = Encoding.UTF8.GetBytes(postParameters);
             await stream.WriteAsync(postData, 0, postData.Length);
             stream.Dispose();
-
-            WebResponse result = await req.GetResponseAsync();
-            
-            if (result.ContentType.Substring(0, 5).Equals("image"))
+            try
             {
-                var randomAccessStream = new InMemoryRandomAccessStream();
-                byte[] byteResponse = new byte[500];
-                int read = 0;
-                using (var responseStream = result.GetResponseStream())
+                WebResponse result = await req.GetResponseAsync();
+                if (result.ContentType.Substring(0, 5).Equals("image"))
                 {
-                    do
+                    var randomAccessStream = new InMemoryRandomAccessStream();
+                    byte[] byteResponse = new byte[500];
+                    int read = 0;
+                    using (var responseStream = result.GetResponseStream())
                     {
-                        read = await responseStream.ReadAsync(byteResponse, 0, byteResponse.Length);
-                        await randomAccessStream.WriteAsync(byteResponse.AsBuffer());
-                    } while (read != 0);
+                        do
+                        {
+                            read = await responseStream.ReadAsync(byteResponse, 0, byteResponse.Length);
+                            await randomAccessStream.WriteAsync(byteResponse.AsBuffer());
+                        } while (read != 0);
 
-                    await randomAccessStream.FlushAsync();
-                    randomAccessStream.Seek(0);
+                        await randomAccessStream.FlushAsync();
+                        randomAccessStream.Seek(0);
+                    }
+
+                    byte[] responseBytes = new byte[randomAccessStream.Size];
+                    await randomAccessStream.ReadAsync(responseBytes.AsBuffer(), (uint)responseBytes.Length, InputStreamOptions.None);
+                    string imageString = Encoding.UTF8.GetString(responseBytes);
+                    string[] byteToConvert = imageString.Split('.');
+                    List<byte> fileBytesList = new List<byte>();
+                    byteToConvert.ToList()
+                            .Where(x => !string.IsNullOrEmpty(x))
+                            .ToList()
+                            .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
+
+                    byte[] imageBytes = fileBytesList.ToArray();
+                    if (!Directory.Exists(ApplicationData.Current.LocalFolder.Path + "/Images"))
+                        await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                    StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName);
+                    Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
+                    await writeToFile.WriteAsync(imageBytes, 0, imageBytes.Length);
+                    writeToFile.Dispose();
+                    success = true;
                 }
-
-                byte[] imageBytes = new byte[randomAccessStream.Size];
-                await randomAccessStream.ReadAsync(imageBytes.AsBuffer(), (uint)imageBytes.Length, InputStreamOptions.None);
-
-                await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name, CreationCollisionOption.ReplaceExisting);
-                StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.GetFileAsync(file.Name);
-                Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
-                await writeToFile.WriteAsync(imageBytes, 0, imageBytes.Length);
-                writeToFile.Dispose();
-                return true;
+            } catch (Exception E)
+            {
+                Popup errorPopup = new Popup();
+                
+                success = false;
             }
-
-            
-            return false;
+            return success;
         }
 
         public async static Task<bool> LogIn(string username, string password)
@@ -119,11 +134,15 @@ namespace UWPDocFingerPrinter
             stream.Dispose();
             HttpWebResponse result =(HttpWebResponse) await request.GetResponseAsync();
 
-            if (result.StatusCode == HttpStatusCode.OK)
+            if (result.StatusCode == HttpStatusCode.OK && result.Cookies[".ASPXAUTH"] != null)
             {
-
-                if (result.Cookies[".ASPXAUTH"] != null)
-                    authCookie = result.Cookies[".ASPXAUTH"];
+                authCookie = result.Cookies[".ASPXAUTH"];
+                await ApplicationData.Current.LocalFolder.CreateFileAsync("authToken.txt", CreationCollisionOption.ReplaceExisting);
+                StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("authToken.txt");
+                Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
+                byte[] tokenBytes = Encoding.UTF8.GetBytes(authCookie.Value);
+                await writeToFile.WriteAsync(tokenBytes, 0, tokenBytes.Length);
+                writeToFile.Dispose();
 
                 success = true;
             }

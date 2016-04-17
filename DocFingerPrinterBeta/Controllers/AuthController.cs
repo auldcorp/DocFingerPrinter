@@ -98,7 +98,10 @@ namespace DocFingerPrinterBeta.Controllers
                 ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
                 string encTicket = FormsAuthentication.Encrypt(ticket);
 
-                Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                //HttpCookie authCookie = FormsAuthentication.GetAuthCookie(user.UserName, true);
+                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
+                user.AuthTokenValue = authCookie.Value;
+                Response.AppendCookie(authCookie);
                 Response.StatusCode = (int) HttpStatusCode.OK;
                 return Response;
             }

@@ -12,8 +12,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Web.UI.HtmlControls;
 
 namespace DocFingerPrinterBeta.Controllers
@@ -64,46 +66,62 @@ namespace DocFingerPrinterBeta.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User, Admin")]
-        public ActionResult MobileFileUpload(string fileBytes, string fileName, int radio)
+        public HttpResponseBase MobileFileUpload(string fileBytes, string fileName, int radio)
         {
+            HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
             if (!string.IsNullOrEmpty(fileBytes))
             {
-                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), fileName);
-
-                string[] byteToConvert = fileBytes.Split('.');
-                List<byte> fileBytesList = new List<byte>();
-                byteToConvert.ToList()
-                        .Where(x => !string.IsNullOrEmpty(x))
-                        .ToList()
-                        .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
-
-                byte[] imageBytes = fileBytesList.ToArray();
-                Bitmap image;
-                using (Stream imageStream = new MemoryStream(imageBytes))
+                try
                 {
-                    image = new Bitmap(imageStream);
-                    imageStream.Close();
-                    image.Save(imagePath);
-                }
+                    string imagePath = Path.Combine(Server.MapPath("~/images/profile"), fileName);
 
-                FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio);
-                if (fileUploadResponse.Status == ResultStatus.Error)
+                    string[] byteToConvert = fileBytes.Split('.');
+                    List<byte> fileBytesList = new List<byte>();
+                    byteToConvert.ToList()
+                            .Where(x => !string.IsNullOrEmpty(x))
+                            .ToList()
+                            .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
+
+                    byte[] imageBytes = fileBytesList.ToArray();
+                    Bitmap image;
+                    using (Stream imageStream = new MemoryStream(imageBytes))
+                    {
+                        image = new Bitmap(imageStream);
+                        imageStream.Close();
+                        image.Save(imagePath);
+                    }
+
+                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio);
+                    if (fileUploadResponse.Status == ResultStatus.Error)
+                    {
+                        Response.StatusDescription = fileUploadResponse.Message;
+                        Response.StatusCode = (int)fileUploadResponse.Status;
+                        return Response;
+                    }
+                    else
+                    {
+                        var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
+                        StringBuilder serializedBytes = new StringBuilder();
+                        imageData.ToList().ForEach(x => serializedBytes.AppendFormat("{0}.", Convert.ToUInt32(x)));
+                        string responseString = serializedBytes.ToString();
+                        byte[] responseData = Encoding.UTF8.GetBytes(responseString);
+                        Response.ContentEncoding = Encoding.UTF8;
+                        Response.ContentType = "image/png";
+                        Response.BinaryWrite(responseData);
+                        Response.Flush();
+                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        return Response;
+                    }
+                } catch (Exception E)
                 {
-                    return Json(fileUploadResponse.Message);
-                }
-                else
-                {
-                    var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
-                    StringBuilder serializedBytes = new StringBuilder();
-                    imageData.ToList().ForEach(x => serializedBytes.AppendFormat("{0}.", Convert.ToUInt32(x)));
-                    string responseString = serializedBytes.ToString();
-                    byte[] responseData = Encoding.UTF8.GetBytes(responseString);
-                    return new FileContentResult(responseData,"image/png");
+                    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    Response.StatusDescription = E.Message;
+                    return Response;
                 }
             }
-
-            return Json("Error: File input cannot be null.");
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            Response.StatusDescription = "Error: File input cannot be null.";
+            return Response;
         }
 
         [AllowAnonymous]

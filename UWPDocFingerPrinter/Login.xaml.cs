@@ -30,6 +30,7 @@ namespace UWPDocFingerPrinter
 
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            ProgressRing.IsActive = true;
             string user = username.Text;
             string pass = password.Password;
             bool loggedIn = await HttpRequest.LogIn(user, pass);
@@ -40,6 +41,7 @@ namespace UWPDocFingerPrinter
             {
                 username.Text = "Invalid Username of password!";
             }
+            ProgressRing.IsActive = false;
         }
 
         private void password_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -48,6 +50,7 @@ namespace UWPDocFingerPrinter
                 return;
             e.Handled = true;
             SubmitButton_Click(sender, e);
+            
         }
     }
 }
