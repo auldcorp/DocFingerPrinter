@@ -39,24 +39,34 @@ namespace DocFingerPrinterBeta.Controllers
         /// <returns>page displaying who uploaded file belongs to</returns>
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
+            var model = new FileUploadViewModel();
             if (file == null || !file.ContentType.Contains("image"))
             {
-                var model = new FileUploadViewModel();
-                model.errorMessage = "You must select a jpeg or png file to upload";
+                model.errorMessage = "You must select a png file to upload";
                 ViewBag.Hidden = "display: none";
                 ViewBag.UserName = "";
                 ViewBag.ImageNumber = "";
                 return View("Index", model);
             }
             DetectionResponse response = _fps.DetectSignature(file.FileName);
-            if(response.Status == ResultStatus.Success)
+            if (response.Status == ResultStatus.Success)
             {
+                model.errorMessage = null;
                 if (response.UserName != null)
                     ViewBag.UserName = response.UserName;
+
                 ViewBag.ImageNumber = response.ImageNumber;
                 ViewBag.Hidden = "";
+                return View("Index", model);
             }
-            return View("Index");
+            else
+            {
+                model.errorMessage = "An error occured during the processing of the image";
+                ViewBag.Hidden = "display: none";
+                ViewBag.UserName = "";
+                ViewBag.ImageNumber = "";
+                return View("Index", model);
+            }
         }
     }
 }
