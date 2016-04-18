@@ -22,10 +22,16 @@ namespace DocFingerPrinterBeta.Static_Classes
         {
             string rootPath = HostingEnvironment.ApplicationPhysicalPath;
             Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath);
+            image.SetResolution(300, 300);
             TesseractEngine ocr = new TesseractEngine(rootPath, "eng", EngineMode.TesseractOnly);
             ocr.SetVariable("tessedit_char_whitelist", "\\/|#");
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
+            p = p.ConvertRGBToGray();
+            p.Scale(3.0F, 3.0F);
+            p = p.Deskew();
+            
+            //Rect rect = new Rect(0,0,image.Width/2,image.Height/2);
             Page page = ocr.Process(p, PageSegMode.Auto);
             string text = page.GetText();
             return text;
