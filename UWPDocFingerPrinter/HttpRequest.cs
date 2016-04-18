@@ -80,20 +80,11 @@ namespace UWPDocFingerPrinter
 
                     byte[] responseBytes = new byte[randomAccessStream.Size];
                     await randomAccessStream.ReadAsync(responseBytes.AsBuffer(), (uint)responseBytes.Length, InputStreamOptions.None);
-                    string imageString = Encoding.UTF8.GetString(responseBytes);
-                    string[] byteToConvert = imageString.Split('.');
-                    List<byte> fileBytesList = new List<byte>();
-                    byteToConvert.ToList()
-                            .Where(x => !string.IsNullOrEmpty(x))
-                            .ToList()
-                            .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
-
-                    byte[] imageBytes = fileBytesList.ToArray();
                     if (!Directory.Exists(ApplicationData.Current.LocalFolder.Path + "/Images"))
                         await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
                     StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName);
                     Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
-                    await writeToFile.WriteAsync(imageBytes, 0, imageBytes.Length);
+                    await writeToFile.WriteAsync(responseBytes, 0, responseBytes.Length);
                     writeToFile.Dispose();
                     success = true;
                 }
@@ -209,28 +200,37 @@ namespace UWPDocFingerPrinter
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             request.CookieContainer = cookies;
-            var stream = await request.GetRequestStreamAsync();
 
-            StringBuilder serializedBytes = new StringBuilder();
-
-            string postParameters = "email=" + username + "&password=" + password;
-            byte[] postData = Encoding.UTF8.GetBytes(postParameters);
-            await stream.WriteAsync(postData, 0, postData.Length);
-            stream.Dispose();
-            HttpWebResponse result =(HttpWebResponse) await request.GetResponseAsync();
-
-            if (result.StatusCode == HttpStatusCode.OK && result.Cookies[".ASPXAUTH"] != null)
+            try
             {
-                authCookie = result.Cookies[".ASPXAUTH"];
-                await ApplicationData.Current.LocalFolder.CreateFileAsync("authToken.txt", CreationCollisionOption.ReplaceExisting);
-                StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("authToken.txt");
-                Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
-                byte[] tokenBytes = Encoding.UTF8.GetBytes(authCookie.Value);
-                await writeToFile.WriteAsync(tokenBytes, 0, tokenBytes.Length);
-                writeToFile.Dispose();
+                var stream = await request.GetRequestStreamAsync();
 
-                success = true;
+                StringBuilder serializedBytes = new StringBuilder();
+
+                string postParameters = "email=" + username + "&password=" + password;
+                byte[] postData = Encoding.UTF8.GetBytes(postParameters);
+                await stream.WriteAsync(postData, 0, postData.Length);
+                stream.Dispose();
+                HttpWebResponse result = (HttpWebResponse)await request.GetResponseAsync();
+
+                if (result.StatusCode == HttpStatusCode.OK && result.Cookies[".ASPXAUTH"] != null)
+                {
+                    authCookie = result.Cookies[".ASPXAUTH"];
+                    await ApplicationData.Current.LocalFolder.CreateFileAsync("authToken.txt", CreationCollisionOption.ReplaceExisting);
+                    StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.GetFileAsync("authToken.txt");
+                    Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
+                    byte[] tokenBytes = Encoding.UTF8.GetBytes(authCookie.Value);
+                    await writeToFile.WriteAsync(tokenBytes, 0, tokenBytes.Length);
+                    writeToFile.Dispose();
+
+                    success = true;
+                }
             }
+            catch(Exception E)
+            {
+
+            }
+            
             return success;
         }
     }

@@ -127,6 +127,10 @@ namespace DocFingerPrinterBeta.DataLayer
                                 result2.Status = ResultStatus.Success;
                             }
                         }
+                        else
+                        {
+                            result2.Status = ResultStatus.Error;
+                        }
                     }
                     else
                     {

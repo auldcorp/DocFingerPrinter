@@ -134,22 +134,20 @@ namespace DocFingerPrinterBeta.Controllers
                     FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio);
                     if (fileUploadResponse.Status == ResultStatus.Error)
                     {
-                        Response.StatusDescription = fileUploadResponse.Message;
                         Response.StatusCode = (int)fileUploadResponse.Status;
+                        Response.StatusDescription = fileUploadResponse.Message;
                         return Response;
                     }
                     else
                     {
                         var imageData = _fps.GetImageById(fileUploadResponse.SignedImageId).ImageBinary;
-                        StringBuilder serializedBytes = new StringBuilder();
-                        imageData.ToList().ForEach(x => serializedBytes.AppendFormat("{0}.", Convert.ToUInt32(x)));
-                        string responseString = serializedBytes.ToString();
-                        byte[] responseData = Encoding.UTF8.GetBytes(responseString);
-                        Response.ContentEncoding = Encoding.UTF8;
-                        Response.ContentType = "image/png";
-                        Response.BinaryWrite(responseData);
-                        Response.Flush();
                         Response.StatusCode = (int)HttpStatusCode.OK;
+                        Response.ContentType = "image/png";
+                        Response.Buffer = true;
+                        Stream responseStream = Response.OutputStream;
+                        responseStream.Write(imageData, 0, imageData.Length);
+                        responseStream.Flush();
+                        Response.Flush(); 
                         return Response;
                     }
                 } catch (Exception E)
