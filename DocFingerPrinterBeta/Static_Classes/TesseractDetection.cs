@@ -28,12 +28,12 @@ namespace DocFingerPrinterBeta.Static_Classes
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
             p = p.ConvertRGBToGray();
-            p.Scale(3.0F, 3.0F);
-            p = p.Deskew();
-            image.Dispose();
-            //Rect rect = new Rect(0,0,image.Width/2,image.Height/2);
             Page page = ocr.Process(p, PageSegMode.Auto);
             string text = page.GetText();
+            image.Dispose();
+            p.Dispose();
+            page.Dispose();
+            ocr.Dispose();
             return text;
         }
 

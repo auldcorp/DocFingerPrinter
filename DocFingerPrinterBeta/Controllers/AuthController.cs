@@ -132,7 +132,7 @@ namespace DocFingerPrinterBeta.Controllers
                 }
 
                 //HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
-                
+                FormsAuthentication.SetAuthCookie(user.UserName, true);
                 //Response.AppendCookie(authCookie);
                 
                 return Response;
