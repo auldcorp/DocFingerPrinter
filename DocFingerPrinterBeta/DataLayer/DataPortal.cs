@@ -179,9 +179,12 @@ namespace DocFingerPrinterBeta.DataLayer
         /// </summary>
         /// <param name="authToken"></param>
         /// <returns>returns user with param authToken or null if user does not exist</returns>
-        public User GetUserByAuthToken(string authToken)
-        { 
-            return _dbContext.Users.Where(x => x.AuthTokenValue == authToken).FirstOrDefault();
+        public List<User> GetUserByAuthToken(string authToken)
+        {
+            var user = _dbContext.Users.Where(x => x.AuthTokenValue == authToken).First();
+            List<User> users = new List<User>();
+            users.Add(user);
+            return users;
         }
 
         /// <summary>

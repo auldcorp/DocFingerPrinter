@@ -33,9 +33,11 @@ namespace UWPDocFingerPrinter
             var req = (HttpWebRequest)WebRequest.Create(builder.Uri);
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
+            req.AllowReadStreamBuffering = true;
             CookieContainer cookies = new CookieContainer();
-            cookies.Add(builder.Uri, authCookie);
+            //cookies.Add(req.RequestUri, authCookie);
             req.CookieContainer = cookies;
+            
             byte[] fileBytes = null;
             uint fileSize = 0;
             using (IRandomAccessStreamWithContentType fileStream = await file.OpenReadAsync())
@@ -58,8 +60,8 @@ namespace UWPDocFingerPrinter
             string postParameters = String.Format("fileBytes={0}&fileName={1}&radio={2}", serializedBytes.ToString(), file.Name, corner);
             byte[] postData = Encoding.UTF8.GetBytes(postParameters);
             await stream.WriteAsync(postData, 0, postData.Length);
-            await stream.FlushAsync();
-            stream.Dispose();
+            //await stream.FlushAsync();
+            //stream.Dispose();
             try
             {
                 WebResponse result = await req.GetResponseAsync();

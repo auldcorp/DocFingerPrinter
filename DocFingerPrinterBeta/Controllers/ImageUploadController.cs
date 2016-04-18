@@ -128,7 +128,7 @@ namespace DocFingerPrinterBeta.Controllers
             if (Request.Cookies[".ASPXAUTH"] != null)
             {
                 authCookie = Request.Cookies[".ASPXAUTH"];
-                user = _fps.GetUserFromAuthToken(authCookie.Value).Users.FirstOrDefault();
+                user = _fps.GetUserFromAuthToken(authCookie.Value).Users.First();
             }
                 
             if (user != null && !string.IsNullOrEmpty(fileBytes))

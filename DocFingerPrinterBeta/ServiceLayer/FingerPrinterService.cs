@@ -123,12 +123,9 @@ namespace DocFingerPrinterBeta.ServiceLayer
         {
             try
             {
-                var user = _dataPortal.GetUserByAuthToken(authToken);
-                List<Models.User> users = new List<Models.User>();
-                users.Add(user);
                 return new UsersResponse
                 {
-                    Users = users,
+                    Users = _dataPortal.GetUserByAuthToken(authToken),
                     Status = ResultStatus.Success,
                     Message = "success"
                 };
