@@ -17,8 +17,8 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         public void EmbedDataTest()
         {
             string embededData = "test";
-            string inputFilePath = "C:\\Users\\Public\\small-mario.png";
-            string outputFilePath = "C:\\Users\\Public\\test.png";
+            string inputFilePath = @"~\images\profile\test\Small-Mario.png";
+            string outputFilePath = @"~\images\profile\test\test.png";
 
             ResultStatus osStatus = OpenStego.EmbedData(embededData, inputFilePath, outputFilePath);
 
@@ -29,9 +29,9 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         [TestMethod]
         public void EmbededDataFromFileTest()
         {
-            string embeddedDataFilePath = "C:\\Users\\Public\\secretText.txt";
-            string inputFilePath = "C:\\Users\\Public\\small-mario.png";
-            string outputFilePath = "C:\\Users\\Public\\test.png";
+            string embeddedDataFilePath = @"texts\secretText.txt";
+            string inputFilePath = @"~\images\profile\test\Small-Mario.png";
+            string outputFilePath = @"~\images\profile\test\test.png";
 
             ResultStatus osStatus = OpenStego.EmbedDataFromFile(embeddedDataFilePath, inputFilePath, outputFilePath);
 
@@ -42,8 +42,9 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
         [TestMethod]
         public void ExtractDataTest()
         {
-            string inputFilePath = "C:\\Users\\Public\\test.png";
+            string inputFilePath = Directory.GetCurrentDirectory() + @"\images\profile\test\test.png";
             string result = OpenStego.ExtractDataFromFile(inputFilePath);
+            System.IO.File.Delete("C:\\Users\\Public\\data\\tempTextFile");
 
             Assert.AreEqual(result, "test");
         }
