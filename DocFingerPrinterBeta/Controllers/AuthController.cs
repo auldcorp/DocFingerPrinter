@@ -117,13 +117,21 @@ namespace DocFingerPrinterBeta.Controllers
                     user, DefaultAuthenticationTypes.ApplicationCookie);
 
                 GetAuthenticationManager().SignIn(new AuthenticationProperties() { ExpiresUtc = new DateTime(2018, 12, 25) },identity);
-                FormsAuthenticationTicket ticket;
-                ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
-                string encTicket = FormsAuthentication.Encrypt(ticket);
                 Response.StatusCode = (int)HttpStatusCode.OK;
-                //HttpCookie authCookie = FormsAuthentication.GetAuthCookie(user.UserName, true);
+                string encTicket;
+                if (string.IsNullOrEmpty(user.AuthTokenValue))
+                {
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
+                    encTicket = FormsAuthentication.Encrypt(ticket);
+                    user.AuthTokenValue = encTicket;
+                }
+                else
+                {
+                    encTicket = user.AuthTokenValue;
+                }
+
                 HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
-                user.AuthTokenValue = authCookie.Value;
+                
                 Response.AppendCookie(authCookie);
                 
                 return Response;

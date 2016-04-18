@@ -21,19 +21,29 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// embeds param embeddedData into image
         /// </summary>
         /// <param name="embeddedData"></param>
-        /// <param name="inputFilePath"></param>
+        /// <param name="inputData"></param>
+        /// <param name="inputDataName"></param>
         /// <param name="outputFilePath"></param>
         /// <returns></returns>
-        public static ResultStatus EmbedData(string embeddedData, string inputFilePath, string outputFilePath)
+        public static byte[] EmbedData(string embeddedData, byte[] inputData, string inputDataName, string outputFilePath)
         {
-            string workingDirectory = @"C:\Users\Public";
-            File.WriteAllText(workingDirectory + @"\tempTextFile.txt", embeddedData);
-            string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + workingDirectory
-               + "\\tempTextFile.txt\" -cf \"" + inputFilePath + "\" -sf \"" + outputFilePath + "\"";
+            byte[] result = null;
+            string workingDirectory = @"C:\Users\Public\";
+            string tempTextFilePath = workingDirectory + @"tempTextFile.txt";
+            string tempImageFilePath = workingDirectory + inputDataName;
 
-            var result = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+            File.WriteAllText(tempTextFilePath, embeddedData);
+            File.WriteAllBytes(tempImageFilePath, inputData);
+            string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + tempTextFilePath
+               + "\" -cf \"" + tempImageFilePath + "\" -sf \"" + outputFilePath + "\"";
 
-            File.Delete(workingDirectory + @"\tempTextFile.txt");
+            var commandResult = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+            if(commandResult == ResultStatus.Success)
+            {
+                result = File.ReadAllBytes(tempImageFilePath);
+            }
+            File.Delete(tempTextFilePath);
+            File.Delete(tempImageFilePath);
             return result;
         }
 
@@ -68,6 +78,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             if (r == ResultStatus.Success && File.Exists(workingDirectory + "\\data\\tempTextFile.txt"))
             {
                 result = System.IO.File.ReadAllText(workingDirectory + "\\data\\tempTextFile.txt");
+                File.Delete(workingDirectory + "\\data\\tempTextFile.txt");
             }
             return result;
         }

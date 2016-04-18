@@ -111,6 +111,7 @@ namespace DocFingerPrinterBeta.Controllers
         public HttpResponseBase MobileFileUpload(string fileBytes, string fileName, int radio)
         {
             HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+
             if (!string.IsNullOrEmpty(fileBytes))
             {
                 try
