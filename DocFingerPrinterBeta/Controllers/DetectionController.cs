@@ -49,7 +49,11 @@ namespace DocFingerPrinterBeta.Controllers
                 ViewBag.ImageNumber = "";
                 return View("Index", model);
             }
-            DetectionResponse response = _fps.DetectSignature(file.FileName);
+            string imageName = Path.GetFileName(file.FileName);
+            string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
+            file.SaveAs(imagePath);
+            DetectionResponse response = _fps.DetectSignature(imagePath);
+            System.IO.File.Delete(imagePath);
             //if sig detection success return user/image id else return error
             if (response.Status == ResultStatus.Success)
             {

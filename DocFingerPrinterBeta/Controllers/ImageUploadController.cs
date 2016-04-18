@@ -88,6 +88,7 @@ namespace DocFingerPrinterBeta.Controllers
                         return File(imageData, "image/png");
                     }
                 }
+                System.IO.File.Delete(imagePath);
             }
 
             model = new FileUploadViewModel();
