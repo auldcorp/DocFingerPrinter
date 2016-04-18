@@ -34,8 +34,7 @@ namespace UWPDocFingerPrinter
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
             CookieContainer cookies = new CookieContainer();
-            Uri cookieUri = new Uri("http://docFingerprint.cloudapp.net");
-            cookies.Add(cookieUri, authCookie);
+            cookies.Add(builder.Uri, authCookie);
             req.CookieContainer = cookies;
             byte[] fileBytes = null;
             uint fileSize = 0;
@@ -59,6 +58,7 @@ namespace UWPDocFingerPrinter
             string postParameters = String.Format("fileBytes={0}&fileName={1}&radio={2}", serializedBytes.ToString(), file.Name, corner);
             byte[] postData = Encoding.UTF8.GetBytes(postParameters);
             await stream.WriteAsync(postData, 0, postData.Length);
+            await stream.FlushAsync();
             stream.Dispose();
             try
             {

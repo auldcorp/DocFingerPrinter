@@ -103,8 +103,8 @@ namespace DocFingerPrinterBeta.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 Response.StatusDescription = "Invalid Model";
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 
                 return Response;
             }

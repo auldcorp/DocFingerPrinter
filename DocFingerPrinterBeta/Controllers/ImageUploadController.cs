@@ -123,8 +123,14 @@ namespace DocFingerPrinterBeta.Controllers
         [HttpPost]
         public async Task<HttpResponseBase> MobileFileUpload(string fileBytes, string fileName, int radio)
         {
-            HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-            var user = _fps.GetUserFromAuthToken(authCookie.Value).Users.FirstOrDefault();
+            HttpCookie authCookie = null;
+            Models.User user = null;
+            if (Request.Cookies[".ASPXAUTH"] != null)
+            {
+                authCookie = Request.Cookies[".ASPXAUTH"];
+                user = _fps.GetUserFromAuthToken(authCookie.Value).Users.FirstOrDefault();
+            }
+                
             if (user != null && !string.IsNullOrEmpty(fileBytes))
             {
                 try
