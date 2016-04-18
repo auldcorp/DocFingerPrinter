@@ -30,7 +30,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             p = p.ConvertRGBToGray();
             p.Scale(3.0F, 3.0F);
             p = p.Deskew();
-            
+            image.Dispose();
             //Rect rect = new Rect(0,0,image.Width/2,image.Height/2);
             Page page = ocr.Process(p, PageSegMode.Auto);
             string text = page.GetText();
@@ -76,22 +76,15 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// <returns>the users id associated with the encoded string str</returns>
         public static string getUserIDString(string str)
         {
-            int i = 0;
-            while (str[i] != '\\')
-            {
-                i++;
-                if (i >= str.Length)
-                    return "";
-            }
-            i++;
             string strReturn = "";
-            while (i < str.Length && (str[i] == '|' || str[i] == '/' || str[i] == 'l'))
+            if (!string.IsNullOrEmpty(str))
             {
-                strReturn += str[i];
-                i++;
+                int startIndex = str.IndexOf('\\') + 1;
+                int endIndex = str.IndexOf('#') - 1;
+
+                if( startIndex != -1 && endIndex != -1 && startIndex < endIndex)
+                    strReturn = str.Substring(startIndex, endIndex - startIndex);
             }
-            if (strReturn == "" && i < str.Length)
-                return getUserIDString(str);
             return strReturn;
         }
 
@@ -117,22 +110,19 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// <returns>imageId associated with the encoding</returns>
         public static string getImageIDString(string str)
         {
-            int i = 0;
-            while (str[i] != '#')
-            {
-                i++;
-                if (i >= str.Length)
-                    return "";
-            }
-            i++;
             string strReturn = "";
-            while (i < str.Length && (str[i] == '|' || str[i] == '/' || str[i] == 'l'))
+            if (!string.IsNullOrEmpty(str) && str.IndexOf('#') != -1)
             {
-                strReturn += str[i];
-                i++;
+                int startIndex = str.IndexOf('#') + 1;
+                int endIndex = startIndex;
+   
+                while (endIndex < str.Length && (str[endIndex] == '|' || str[endIndex] == '/'))
+                {
+                    endIndex++;
+                }
+                strReturn = str.Substring(startIndex, endIndex - startIndex);
             }
-            if (strReturn == "" && i < str.Length)
-                return getImageIDString(strReturn);
+
             return strReturn;
         }
 
@@ -171,7 +161,6 @@ namespace DocFingerPrinterBeta.Static_Classes
                 switch (str[i])
                 {
                     case '|':
-                    case 'l':
                         b = 1;
                         break;
                     case '/':

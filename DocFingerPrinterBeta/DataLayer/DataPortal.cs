@@ -84,26 +84,25 @@ namespace DocFingerPrinterBeta.DataLayer
         /// <returns>username and image number</returns>
         public DetectionResponse DetectSignature(string imagePath)
         {
-            DetectionResponse result1 = new DetectionResponse();
-            DetectionResponse result2 = new DetectionResponse();
+            DetectionResponse result = new DetectionResponse();
             string extractText = OpenStego.ExtractDataFromFile(imagePath);
             if (!String.IsNullOrEmpty(extractText))
             {
                 Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(extractText)).Include("User").FirstOrDefault();
                 if (markedImage != null)
                 {
-                    result2.UserName = markedImage.User.UserName;
+                    result.UserName = markedImage.User.UserName;
                     int imageNo;
                     bool parseSuccess = int.TryParse(extractText.Substring(extractText.IndexOf('#') + 1), out imageNo);
                     if (parseSuccess)
                     {
-                        result2.ImageNumber = imageNo;
-                        result2.Status = ResultStatus.Success;
+                        result.ImageNumber = imageNo;
+                        result.Status = ResultStatus.Success;
                     }
                 }
                 else
                 {
-                    result2.Status = ResultStatus.Error;
+                    result.Status = ResultStatus.Error;
                 }
             }
             else 
@@ -119,31 +118,31 @@ namespace DocFingerPrinterBeta.DataLayer
                         Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
                         if (markedImage != null)
                         {
-                            result2.UserName = markedImage.User.UserName;
+                            result.UserName = markedImage.User.UserName;
                             int imageNo;
                             bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
                             if (parseSuccess)
                             {
-                                result2.ImageNumber = imageNo;
-                                result2.Status = ResultStatus.Success;
+                                result.ImageNumber = imageNo;
+                                result.Status = ResultStatus.Success;
                             }
                         }
                         else
                         {
-                            result2.Status = ResultStatus.Error;
+                            result.Status = ResultStatus.Error;
                         }
                     }
                     else
                     {
-                        result2.Status = ResultStatus.Error;
+                        result.Status = ResultStatus.Error;
                     }
                 }
                 else
                 {
-                    result2.Status = ResultStatus.Error;
+                    result.Status = ResultStatus.Error;
                 }
             }
-            return result2;
+            return result;
         }
 
         /// <summary>

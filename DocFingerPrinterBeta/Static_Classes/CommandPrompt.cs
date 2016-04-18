@@ -28,7 +28,8 @@ namespace DocFingerPrinterBeta.Static_Classes
             procedure.WorkingDirectory = workingDirectory;
             procedure.UseShellExecute = true;
             procedure.Arguments = "/c " + command;
-            procedure.WindowStyle = ProcessWindowStyle.Hidden;
+            procedure.WindowStyle = ProcessWindowStyle.Normal;
+            
 
             var process = new Process() { StartInfo = procedure };
             process.Start();
