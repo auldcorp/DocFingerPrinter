@@ -90,7 +90,7 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// <param name="mark"></param>
         /// <param name="inputFilePath"></param>
         /// <returns></returns>
-        public static byte[] WatermarkImage(int corner, string mark, string inputFilePath)
+        public static byte[] WatermarkImage(int corner, string mark, string inputFilePath, bool box)
         {
             /*todo: accomodate for buffers on edges when placing watermark
                 accomodate for color of image/watermark            
@@ -112,8 +112,11 @@ namespace DocFingerPrinterBeta.Static_Classes
                 else if (corner == 3)
                     point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
 
-                //var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
-                imageGraphics.FillRectangle(Brushes.White, point.X, point.Y, size.Width, size.Height);
+                if (box)
+                {
+                    var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
+                    imageGraphics.FillRectangle(Brushes.White, point.X, point.Y, size.Width, size.Height);
+                }
                 imageGraphics.DrawString(mark, font, Brushes.Black, point);
 
                 using (MemoryStream stream = new MemoryStream())

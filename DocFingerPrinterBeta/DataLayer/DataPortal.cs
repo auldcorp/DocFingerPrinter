@@ -37,7 +37,7 @@ namespace DocFingerPrinterBeta.DataLayer
         /// <param name="imageName"></param>
         /// <param name="radio"></param>
         /// <returns>id of uploaded image</returns>
-        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
+        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio, bool box)
         {
             FileUploadResponse response = new FileUploadResponse();
             var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
@@ -53,11 +53,12 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.User = currentUser;
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
 
-            response.Status = OpenStego.EmbedData(markedImage.UniqueMark, imagePath, "C:\\Users\\Public\\test.png");
-            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
-            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, "C:\\Users\\Public\\test.png");
-            markedImage.MarkedImageBinary = markedImageBinary;
-            response.Status = ResultStatus.Success;            
+            string signature = "\\" + TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) + "#";
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath, box);
+            byte[] embeddedAndMarkedImageBinary = OpenStego.EmbedData(markedImage.UniqueMark, markedImageBinary, imageName, imagePath);
+
+            markedImage.MarkedImageBinary = embeddedAndMarkedImageBinary;
+            response.Status = ResultStatus.Success;
 
             try
             {
@@ -153,6 +154,12 @@ namespace DocFingerPrinterBeta.DataLayer
         {
             List<User> users = _dbContext.Users.ToList();
             return users;
+        }
+
+        public List<Models.Image> GetAllImageRecords()
+        {
+            var imageList = _dbContext.Image.Include("User").ToList();
+            return imageList;
         }
 
         /// <summary>
