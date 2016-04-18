@@ -80,7 +80,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             if (!string.IsNullOrEmpty(str))
             {
                 int startIndex = str.IndexOf('\\') + 1;
-                int endIndex = str.IndexOf('#') - 1;
+                int endIndex = str.IndexOf('#');
 
                 if( startIndex != -1 && endIndex != -1 && startIndex < endIndex)
                     strReturn = str.Substring(startIndex, endIndex - startIndex);
