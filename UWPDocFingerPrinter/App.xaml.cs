@@ -36,6 +36,31 @@ namespace UWPDocFingerPrinter
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            string filePath = ApplicationData.Current.LocalFolder.Path + "/requestedTheme.txt";
+            if (File.Exists(filePath))
+            {
+                var fileStream = File.OpenRead(filePath);
+                byte[] dataBytes = new byte[fileStream.Length];
+                fileStream.Read(dataBytes, 0, dataBytes.Length);
+                fileStream.Dispose();
+                string theme = Encoding.UTF8.GetString(dataBytes);
+                if (theme.Equals("dark"))
+                {
+                    App.Current.RequestedTheme = ApplicationTheme.Dark;
+                    PageData.Instance().SettingsPageApplicationTheme = ApplicationTheme.Dark;
+                }
+                else
+                {
+                    App.Current.RequestedTheme = ApplicationTheme.Light;
+                }
+            }
+            else
+            {
+                var streamWriter = File.CreateText(filePath);
+                streamWriter.Write("lght");
+                streamWriter.Flush();
+                streamWriter.Dispose();
+            }
         }
 
         /// <summary>
@@ -84,6 +109,7 @@ namespace UWPDocFingerPrinter
                     var fileStream = File.OpenRead(filePath);
                     byte[] dataBytes = new byte[fileStream.Length];
                     fileStream.Read(dataBytes, 0, dataBytes.Length);
+                    fileStream.Dispose();
                     string authToken = Encoding.UTF8.GetString(dataBytes);
                     Cookie authCookie = new Cookie(".ASPXAUTH", authToken, "/","docfingerprint.cloudapp.net");
                     authCookie.Path = "/";
@@ -94,7 +120,7 @@ namespace UWPDocFingerPrinter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 else
-                    rootFrame.Navigate(typeof(Login), e.Arguments);
+                    rootFrame.Navigate(typeof(LoginPage), e.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();
@@ -120,7 +146,20 @@ namespace UWPDocFingerPrinter
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+            if (App.Current.RequestedTheme != PageData.Instance().SettingsPageApplicationTheme)
+            {
+                string filePath = ApplicationData.Current.LocalFolder.Path + "/requestedTheme.txt";
+                StreamWriter streamWriter = File.CreateText(filePath);
+                streamWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+                if (PageData.Instance().SettingsPageApplicationTheme == ApplicationTheme.Dark)
+                    streamWriter.Write("dark");
+                else
+                    streamWriter.Write("lght");
+
+                streamWriter.Flush();
+                streamWriter.Dispose();
+            }
+
             deferral.Complete();
         }
     }

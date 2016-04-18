@@ -1,4 +1,5 @@
 ﻿using Windows.Storage;
+using Windows.UI.Xaml;
 
 namespace UWPDocFingerPrinter
 {
@@ -9,10 +10,15 @@ namespace UWPDocFingerPrinter
         //MainPage Variables
         public StorageFile MainPageStorageFile { get; private set; }
         public int MainPageRadioBox { get; private set; }
+        public ApplicationTheme SettingsPageApplicationTheme { get; set; }
+        public StorageFile DetectionPageStorageFile { get; private set; }
+        public int DetectionPageRadioBox { get; private set; }
 
         private PageData()
         {
-
+            MainPageStorageFile = DetectionPageStorageFile = null;
+            MainPageRadioBox = DetectionPageRadioBox = 0;
+            SettingsPageApplicationTheme = ApplicationTheme.Light;
         }
 
         public static PageData Instance()
@@ -25,6 +31,12 @@ namespace UWPDocFingerPrinter
         }
 
         public void SaveMainPageContent(StorageFile file, int radioBox)
+        {
+            MainPageStorageFile = file;
+            MainPageRadioBox = radioBox;
+        }
+
+        public void SaveDetectionPageContent(StorageFile file, int radioBox)
         {
             MainPageStorageFile = file;
             MainPageRadioBox = radioBox;

@@ -44,19 +44,20 @@ namespace DocFingerPrinterBeta.DataLayer
             var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
             currentUser.NumberOfImagesMarked++;
 
-            response.Status = OpenStego.EmbedData("Test embedding of string", imagePath, "C:\\Users\\Public\\test.png");
-            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
-            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath);
-            response.Status = ResultStatus.Success;
-            
+
             //create, initialize new markedImage then save to db
             Models.Image markedImage = new Models.Image();
-            markedImage.MarkedImageBinary = markedImageBinary;
             markedImage.OriginalImageBinary = fileBytes;
             markedImage.Filename = imageName;
             markedImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
             markedImage.User = currentUser;
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
+
+            response.Status = OpenStego.EmbedData(markedImage.UniqueMark, imagePath, "C:\\Users\\Public\\test.png");
+            string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath);
+            markedImage.MarkedImageBinary = markedImageBinary;
+            response.Status = ResultStatus.Success;            
 
             try
             {
@@ -85,35 +86,57 @@ namespace DocFingerPrinterBeta.DataLayer
             DetectionResponse result1 = new DetectionResponse();
             DetectionResponse result2 = new DetectionResponse();
             string extractText = OpenStego.ExtractDataFromFile(imagePath);
-            string imageText = TesseractDetection.getText(imagePath);
             if (!String.IsNullOrEmpty(extractText))
             {
-                //extract string detected
-            }
-            else if (!String.IsNullOrEmpty(imageText))
-            {
-                imageText = TesseractDetection.removeNewLineCharacters(imageText);
-                imageText = TesseractDetection.removeWhiteSpaces(imageText);
-                string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
-                if (imageSignature.Length > 1)
+                Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(extractText)).Include("User").FirstOrDefault();
+                if (markedImage != null)
                 {
-                    Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
-                    if (markedImage != null)
+                    result2.UserName = markedImage.User.UserName;
+                    int imageNo;
+                    bool parseSuccess = int.TryParse(extractText.Substring(extractText.IndexOf('#') + 1), out imageNo);
+                    if (parseSuccess)
                     {
-                        result2.UserName = markedImage.User.UserName;
-                        int imageNo;
-                        bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
-                        if (parseSuccess)
-                        {
-                            result2.ImageNumber = imageNo;
-                            result2.Status = ResultStatus.Success;
-                        }
+                        result2.ImageNumber = imageNo;
+                        result2.Status = ResultStatus.Success;
                     }
                 }
+                else
+                {
+                    result2.Status = ResultStatus.Error;
+                }
             }
-            else
+            else 
             {
-                result2.Status = ResultStatus.Error;
+                string imageText = TesseractDetection.getText(imagePath);
+                if (!String.IsNullOrEmpty(imageText))
+                {
+                    imageText = TesseractDetection.removeNewLineCharacters(imageText);
+                    imageText = TesseractDetection.removeWhiteSpaces(imageText);
+                    string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
+                    if (imageSignature.Length > 1)
+                    {
+                        Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
+                        if (markedImage != null)
+                        {
+                            result2.UserName = markedImage.User.UserName;
+                            int imageNo;
+                            bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
+                            if (parseSuccess)
+                            {
+                                result2.ImageNumber = imageNo;
+                                result2.Status = ResultStatus.Success;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result2.Status = ResultStatus.Error;
+                    }
+                }
+                else
+                {
+                    result2.Status = ResultStatus.Error;
+                }
             }
             return result2;
         }

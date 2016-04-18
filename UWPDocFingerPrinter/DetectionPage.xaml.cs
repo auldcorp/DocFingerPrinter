@@ -7,7 +7,6 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,20 +16,19 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace UWPDocFingerPrinter
 {
-
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class DetectionPage : Page
     {
         private StorageFile fileToEmbed;
         private bool smallView = false;
 
-        public MainPage()
+        public DetectionPage()
         {
             this.InitializeComponent();
         }
@@ -39,12 +37,12 @@ namespace UWPDocFingerPrinter
         {
             base.OnNavigatedTo(e);
             PageData data = PageData.Instance();
-            if (data.MainPageStorageFile != null)
+            if (data.DetectionPageStorageFile != null)
             {
-                fileToEmbed = data.MainPageStorageFile;
+                fileToEmbed = data.DetectionPageStorageFile;
                 fileNameTextBlock.Text = "Picked photo: " + fileToEmbed.Name;
             }
-            int corner = data.MainPageRadioBox;
+            int corner = data.DetectionPageRadioBox;
             switch (corner)
             {
                 case 1:
@@ -67,7 +65,7 @@ namespace UWPDocFingerPrinter
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             base.OnNavigatingFrom(e);
-            PageData.Instance().SaveMainPageContent(fileToEmbed, getCheckedRadioButton());
+            PageData.Instance().SaveDetectionPageContent(fileToEmbed, getCheckedRadioButton());
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -75,19 +73,14 @@ namespace UWPDocFingerPrinter
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void DetectImageIcon_Click(object sender, RoutedEventArgs e)
+        private void embedSignatureIcon_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(DetectionPage));
+            Frame.Navigate(typeof(MainPage));
         }
 
         private void markedFilesIcon_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(FilesPage));
-        }
-
-        private void settingsIcon_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingsPage));
         }
 
         private async void imageChooserButton_Click(object sender, RoutedEventArgs e)
@@ -114,33 +107,15 @@ namespace UWPDocFingerPrinter
             }
         }
 
-        private async void embedSignatureButton_Click(object sender, RoutedEventArgs e)
+        private async void detectSignatureButton_Click(object sender, RoutedEventArgs e)
         {
-            
             if (fileToEmbed != null)
             {
                 int corner = getCheckedRadioButton();
                 progressRing.Visibility = Visibility.Visible;
-                bool success = await HttpRequest.UploadFile(fileToEmbed, corner);
+                //bool success = await HttpRequest.UploadFile(fileToEmbed, corner);
                 progressRing.Visibility = Visibility.Collapsed;
             }
-                
-        }
-
-        private int getCheckedRadioButton()
-        {
-            int corner = 0;
-
-            if ((bool)topRightButton.IsChecked)
-                corner = 1;
-            else if ((bool)bottomLeftButton.IsChecked)
-                corner = 2;
-            else if ((bool)bottomRightButton.IsChecked)
-                corner = 3;
-            else if ((bool)topLeftButton.IsChecked)
-                corner = 4;
-
-            return corner;
         }
 
         private void AlignElements()
@@ -172,8 +147,24 @@ namespace UWPDocFingerPrinter
             }
             else if (smallView)
             {
-                Frame.Navigate(typeof(MainPage));
+                Frame.Navigate(typeof(DetectionPage));
             }
+        }
+
+        private int getCheckedRadioButton()
+        {
+            int corner = 0;
+
+            if ((bool)topRightButton.IsChecked)
+                corner = 1;
+            else if ((bool)bottomLeftButton.IsChecked)
+                corner = 2;
+            else if ((bool)bottomRightButton.IsChecked)
+                corner = 3;
+            else if ((bool)topLeftButton.IsChecked)
+                corner = 4;
+
+            return corner;
         }
     }
 }

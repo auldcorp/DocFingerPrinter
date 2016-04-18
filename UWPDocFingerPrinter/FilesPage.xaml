@@ -15,22 +15,22 @@
                      Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" />
                     <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="embedPanel" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
                     <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
                             Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
                     <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="searchPanel" Orientation="Horizontal">
-                    <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                            Width="50" Height="50" Background="Transparent" Click="searchImageIcon_Click" />
-                    <TextBlock Text="Search Image" FontSize="14" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="DetectImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
+                            Width="50" Height="50" Background="Transparent" Click="DetectImageIcon_Click" />
+                    <TextBlock Text="Detect Image" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="filesPanel" Background="DarkGray" Orientation="Horizontal">
+                <StackPanel Background="DarkGray" Orientation="Horizontal">
                     <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
                             Width="50" Height="50" Background="Transparent" />
                     <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="settingPanel" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
                     <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
                             Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click" />
                     <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
