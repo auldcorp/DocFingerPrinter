@@ -31,11 +31,11 @@ namespace DocFingerPrinterBeta.ServiceLayer
         /// <param name="imageName"></param>
         /// <param name="radio"></param>
         /// <returns>appropriate response based on whether an error occured or not</returns>
-        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
+        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio, bool box)
         {
             try
             {
-                return _dataPortal.FileUpload(imagePath, fileBytes, imageName, radio);       
+                return _dataPortal.FileUpload(imagePath, fileBytes, imageName, radio, box);       
             }
             catch (Exception e)
             {

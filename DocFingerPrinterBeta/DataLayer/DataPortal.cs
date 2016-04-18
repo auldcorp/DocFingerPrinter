@@ -37,7 +37,7 @@ namespace DocFingerPrinterBeta.DataLayer
         /// <param name="imageName"></param>
         /// <param name="radio"></param>
         /// <returns>id of uploaded image</returns>
-        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio)
+        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio, bool box)
         {
             FileUploadResponse response = new FileUploadResponse();
             var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
@@ -54,11 +54,11 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
 
             string signature = "\\" + TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) + "#";
-            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath);
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath, box);
             byte[] embeddedAndMarkedImageBinary = OpenStego.EmbedData(markedImage.UniqueMark, markedImageBinary, imageName, imagePath);
 
             markedImage.MarkedImageBinary = embeddedAndMarkedImageBinary;
-            response.Status = ResultStatus.Success;            
+            response.Status = ResultStatus.Success;
 
             try
             {

@@ -19,6 +19,16 @@
             return false;
         }
     }
+
+    function validate_checkbox() {
+
+        var checkbox = document.getElementById("checkbox").checked;
+
+        if (checkbox)
+            return true;
+
+        return false;
+    }
 </script>
 
 
@@ -36,6 +46,7 @@
         <label>@Html.RadioButton("radio", 2, new { id = "radio2" })Bottom Left</label><br />
         <label>@Html.RadioButton("radio", 4, new { id = "radio4" })Top left</label><br />
 
+        <label>@Html.CheckBox("checkbox", false)Add white background for greater accuracy</label><br />
 
         <input type="submit" value="Upload" class="submit-button" onClick="return validate_radios();">
         <div style="@Model.ShowErrorMessage(Model.errorMessage)" class="alert-danger">

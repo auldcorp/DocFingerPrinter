@@ -64,8 +64,9 @@ namespace DocFingerPrinterBeta.Controllers
         /// <returns>page of uploaded image unless error occurs</returns>
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
-        public ActionResult FileUpload(HttpPostedFileBase file, int radio)
+        public ActionResult FileUpload(HttpPostedFileBase file, int radio, bool checkbox)
         {
+            Debug.Print("checkbox: " + checkbox.ToString());
             var model = new FileUploadViewModel();
             if (file != null)
             {
@@ -90,7 +91,7 @@ namespace DocFingerPrinterBeta.Controllers
                     ms.Close();
                     file.InputStream.Dispose();
 
-                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio);
+                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio, checkbox);
                     if (fileUploadResponse.Status == ResultStatus.Error)
                     {
                         //do error handling here 
@@ -151,7 +152,7 @@ namespace DocFingerPrinterBeta.Controllers
                         image.Save(imagePath);
                     }
 
-                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio);
+                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio, false);
                     if (fileUploadResponse.Status == ResultStatus.Error)
                     {
                         Response.StatusCode = (int)fileUploadResponse.Status;
