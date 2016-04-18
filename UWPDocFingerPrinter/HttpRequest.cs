@@ -82,7 +82,8 @@ namespace UWPDocFingerPrinter
                     await randomAccessStream.ReadAsync(responseBytes.AsBuffer(), (uint)responseBytes.Length, InputStreamOptions.None);
                     if (!Directory.Exists(ApplicationData.Current.LocalFolder.Path + "/Images"))
                         await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-                    StorageFile markedImageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName);
+                    StorageFolder imageFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
+                    StorageFile markedImageFile = await imageFolder.CreateFileAsync(file.Name, CreationCollisionOption.GenerateUniqueName);
                     Stream writeToFile = await markedImageFile.OpenStreamForWriteAsync();
                     await writeToFile.WriteAsync(responseBytes, 0, responseBytes.Length);
                     writeToFile.Dispose();

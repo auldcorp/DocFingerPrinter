@@ -65,7 +65,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             string result = "";
 
             ResultStatus r = CommandPrompt.ExecuteCommand(extractCommand, workingDirectory);
-            if (r == ResultStatus.Success)
+            if (r == ResultStatus.Success && File.Exists(workingDirectory + "\\data\\tempTextFile.txt"))
             {
                 result = System.IO.File.ReadAllText(workingDirectory + "\\data\\tempTextFile.txt");
             }
