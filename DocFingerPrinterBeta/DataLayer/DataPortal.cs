@@ -55,7 +55,7 @@ namespace DocFingerPrinterBeta.DataLayer
 
             response.Status = OpenStego.EmbedData(markedImage.UniqueMark, imagePath, "C:\\Users\\Public\\test.png");
             string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
-            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath);
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, "C:\\Users\\Public\\test.png");
             markedImage.MarkedImageBinary = markedImageBinary;
             response.Status = ResultStatus.Success;            
 
