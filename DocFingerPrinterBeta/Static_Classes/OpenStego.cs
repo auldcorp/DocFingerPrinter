@@ -90,7 +90,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             using (Graphics imageGraphics = Graphics.FromImage(image))
             using (Font font = new Font("Sans", 40))
             {
-                
+                imageGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 Point point = new Point(0, 0);
                 var size = imageGraphics.MeasureString(mark, font);
 
@@ -101,16 +101,15 @@ namespace DocFingerPrinterBeta.Static_Classes
                 else if (corner == 3)
                     point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
 
-                var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
-                imageGraphics.FillRectangle(Brushes.White, rect);
+                //var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
+                imageGraphics.FillRectangle(Brushes.White, point.X, point.Y, size.Width, size.Height);
                 imageGraphics.DrawString(mark, font, Brushes.Black, point);
-                
+
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                    image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                     bytes = stream.ToArray();
                 }
-                
                 //give option to maximize contrast of text and or choose color of text/box
             }
             return bytes;

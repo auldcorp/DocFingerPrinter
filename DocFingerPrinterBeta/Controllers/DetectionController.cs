@@ -40,6 +40,7 @@ namespace DocFingerPrinterBeta.Controllers
         public ActionResult DetectMark(HttpPostedFileBase file)
         {
             var model = new FileUploadViewModel();
+            //validation on file input
             if (file == null || !file.ContentType.Contains("image"))
             {
                 model.errorMessage = "You must select a png file to upload";
@@ -49,6 +50,7 @@ namespace DocFingerPrinterBeta.Controllers
                 return View("Index", model);
             }
             DetectionResponse response = _fps.DetectSignature(file.FileName);
+            //if sig detection success return user/image id else return error
             if (response.Status == ResultStatus.Success)
             {
                 model.errorMessage = null;

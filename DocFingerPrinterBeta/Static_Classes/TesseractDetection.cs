@@ -26,7 +26,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             ocr.SetVariable("tessedit_char_whitelist", "\\/|#");
             BitmapToPixConverter b = new BitmapToPixConverter();
             Pix p = b.Convert(image);
-            Page page = ocr.Process(image, PageSegMode.Auto);
+            Page page = ocr.Process(p, PageSegMode.Auto);
             string text = page.GetText();
             return text;
         }
