@@ -19,11 +19,11 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
             string embededData = "test";
             string inputFilePath = "C:\\Users\\Public\\small-mario.png";
             string outputFilePath = "C:\\Users\\Public\\test.png";
+            var file = File.ReadAllBytes(inputFilePath);
 
-            ResultStatus osStatus = OpenStego.EmbedData(embededData, inputFilePath, outputFilePath);
+            var osStatus = OpenStego.EmbedData(embededData, file, "small-mario.png", outputFilePath);
 
             Assert.IsNotNull(osStatus);
-            Assert.AreEqual(ResultStatus.Success, osStatus);
         }
 
         [TestMethod]

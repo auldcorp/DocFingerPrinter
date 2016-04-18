@@ -156,6 +156,12 @@ namespace DocFingerPrinterBeta.DataLayer
             return users;
         }
 
+        public List<Models.Image> GetAllImageRecords()
+        {
+            var imageList = _dbContext.Image.Include("User").ToList();
+            return imageList;
+        }
+
         /// <summary>
         /// gets user with param id
         /// </summary>
