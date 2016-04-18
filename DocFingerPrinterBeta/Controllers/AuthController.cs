@@ -104,6 +104,8 @@ namespace DocFingerPrinterBeta.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Response.StatusDescription = "Invalid Model";
+                
                 return Response;
             }
 
@@ -118,12 +120,12 @@ namespace DocFingerPrinterBeta.Controllers
                 FormsAuthenticationTicket ticket;
                 ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
                 string encTicket = FormsAuthentication.Encrypt(ticket);
-
+                Response.StatusCode = (int)HttpStatusCode.OK;
                 //HttpCookie authCookie = FormsAuthentication.GetAuthCookie(user.UserName, true);
                 HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
                 user.AuthTokenValue = authCookie.Value;
                 Response.AppendCookie(authCookie);
-                Response.StatusCode = (int) HttpStatusCode.OK;
+                
                 return Response;
             }
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;
