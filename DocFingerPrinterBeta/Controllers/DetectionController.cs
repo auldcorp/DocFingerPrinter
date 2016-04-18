@@ -53,6 +53,7 @@ namespace DocFingerPrinterBeta.Controllers
             string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
             file.SaveAs(imagePath);
             DetectionResponse response = _fps.DetectSignature(imagePath);
+            file.InputStream.Dispose();
             System.IO.File.Delete(imagePath);
             //if sig detection success return user/image id else return error
             if (response.Status == ResultStatus.Success)
