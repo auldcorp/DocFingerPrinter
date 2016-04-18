@@ -44,7 +44,6 @@ namespace DocFingerPrinterBeta.DataLayer
             var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
             currentUser.NumberOfImagesMarked++;
 
-
             //create, initialize new markedImage then save to db
             Models.Image markedImage = new Models.Image();
             markedImage.OriginalImageBinary = fileBytes;
@@ -52,7 +51,6 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.UserId = HttpContext.Current.User.Identity.GetUserId<int>();
             markedImage.User = currentUser;
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
-
             response.Status = OpenStego.EmbedData(markedImage.UniqueMark, imagePath, "C:\\Users\\Public\\test.png");
             string signature = "\\" +TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) +"#";
             byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, "C:\\Users\\Public\\test.png");
@@ -166,6 +164,16 @@ namespace DocFingerPrinterBeta.DataLayer
             List<User> users = new List<User>();
             users.Add(user);
             return users;
+        }
+
+        /// <summary>
+        /// gets all image records
+        /// </summary>
+        /// <returns>all image records</returns>
+        public List<Models.Image> GetAllImageRecords()
+        {
+            List<Models.Image> imageList = _dbContext.Image.Include("User").ToList();
+            return imageList;
         }
 
         /// <summary>

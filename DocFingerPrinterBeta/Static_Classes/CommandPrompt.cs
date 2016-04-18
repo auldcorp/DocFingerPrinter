@@ -36,7 +36,6 @@ namespace DocFingerPrinterBeta.Static_Classes
             //Should probably have this timeout and return error
             process.WaitForExit();
             int exitCode = process.ExitCode;
-            process.Close();
             process.Dispose();
 
             if (exitCode != 0)

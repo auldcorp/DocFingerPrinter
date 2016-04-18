@@ -76,6 +76,7 @@ namespace DocFingerPrinterBeta.Controllers
                     file.InputStream.CopyTo(ms);
                     byte[] fileArray = ms.GetBuffer();
                     ms.Close();
+                    file.InputStream.Dispose();
 
                     FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio);
                     if (fileUploadResponse.Status == ResultStatus.Error)
