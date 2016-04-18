@@ -175,6 +175,16 @@ namespace DocFingerPrinterBeta.DataLayer
         }
 
         /// <summary>
+        /// gets user with param authToken
+        /// </summary>
+        /// <param name="authToken"></param>
+        /// <returns>returns user with param authToken or null if user does not exist</returns>
+        public User GetUserByAuthToken(string authToken)
+        { 
+            return _dbContext.Users.Where(x => x.AuthTokenValue == authToken).FirstOrDefault();
+        }
+
+        /// <summary>
         /// gets images associated with user with userId
         /// </summary>
         /// <param name="userId"></param>

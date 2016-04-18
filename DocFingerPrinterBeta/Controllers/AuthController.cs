@@ -114,9 +114,10 @@ namespace DocFingerPrinterBeta.Controllers
             if (user != null)
             {
                 var identity = await userManager.CreateIdentityAsync(
-                    user, DefaultAuthenticationTypes.ApplicationCookie);
+                    user, DefaultAuthenticationTypes.ExternalCookie);
 
-                GetAuthenticationManager().SignIn(new AuthenticationProperties() { ExpiresUtc = new DateTime(2018, 12, 25) },identity);
+                GetAuthenticationManager().SignIn(identity);
+                
                 Response.StatusCode = (int)HttpStatusCode.OK;
                 string encTicket;
                 if (string.IsNullOrEmpty(user.AuthTokenValue))
@@ -130,9 +131,9 @@ namespace DocFingerPrinterBeta.Controllers
                     encTicket = user.AuthTokenValue;
                 }
 
-                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
+                //HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
                 
-                Response.AppendCookie(authCookie);
+                //Response.AppendCookie(authCookie);
                 
                 return Response;
             }

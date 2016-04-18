@@ -115,6 +115,36 @@ namespace DocFingerPrinterBeta.ServiceLayer
         }
 
         /// <summary>
+        /// calls dataPortal.GetUserByAuthToken
+        /// </summary>
+        /// <param name="authToken"></param>
+        /// <returns>user along with appropriate response based on whether an error occured or not</returns>
+        public UsersResponse GetUserFromAuthToken(string authToken)
+        {
+            try
+            {
+                var user = _dataPortal.GetUserByAuthToken(authToken);
+                List<Models.User> users = new List<Models.User>();
+                users.Add(user);
+                return new UsersResponse
+                {
+                    Users = users,
+                    Status = ResultStatus.Success,
+                    Message = "success"
+                };
+            }
+            catch (Exception e)
+            {
+                return new UsersResponse
+                {
+                    Users = null,
+                    Status = ResultStatus.Error,
+                    Message = e.ToString()
+                };
+            }
+        }
+
+        /// <summary>
         /// calls dataPortal.GetUser
         /// </summary>
         /// <param name="userId"></param>

@@ -21,6 +21,8 @@ namespace UWPDocFingerPrinter
     public static class HttpRequest
     {
         public static Cookie authCookie;
+        private static string serverHost = "docfingerprint.cloudapp.net";
+        private static string localHost = "localhost:51916";
         public async static Task<bool> UploadFile(StorageFile file, int corner)
         {
             bool success = false;
@@ -193,7 +195,7 @@ namespace UWPDocFingerPrinter
 
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
-            builder.Host = "docfingerprint.cloudapp.net";
+            builder.Host = localHost;
             builder.Path = "/Auth/MobileLogIn";
 
             Uri uri = builder.Uri;

@@ -4,6 +4,7 @@ using DocFingerPrinterBeta.Responses;
 using DocFingerPrinterBeta.ServiceLayer;
 using DocFingerPrinterBeta.Static_Classes;
 using DocFingerPrinterBeta.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +29,18 @@ namespace DocFingerPrinterBeta.Controllers
     public class ImageUploadController : Controller
     {
         private FingerPrinterService _fps = new FingerPrinterService();
-       
+        private readonly UserManager<User, int> userManager;
+
+        public ImageUploadController()
+            : this(Startup.UserManagerFactory.Invoke())
+        {
+        }
+
+        public ImageUploadController(UserManager<User, int> userManager)
+        {
+            this.userManager = userManager;
+        }
+
         // GET: ImageUpload
         /// <summary>
         /// image upload page
@@ -108,14 +120,19 @@ namespace DocFingerPrinterBeta.Controllers
         /// <param name="radio"></param>
         /// <returns>json containing image file uploaded</returns>
         [HttpPost]
-        public HttpResponseBase MobileFileUpload(string fileBytes, string fileName, int radio)
+        public async Task<HttpResponseBase> MobileFileUpload(string fileBytes, string fileName, int radio)
         {
             HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-
-            if (!string.IsNullOrEmpty(fileBytes))
+            var user = _fps.GetUserFromAuthToken(authCookie.Value).Users.FirstOrDefault();
+            if (user != null && !string.IsNullOrEmpty(fileBytes))
             {
                 try
                 {
+                    var identity = await userManager.CreateIdentityAsync(
+                    user, DefaultAuthenticationTypes.ExternalCookie);
+
+                    Request.GetOwinContext().Authentication.SignIn(identity);
+    
                     string imagePath = Path.Combine(Server.MapPath("~/images/profile"), fileName);
 
                     string[] byteToConvert = fileBytes.Split('.');
@@ -161,7 +178,7 @@ namespace DocFingerPrinterBeta.Controllers
                 }
             }
             Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            Response.StatusDescription = "Error: File input cannot be null.";
+            Response.StatusDescription = "Error: Problem with authorization or null file string";
             return Response;
         }
 
