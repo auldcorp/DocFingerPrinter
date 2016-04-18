@@ -125,16 +125,16 @@ namespace DocFingerPrinterBeta.Controllers
                     FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, email, DateTime.Now, DateTime.MaxValue, true, string.Empty);
                     encTicket = FormsAuthentication.Encrypt(ticket);
                     user.AuthTokenValue = encTicket;
+                    var identityResult = await userManager.UpdateAsync(user);
                 }
                 else
                 {
                     encTicket = user.AuthTokenValue;
                 }
 
-                //HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
-                
-                //Response.AppendCookie(authCookie);
-                
+                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket) { Path = FormsAuthentication.FormsCookiePath };
+                Response.AppendCookie(authCookie);
+
                 return Response;
             }
             Response.StatusCode = (int)HttpStatusCode.Unauthorized;

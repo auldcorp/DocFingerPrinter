@@ -28,7 +28,7 @@ namespace UWPDocFingerPrinter
             bool success = false;
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
-            builder.Host = "docfingerprint.cloudapp.net";
+            builder.Host = serverHost;
             builder.Path = "/ImageUpload/MobileFileUpload";
             var req = (HttpWebRequest)WebRequest.Create(builder.Uri);
             req.Method = "POST";
@@ -105,7 +105,7 @@ namespace UWPDocFingerPrinter
             bool success = false;
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
-            builder.Host = "docfingerprint.cloudapp.net";
+            builder.Host = serverHost;
             builder.Path = "/Detection/MobileDetectMark";
             var req = (HttpWebRequest)WebRequest.Create(builder.Uri);
             req.Method = "POST";
@@ -195,7 +195,7 @@ namespace UWPDocFingerPrinter
 
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
-            builder.Host = localHost;
+            builder.Host = serverHost;
             builder.Path = "/Auth/MobileLogIn";
 
             Uri uri = builder.Uri;
