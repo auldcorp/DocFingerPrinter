@@ -85,35 +85,38 @@ namespace DocFingerPrinterBeta.DataLayer
             DetectionResponse result1 = new DetectionResponse();
             DetectionResponse result2 = new DetectionResponse();
             string extractText = OpenStego.ExtractDataFromFile(imagePath);
-            string imageText = TesseractDetection.getText(imagePath);
             if (!String.IsNullOrEmpty(extractText))
             {
                 //extract string detected
             }
-            else if (!String.IsNullOrEmpty(imageText))
+            else 
             {
-                imageText = TesseractDetection.removeNewLineCharacters(imageText);
-                imageText = TesseractDetection.removeWhiteSpaces(imageText);
-                string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
-                if (imageSignature.Length > 1)
+                string imageText = TesseractDetection.getText(imagePath);
+                if (!String.IsNullOrEmpty(imageText))
                 {
-                    Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
-                    if (markedImage != null)
+                    imageText = TesseractDetection.removeNewLineCharacters(imageText);
+                    imageText = TesseractDetection.removeWhiteSpaces(imageText);
+                    string imageSignature = TesseractDetection.convertFullMarkToString(imageText);
+                    if (imageSignature.Length > 1)
                     {
-                        result2.UserName = markedImage.User.UserName;
-                        int imageNo;
-                        bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
-                        if (parseSuccess)
+                        Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(imageSignature)).Include("User").FirstOrDefault();
+                        if (markedImage != null)
                         {
-                            result2.ImageNumber = imageNo;
-                            result2.Status = ResultStatus.Success;
+                            result2.UserName = markedImage.User.UserName;
+                            int imageNo;
+                            bool parseSuccess = int.TryParse(imageSignature.Substring(imageSignature.IndexOf('#') + 1), out imageNo);
+                            if (parseSuccess)
+                            {
+                                result2.ImageNumber = imageNo;
+                                result2.Status = ResultStatus.Success;
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                result2.Status = ResultStatus.Error;
+                else
+                {
+                    result2.Status = ResultStatus.Error;
+                }
             }
             return result2;
         }

@@ -21,10 +21,10 @@
                             Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
                     <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
-                <StackPanel Name="searchPanel" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
                     <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                            Width="50" Height="50" Background="Transparent" Click="searchImageIcon_Click" />
-                    <TextBlock Text="Search Image" FontSize="14" VerticalAlignment="Center" />
+                            Width="50" Height="50" Background="Transparent" Click="DetectImageIcon_Click" />
+                    <TextBlock Text="Detect Image" FontSize="14" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Name="filesPanel" Orientation="Horizontal">
                     <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
@@ -39,16 +39,35 @@
             </StackPanel>
         </SplitView.Pane>
         <SplitView.Content>
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="Auto" Width="Auto" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="500px" >
-                    
-                </StackPanel>
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                <Pivot Title="Settings">
+                    <PivotItem Header="General">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Application Theme: " FontWeight="Bold"/>
+                            <ToggleSwitch Name="themeToggle" OffContent="Light" OnContent="Dark" Toggled="themeToggle_Toggled" />
+                            <TextBlock Text="Username: " FontWeight="Bold" Margin="0,20,0,0"/>
+                            <TextBlock Name="UserNameTextBlock" />
+                            <TextBlock Text="Number of Images Uploaded: " FontWeight="Bold" Margin="0,20,0,0"/>
+                            <TextBlock Name="NumImagesUploadedTextBlock" />
+                            <Button Name="LogOutButton" Content="Sign Out" Margin="0,40,0,0" Click="LogOutButton_Click"/>
+                        </StackPanel>
+                    </PivotItem>
 
+                    <PivotItem Header="Credits">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="UWP Application Created by Chaz Gordish" />
+                            <TextBlock Text="The Application communicates with a server application written by:" Margin="0,20,0,0" />
+                            <ListView>
+                                <ListViewItem Content="Chaz Gordish" />
+                                <ListViewItem Content="Thomas Tedrow" />
+                                <ListViewItem Content="Gregory Rogers" />
+                                <ListViewItem Content="David Kohn" />
+                            </ListView>
+                            <TextBlock Text="Application is pattented by Dan Auld"  Margin="0,20,0,0" />
+                        </StackPanel>
+
+                    </PivotItem>
+                </Pivot>
             </Grid>
         </SplitView.Content>
     </SplitView>
