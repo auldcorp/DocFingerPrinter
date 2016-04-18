@@ -63,7 +63,7 @@ namespace DocFingerPrinterBeta.Controllers
             }
             else
             {
-                model.errorMessage = "An error occured during the processing of the image";
+                model.errorMessage = response.Message;
                 ViewBag.Hidden = "display: none";
                 ViewBag.UserName = "";
                 ViewBag.ImageNumber = "";
