@@ -243,6 +243,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ArchiveController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\DetectionController.cs" />
     <Compile Include="DAL\ApplicationDbContext.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Responses\DetectionResponse.cs" />
     <Compile Include="Responses\FileUploadResponse.cs" />
     <Compile Include="Responses\ImageBinaryResponse.cs" />
+    <Compile Include="Responses\ImageRecordsResponse.cs" />
     <Compile Include="Responses\ImagesResponse.cs" />
     <Compile Include="Responses\UsersResponse.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Static_Classes\CommandPrompt.cs" />
     <Compile Include="Static_Classes\TesseractDetection.cs" />
+    <Compile Include="ViewModels\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\FileUploadViewModel.cs" />
     <Compile Include="ViewModels\LogInModel.cs" />
     <Compile Include="ViewModels\RegisterModel.cs" />
@@ -416,6 +419,7 @@
     <Content Include="Views\Users\UserInfo.cshtml" />
     <Content Include="Views\Detection\Index.cshtml" />
     <Content Include="Views\ImageUpload\ImageDisplay.cshtml" />
+    <Content Include="Views\Archive\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

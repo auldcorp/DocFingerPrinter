@@ -47,6 +47,26 @@ namespace DocFingerPrinterBeta.ServiceLayer
             }
         }
 
+        public ImageRecordsResponse GetAllImageRecords()
+        {
+            try
+            {
+                return new ImageRecordsResponse
+                {
+                    Images = _dataPortal.GetAllImageRecords()
+                };
+            }
+            catch (Exception e)
+            {
+                return new ImageRecordsResponse
+                {
+                    Images = null,
+                    Status = ResultStatus.Error,
+                    Message = e.ToString()
+                };
+            }
+        }
+
         /// <summary>
         /// calls dataPortal.DetectSignature to detect the signature on the image
         /// </summary>

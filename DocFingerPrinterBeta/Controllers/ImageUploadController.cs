@@ -76,6 +76,7 @@ namespace DocFingerPrinterBeta.Controllers
                     file.InputStream.CopyTo(ms);
                     byte[] fileArray = ms.GetBuffer();
                     ms.Close();
+                    file.InputStream.Dispose();
 
                     FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio);
                     if (fileUploadResponse.Status == ResultStatus.Error)
@@ -110,6 +111,7 @@ namespace DocFingerPrinterBeta.Controllers
         public HttpResponseBase MobileFileUpload(string fileBytes, string fileName, int radio)
         {
             HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+
             if (!string.IsNullOrEmpty(fileBytes))
             {
                 try
