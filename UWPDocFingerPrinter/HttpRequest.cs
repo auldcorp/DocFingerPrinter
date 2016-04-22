@@ -15,6 +15,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.Web.Http;
 
 namespace UWPDocFingerPrinter
 {
@@ -35,7 +36,7 @@ namespace UWPDocFingerPrinter
             req.ContentType = "application/x-www-form-urlencoded";
             req.AllowReadStreamBuffering = true;
             CookieContainer cookies = new CookieContainer();
-            //cookies.Add(req.RequestUri, authCookie);
+            cookies.Add(req.RequestUri, authCookie);
             req.CookieContainer = cookies;
             
             byte[] fileBytes = null;
@@ -218,7 +219,7 @@ namespace UWPDocFingerPrinter
                 stream.Dispose();
                 HttpWebResponse result = (HttpWebResponse)await request.GetResponseAsync();
 
-                if (result.StatusCode == HttpStatusCode.OK && result.Cookies[".ASPXAUTH"] != null)
+                if (result.StatusCode == System.Net.HttpStatusCode.OK && result.Cookies[".ASPXAUTH"] != null)
                 {
                     authCookie = result.Cookies[".ASPXAUTH"];
                     await ApplicationData.Current.LocalFolder.CreateFileAsync("authToken.txt", CreationCollisionOption.ReplaceExisting);

@@ -40,7 +40,7 @@ namespace DocFingerPrinterBeta.Static_Classes
             var commandResult = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
             if(commandResult == ResultStatus.Success)
             {
-                result = File.ReadAllBytes(tempImageFilePath);
+                result = File.ReadAllBytes(outputFilePath);
             }
             File.Delete(tempTextFilePath);
             File.Delete(tempImageFilePath);
