@@ -81,9 +81,10 @@ namespace DocFingerPrinterBeta.Static_Classes
             {
                 int startIndex = str.IndexOf('\\') + 1;
                 int endIndex = str.IndexOf('#');
+                int length = endIndex - startIndex;
 
-                if( startIndex != -1 && endIndex != -1 && startIndex < endIndex)
-                    strReturn = str.Substring(startIndex, endIndex - startIndex);
+                if( startIndex != 0 && endIndex != -1 && length > 0)
+                    strReturn = str.Substring(startIndex, length);
             }
             return strReturn;
         }
