@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Web;
 using Tesseract;
 using System.Web.Hosting;
+using System.IO;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
@@ -16,24 +14,28 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// <summary>
         /// pulls marked from param inputFilePath image
         /// </summary>
-        /// <param name="inputFilePath"></param>
+        /// <param name="fileBytes">Byte array of file data</param>
         /// <returns>encodes text</returns>
-        public static string getText(string inputFilePath)
+        public static string getText(byte[] fileBytes)
         {
-            string rootPath = HostingEnvironment.ApplicationPhysicalPath;
-            Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath);
-            image.SetResolution(300, 300);
-            TesseractEngine ocr = new TesseractEngine(rootPath, "eng", EngineMode.TesseractOnly);
-            ocr.SetVariable("tessedit_char_whitelist", "\\/|#");
+            string text = "", rootPath = HostingEnvironment.ApplicationPhysicalPath;
             BitmapToPixConverter b = new BitmapToPixConverter();
-            Pix p = b.Convert(image);
-            p = p.ConvertRGBToGray();
-            Page page = ocr.Process(p, PageSegMode.Auto);
-            string text = page.GetText();
-            image.Dispose();
-            p.Dispose();
-            page.Dispose();
-            ocr.Dispose();
+
+            using (Stream memStream = new MemoryStream(fileBytes))
+            using (Bitmap image = (Bitmap)Image.FromStream(memStream))
+            using (TesseractEngine ocr = new TesseractEngine(rootPath, "eng", EngineMode.TesseractOnly))
+            {
+
+                image.SetResolution(300, 300);
+                ocr.SetVariable("tessedit_char_whitelist", "\\/|#");
+                Pix p = b.Convert(image);
+                p = p.ConvertRGBToGray();
+                Page page = ocr.Process(p, PageSegMode.Auto);
+                text = page.GetText();
+                p.Dispose();
+                page.Dispose();
+            }
+
             return text;
         }
 

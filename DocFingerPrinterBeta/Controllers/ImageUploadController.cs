@@ -61,12 +61,13 @@ namespace DocFingerPrinterBeta.Controllers
         /// </summary>
         /// <param name="file"></param>
         /// <param name="radio"></param>
+        /// <param name="whiteSignatureBackground"></param>
         /// <returns>page of uploaded image unless error occurs</returns>
         [HttpPost]
         [Authorize(Roles = "User, Admin")]
-        public ActionResult FileUpload(HttpPostedFileBase file, int radio, bool checkbox)
+        public ActionResult FileUpload(HttpPostedFileBase file, int radio, bool whiteSignatureBackground)
         {
-            Debug.Print("checkbox: " + checkbox.ToString());
+            Debug.Print("checkbox: " + whiteSignatureBackground.ToString());
             var model = new FileUploadViewModel();
             if (file != null)
             {
@@ -81,17 +82,16 @@ namespace DocFingerPrinterBeta.Controllers
                 }
 
                 string imageName = Path.GetFileName(file.FileName);
-                string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
-                file.SaveAs(imagePath);
-
                 using (MemoryStream ms = new MemoryStream())
                 {
                     file.InputStream.CopyTo(ms);
                     byte[] fileArray = ms.GetBuffer();
                     ms.Close();
-                    file.InputStream.Dispose();
+                    int currentUserId;
+                    FileUploadResponse fileUploadResponse = new FileUploadResponse() { Status = ResultStatus.Error } ;
+                    if (int.TryParse(Request.LogonUserIdentity.GetUserId(), out currentUserId))
+                        fileUploadResponse = _fps.FileUpload(currentUserId, fileArray, imageName, radio, !whiteSignatureBackground);
 
-                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, fileArray, imageName, radio, checkbox);
                     if (fileUploadResponse.Status == ResultStatus.Error)
                     {
                         //do error handling here 
@@ -102,7 +102,6 @@ namespace DocFingerPrinterBeta.Controllers
                         return File(imageData, "image/png");
                     }
                 }
-                System.IO.File.Delete(imagePath);
             }
 
             model = new FileUploadViewModel();
@@ -119,9 +118,10 @@ namespace DocFingerPrinterBeta.Controllers
         /// <param name="fileBytes"></param>
         /// <param name="fileName"></param>
         /// <param name="radio"></param>
+        /// <param name="transparentBackground"></param>
         /// <returns>json containing image file uploaded</returns>
         [HttpPost]
-        public async Task<HttpResponseBase> MobileFileUpload(string fileBytes, string fileName, int radio)
+        public async Task<HttpResponseBase> MobileFileUpload(string fileBytes, string fileName, int radio, bool transparentBackground)
         {
             HttpCookie authCookie = null;
             Models.User user = null;
@@ -149,10 +149,6 @@ namespace DocFingerPrinterBeta.Controllers
                     var identity = await userManager.CreateIdentityAsync(
                     user, DefaultAuthenticationTypes.ExternalCookie);
 
-                    Request.GetOwinContext().Authentication.SignIn(identity);
-    
-                    string imagePath = Path.Combine(Server.MapPath("~/images/profile"), fileName);
-
                     string[] byteToConvert = fileBytes.Split('.');
                     List<byte> fileBytesList = new List<byte>();
                     byteToConvert.ToList()
@@ -161,15 +157,8 @@ namespace DocFingerPrinterBeta.Controllers
                             .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
 
                     byte[] imageBytes = fileBytesList.ToArray();
-                    Bitmap image;
-                    using (Stream imageStream = new MemoryStream(imageBytes))
-                    {
-                        image = new Bitmap(imageStream);
-                        imageStream.Close();
-                        image.Save(imagePath);
-                    }
 
-                    FileUploadResponse fileUploadResponse = _fps.FileUpload(imagePath, imageBytes, fileName, radio, false);
+                    FileUploadResponse fileUploadResponse = _fps.FileUpload(user.Id, imageBytes, fileName, radio, transparentBackground);
                     if (fileUploadResponse.Status == ResultStatus.Error)
                     {
                         Response.StatusCode = (int)fileUploadResponse.Status;
@@ -185,7 +174,7 @@ namespace DocFingerPrinterBeta.Controllers
                         Stream responseStream = Response.OutputStream;
                         responseStream.Write(imageData, 0, imageData.Length);
                         responseStream.Flush();
-                        Response.Flush(); 
+                        Response.Flush();
                         return Response;
                     }
                 } catch (Exception E)

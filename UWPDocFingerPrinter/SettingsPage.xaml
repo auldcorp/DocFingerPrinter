@@ -7,69 +7,71 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
-                CompactPaneLength="50" OpenPaneLength="185" >
-        <SplitView.Pane>
-            <StackPanel Background="Gray" Margin="0,0,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                     Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" />
-                    <TextBlock Name="UserName" FontSize="14" VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel Name="embedPanel" Orientation="Horizontal">
-                    <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                         Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Grid.Row="0" />
+        <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
+                    CompactPaneLength="50" OpenPaneLength="185" Grid.Row="1">
+            <SplitView.Pane>
+                <StackPanel Background="Gray" >
+                    <StackPanel Name="embedPanel" Orientation="Horizontal">
+                        <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
                             Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
-                    <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
+                        <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="searchImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
                             Width="50" Height="50" Background="Transparent" Click="DetectImageIcon_Click" />
-                    <TextBlock Text="Detect Image" FontSize="14" VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel Name="filesPanel" Orientation="Horizontal">
-                    <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
+                        <TextBlock Text="Detect Image" FontSize="14" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Name="filesPanel" Orientation="Horizontal">
+                        <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
                             Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" />
-                    <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel Name="settingPanel" Background="DarkGray" Orientation="Horizontal">
-                    <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
+                        <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Name="settingPanel" Background="DarkGray" Orientation="Horizontal">
+                        <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
                             Width="50" Height="50" Background="Transparent" />
-                    <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
+                        <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </SplitView.Pane>
-        <SplitView.Content>
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                <Pivot Title="Settings">
-                    <PivotItem Header="General">
-                        <StackPanel Margin="10">
-                            <TextBlock Text="Application Theme: " FontWeight="Bold"/>
-                            <ToggleSwitch Name="themeToggle" OffContent="Light" OnContent="Dark" Toggled="themeToggle_Toggled" />
-                            <TextBlock Text="Username: " FontWeight="Bold" Margin="0,20,0,0"/>
-                            <TextBlock Name="UserNameTextBlock" />
-                            <TextBlock Text="Number of Images Uploaded: " FontWeight="Bold" Margin="0,20,0,0"/>
-                            <TextBlock Name="NumImagesUploadedTextBlock" />
-                            <Button Name="LogOutButton" Content="Sign Out" Margin="0,40,0,0" Click="LogOutButton_Click"/>
-                        </StackPanel>
-                    </PivotItem>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Pivot Title="Settings">
+                        <PivotItem Header="General">
+                            <StackPanel Margin="10">
+                                <TextBlock Text="Application Theme: " FontWeight="Bold"/>
+                                <ToggleSwitch Name="themeToggle" OffContent="Light" OnContent="Dark" Toggled="themeToggle_Toggled" />
+                                <TextBlock Text="Username: " FontWeight="Bold" Margin="0,20,0,0"/>
+                                <TextBlock Name="UserNameTextBlock" />
+                                <TextBlock Text="Number of Images Uploaded: " FontWeight="Bold" Margin="0,20,0,0"/>
+                                <TextBlock Name="NumImagesUploadedTextBlock" />
+                                <Button Name="LogOutButton" Content="Sign Out" Margin="0,40,0,0" Click="LogOutButton_Click"/>
+                            </StackPanel>
+                        </PivotItem>
 
-                    <PivotItem Header="Credits">
-                        <StackPanel Margin="10">
-                            <TextBlock Text="UWP Application Created by Chaz Gordish" />
-                            <TextBlock Text="The Application communicates with a server application written by:" Margin="0,20,0,0" />
-                            <ListView>
-                                <ListViewItem Content="Chaz Gordish" />
-                                <ListViewItem Content="Thomas Tedrow" />
-                                <ListViewItem Content="Gregory Rogers" />
-                                <ListViewItem Content="David Kohn" />
-                            </ListView>
-                            <TextBlock Text="Application is pattented by Dan Auld"  Margin="0,20,0,0" />
-                        </StackPanel>
-
-                    </PivotItem>
-                </Pivot>
-            </Grid>
-        </SplitView.Content>
-    </SplitView>
+                        <PivotItem Header="Credits">
+                            <StackPanel Margin="10">
+                                <TextBlock Text="UWP Application Created by Chaz Gordish" />
+                                <TextBlock Text="The Application communicates with a server application written by:" Margin="0,20,0,0" />
+                                <ListView>
+                                    <ListViewItem Content="Chaz Gordish" />
+                                    <ListViewItem Content="Thomas Tedrow" />
+                                    <ListViewItem Content="Gregory Rogers" />
+                                    <ListViewItem Content="David Kohn" />
+                                </ListView>
+                                <TextBlock Text="Application is pattented by Dan Auld"  Margin="0,20,0,0" />
+                            </StackPanel>
+                        </PivotItem>
+                    </Pivot>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
 </Page>
 

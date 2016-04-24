@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
@@ -28,10 +20,20 @@ namespace UWPDocFingerPrinter
     {
         private SolidColorBrush DarkGrayBrush = new SolidColorBrush(Colors.DarkGray);
         private SolidColorBrush GrayBrush = new SolidColorBrush(Colors.Gray);
+        private bool smallView = false;
 
         public SettingsPage()
         {
             this.InitializeComponent();
+            SizeChanged += SettingsPage_SizeChanged;
+        }
+
+        private void SettingsPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if ((ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Landscape) == smallView)
+            {
+                AlignElements();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -86,6 +88,20 @@ namespace UWPDocFingerPrinter
 
             }
             Frame.Navigate(typeof(LoginPage));
+        }
+
+        private void AlignElements()
+        {
+            if (Window.Current.Bounds.Width < 600 && !smallView)
+            {
+                smallView = true;
+                MySplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+            }
+            else if (smallView)
+            {
+                smallView = false;
+                MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+            }
         }
     }
 }

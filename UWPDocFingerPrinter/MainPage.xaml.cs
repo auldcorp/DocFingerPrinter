@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -33,6 +23,15 @@ namespace UWPDocFingerPrinter
         public MainPage()
         {
             this.InitializeComponent();
+            SizeChanged += MainPage_SizeChanged;
+        }
+
+        private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if ((ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Landscape) == smallView)
+            {
+                AlignElements();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -116,15 +115,13 @@ namespace UWPDocFingerPrinter
 
         private async void embedSignatureButton_Click(object sender, RoutedEventArgs e)
         {
-            
             if (fileToEmbed != null)
             {
                 int corner = getCheckedRadioButton();
                 progressRing.Visibility = Visibility.Visible;
-                bool success = await HttpRequest.UploadFile(fileToEmbed, corner);
+                bool success = await HttpRequest.UploadFile(fileToEmbed, corner, false);
                 progressRing.Visibility = Visibility.Collapsed;
-            }
-                
+            }  
         }
 
         private int getCheckedRadioButton()
@@ -147,10 +144,11 @@ namespace UWPDocFingerPrinter
         {
             if (Window.Current.Bounds.Width < 600 && !smallView)
             {
-                MySplitView.DisplayMode = SplitViewDisplayMode.Overlay;
-                CompactHamburgerButton.Visibility = Visibility.Visible;
                 smallView = true;
+                MySplitView.DisplayMode = SplitViewDisplayMode.Overlay;
                 embedContent.Width = Window.Current.Bounds.Width - 50;
+
+                // Change signature location radio boxes from 1x4 to 2x2 grid
                 RadioBoxGrid.ColumnDefinitions.Remove(RadioBoxGrid.ColumnDefinitions.First());
                 RadioBoxGrid.ColumnDefinitions.Remove(RadioBoxGrid.ColumnDefinitions.First());
                 RowDefinition rd = new RowDefinition();
@@ -167,6 +165,7 @@ namespace UWPDocFingerPrinter
                 Grid.SetColumn(bottomLeftButton, 0);
                 Grid.SetColumn(bottomRightText, 1);
                 Grid.SetColumn(bottomRightButton, 1);
+
                 chooseLocationTextbox.HorizontalAlignment = HorizontalAlignment.Center;
                 titleTextBox.HorizontalAlignment = HorizontalAlignment.Center;
             }

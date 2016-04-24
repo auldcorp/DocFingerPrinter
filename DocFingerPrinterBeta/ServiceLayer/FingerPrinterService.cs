@@ -26,16 +26,17 @@ namespace DocFingerPrinterBeta.ServiceLayer
         /// <summary>
         /// calls dataPortal.FileUpload to upload file
         /// </summary>
-        /// <param name="imagePath"></param>
+        /// <param name="userId"
         /// <param name="fileBytes"></param>
         /// <param name="imageName"></param>
         /// <param name="radio"></param>
+        /// <param name="transparentSignatureBackground"
         /// <returns>appropriate response based on whether an error occured or not</returns>
-        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio, bool box)
+        public FileUploadResponse FileUpload(int userId, byte[] fileBytes, string imageName, int radio, bool transparentSignatureBackground)
         {
             try
             {
-                return _dataPortal.FileUpload(imagePath, fileBytes, imageName, radio, box);       
+                return _dataPortal.FileUpload(userId, fileBytes, imageName, radio, transparentSignatureBackground);       
             }
             catch (Exception e)
             {
@@ -70,13 +71,14 @@ namespace DocFingerPrinterBeta.ServiceLayer
         /// <summary>
         /// calls dataPortal.DetectSignature to detect the signature on the image
         /// </summary>
-        /// <param name="imagePath"></param>
+        /// <param name="fileBytes">Byte array of file data</param>
+        /// <param name="fileName">Name of file</param>
         /// <returns>appropriate response based on whether an error occured or not</returns>
-        public DetectionResponse DetectSignature(string imagePath)
+        public DetectionResponse DetectSignature(byte[] fileBytes, string fileName)
         {
             try
             {
-                return _dataPortal.DetectSignature(imagePath);
+                return _dataPortal.DetectSignature(fileBytes, fileName);
             }
             catch (Exception e)
             {

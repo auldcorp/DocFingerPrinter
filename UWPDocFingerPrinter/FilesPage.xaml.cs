@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.System;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -29,77 +25,30 @@ namespace UWPDocFingerPrinter
     {
         private Image imageToDisplayMenu;
         private MenuFlyout menu;
-        private bool menuIsOpen;
+        private bool menuIsOpen = false;
+        private bool smallView = false;
 
         public FilesPage()
         {
             this.InitializeComponent();
-            menu = new MenuFlyout();
-            menu.Placement = FlyoutPlacementMode.Right;
-            MenuFlyoutItem openItem = new MenuFlyoutItem();
-            openItem.Text = "Open";
-            openItem.Click += OpenItem_Click;
-            MenuFlyoutItem shareItem = new MenuFlyoutItem();
-            shareItem.Text = "Share";
-            shareItem.Click += ShareItem_Click;
-            MenuFlyoutItem deleteItem = new MenuFlyoutItem();
-            deleteItem.Text = "Delete";
-            deleteItem.Click += DeleteItem_Click;
-            menu.Items.Add(openItem);
-            menu.Items.Add(shareItem);
-            menu.Items.Add(deleteItem);
-            menu.Closed += Menu_Closed;
-            menuIsOpen = false;
+            SizeChanged += FilesPage_SizeChanged;
+
+            AddImageThumbnailsToLayout();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        private void FilesPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if ((ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Landscape) == smallView)
+            {
+                AlignElements();
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            if (Directory.Exists(ApplicationData.Current.LocalFolder.Path + "\\Images"))
-            {
-                StorageFolder imageFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
-                var images = await imageFolder.GetItemsAsync();
-                StackPanel horizontalStackPanel = new StackPanel();
-                horizontalStackPanel.Orientation = Orientation.Horizontal;
-                vertStackPanel.Children.Add(horizontalStackPanel);
-                int numImagesInRow = (int)((Window.Current.Bounds.Width - 200) / 200);
-                int positionInRow = 0;
-                foreach (IStorageItem image in images)
-                {
-                    if (image.GetType() == typeof(StorageFile))
-                    {
-                        StorageFile file = image as StorageFile;
-                        Image imageToAdd = new Image();
-                        BitmapImage bitmap = new BitmapImage();
-
-                        var thumb = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
-                        await bitmap.SetSourceAsync(thumb);
-                        var fileToken = StorageApplicationPermissions.FutureAccessList.Add(image);
-                        imageToAdd.Name = fileToken;
-                        imageToAdd.Source = bitmap;
-                        imageToAdd.Margin = new Thickness(1.5);
-                        imageToAdd.Tapped += ImageToAdd_Tapped;
-                        imageToAdd.Holding += ImageToAdd_Holding;
-                        imageToAdd.RightTapped += ImageToAdd_RightTapped;
-
-                        
-
-                        
-                        if (positionInRow > numImagesInRow)
-                        {
-                            horizontalStackPanel = new StackPanel();
-                            horizontalStackPanel.Orientation = Orientation.Horizontal;
-                            vertStackPanel.Children.Add(horizontalStackPanel);
-                            positionInRow = 0;
-                        }
-
-                        horizontalStackPanel.Children.Add(imageToAdd);
-                        positionInRow++;
-                    }
-
-                }
-            }
+            AlignElements();
         }
 
         private void ImageToAdd_RightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -159,7 +108,6 @@ namespace UWPDocFingerPrinter
         {
             try
             {
-                
                 DataTransferManager dtm = DataTransferManager.GetForCurrentView();
                 dtm.DataRequested += Dtm_DataRequested;
                 DataTransferManager.ShowShareUI();
@@ -230,6 +178,80 @@ namespace UWPDocFingerPrinter
             Frame.Navigate(typeof(SettingsPage));
         }
 
-        
+        private async void AddImageThumbnailsToLayout()
+        {
+            if (Directory.Exists(ApplicationData.Current.LocalFolder.Path + "\\Images"))
+            {
+                // Create menu for right clicking/holding images
+                menu = new MenuFlyout();
+                menu.Placement = FlyoutPlacementMode.Right;
+                MenuFlyoutItem openItem = new MenuFlyoutItem();
+                openItem.Text = "Open";
+                openItem.Click += OpenItem_Click;
+                MenuFlyoutItem shareItem = new MenuFlyoutItem();
+                shareItem.Text = "Share";
+                shareItem.Click += ShareItem_Click;
+                MenuFlyoutItem deleteItem = new MenuFlyoutItem();
+                deleteItem.Text = "Delete";
+                deleteItem.Click += DeleteItem_Click;
+                menu.Items.Add(openItem);
+                menu.Items.Add(shareItem);
+                menu.Items.Add(deleteItem);
+                menu.Closed += Menu_Closed;
+
+                StorageFolder imageFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Images");
+                var images = await imageFolder.GetItemsAsync();
+                StackPanel horizontalStackPanel = new StackPanel();
+                horizontalStackPanel.Orientation = Orientation.Horizontal;
+                vertStackPanel.Children.Add(horizontalStackPanel);
+                int numImagesInRow = (int)((Window.Current.Bounds.Width - 200) / 200);
+                int positionInRow = 0;
+                foreach (IStorageItem image in images)
+                {
+                    if (image.GetType() == typeof(StorageFile))
+                    {
+                        StorageFile file = image as StorageFile;
+                        Image imageToAdd = new Image();
+                        BitmapImage bitmap = new BitmapImage();
+
+                        var thumb = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
+                        await bitmap.SetSourceAsync(thumb);
+                        var fileToken = StorageApplicationPermissions.FutureAccessList.Add(image);
+                        imageToAdd.Name = fileToken;
+                        imageToAdd.Source = bitmap;
+                        imageToAdd.Margin = new Thickness(1.5);
+                        imageToAdd.Tapped += ImageToAdd_Tapped;
+                        imageToAdd.Holding += ImageToAdd_Holding;
+                        imageToAdd.RightTapped += ImageToAdd_RightTapped;
+
+                        if (positionInRow > numImagesInRow)
+                        {
+                            horizontalStackPanel = new StackPanel();
+                            horizontalStackPanel.Orientation = Orientation.Horizontal;
+                            vertStackPanel.Children.Add(horizontalStackPanel);
+                            positionInRow = 0;
+                        }
+
+                        horizontalStackPanel.Children.Add(imageToAdd);
+                        positionInRow++;
+                    }
+
+                }
+            }
+        }
+
+        private void AlignElements()
+        {
+            if (Window.Current.Bounds.Width < 600 && !smallView)
+            {
+                smallView = true;
+                MySplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+            }
+            else if (smallView)
+            {
+                smallView = false;
+                MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+            }
+        }
     }
 }

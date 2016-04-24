@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -49,12 +51,14 @@ namespace DocFingerPrinterBeta.Controllers
                 ViewBag.ImageNumber = "";
                 return View("Index", model);
             }
-            string imageName = Path.GetFileName(file.FileName);
-            string imagePath = Path.Combine(Server.MapPath("~/images/profile"), imageName);
-            file.SaveAs(imagePath);
-            DetectionResponse response = _fps.DetectSignature(imagePath);
-            file.InputStream.Dispose();
-            System.IO.File.Delete(imagePath);
+
+            MemoryStream ms = new MemoryStream();
+            file.InputStream.CopyTo(ms);
+            byte[] fileBytes = ms.GetBuffer();
+            ms.Close();
+
+            DetectionResponse response = _fps.DetectSignature(fileBytes, Path.GetFileName(file.FileName));
+
             //if sig detection success return user/image id else return error
             if (response.Status == ResultStatus.Success)
             {
@@ -74,6 +78,55 @@ namespace DocFingerPrinterBeta.Controllers
                 ViewBag.ImageNumber = "";
                 return View("Index", model);
             }
+        }
+
+        /// <summary>
+        /// same as DetectMark except for mobile
+        /// </summary>
+        /// <param name="fileBytes"></param>
+        /// <param name="fileName"></param>
+        /// <returns>HttpResponseBase containing image details if image contains mark</returns>
+        [HttpPost]
+        public HttpResponseBase MobileDetectMark(string fileBytes, string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileBytes))
+            {
+                try
+                {
+                    string[] byteToConvert = fileBytes.Split('.');
+                    List<byte> fileBytesList = new List<byte>();
+                    byteToConvert.ToList()
+                            .Where(x => !string.IsNullOrEmpty(x))
+                            .ToList()
+                            .ForEach(x => fileBytesList.Add(Convert.ToByte(x)));
+
+                    byte[] imageBytes = fileBytesList.ToArray();
+
+                    DetectionResponse detectionResponse = _fps.DetectSignature(imageBytes, fileName);
+                    if (detectionResponse.Status == ResultStatus.Error)
+                    {
+                        Response.StatusCode = (int)detectionResponse.Status;
+                        Response.StatusDescription = detectionResponse.Message;
+                        return Response;
+                    }
+                    else
+                    {
+                        Response.StatusCode = (int)HttpStatusCode.OK;
+                        Response.AppendCookie(new HttpCookie("user", detectionResponse.UserName));
+                        Response.AppendCookie(new HttpCookie("imageNumber", detectionResponse.ImageNumber.ToString()));
+                        return Response;
+                    }
+                }
+                catch (Exception E)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    Response.StatusDescription = E.Message;
+                    return Response;
+                }
+            }
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            Response.StatusDescription = "Error: null file string";
+            return Response;
         }
     }
 }

@@ -32,16 +32,16 @@ namespace DocFingerPrinterBeta.DataLayer
         /// <summary>
         /// takes in an image marks that image and saves it the DB
         /// </summary>
-        /// <param name="imagePath"></param>
+        /// <param name="userId"></param>
         /// <param name="fileBytes"></param>
         /// <param name="imageName"></param>
         /// <param name="radio"></param>
+        /// <param name="transparentSignatureBackground"></param>
         /// <returns>id of uploaded image</returns>
-        public FileUploadResponse FileUpload(string imagePath, byte[] fileBytes, string imageName, int radio, bool box)
+        public FileUploadResponse FileUpload(int userId, byte[] fileBytes, string imageName, int radio, bool transparentSignatureBackground)
         {
             FileUploadResponse response = new FileUploadResponse();
-            var currentUserId = HttpContext.Current.User.Identity.GetUserId<int>();
-            var currentUser = _dbContext.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+            var currentUser = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
             currentUser.NumberOfImagesMarked++;
 
 
@@ -53,9 +53,10 @@ namespace DocFingerPrinterBeta.DataLayer
             markedImage.User = currentUser;
             markedImage.UniqueMark = currentUser.Id + "#" + currentUser.NumberOfImagesMarked;
 
+
             string signature = "\\" + TesseractDetection.convertIntToBinarySignature(currentUser.Id) + "#" + TesseractDetection.convertIntToBinarySignature(currentUser.NumberOfImagesMarked) + "#";
-            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, imagePath, box);
-            byte[] embeddedAndMarkedImageBinary = OpenStego.EmbedData(markedImage.UniqueMark, markedImageBinary, imageName, imagePath);
+            byte[] markedImageBinary = OpenStego.WatermarkImage(radio, signature, fileBytes, transparentSignatureBackground);
+            byte[] embeddedAndMarkedImageBinary = OpenStego.EmbedData(markedImage.UniqueMark, markedImageBinary, imageName);
 
             markedImage.MarkedImageBinary = embeddedAndMarkedImageBinary;
             response.Status = ResultStatus.Success;
@@ -80,12 +81,13 @@ namespace DocFingerPrinterBeta.DataLayer
         /// <summary>
         /// takes in an image and looks to see if it is marked, if it is returns the user asscoiated with that image
         /// </summary>
-        /// <param name="imagePath"></param>
+        /// <param name="fileBytes">Byte array of file data</param>
+        /// <param name="fileName">Name of file</param>
         /// <returns>username and image number</returns>
-        public DetectionResponse DetectSignature(string imagePath)
+        public DetectionResponse DetectSignature(byte[] fileBytes, string fileName)
         {
             DetectionResponse result = new DetectionResponse();
-            string extractText = OpenStego.ExtractDataFromFile(imagePath);
+            string extractText = OpenStego.ExtractData(fileBytes, fileName);
             if (!String.IsNullOrEmpty(extractText))
             {
                 Models.Image markedImage = _dbContext.Image.Where(x => x.UniqueMark.Equals(extractText)).Include("User").FirstOrDefault();
@@ -107,7 +109,7 @@ namespace DocFingerPrinterBeta.DataLayer
             }
             else 
             {
-                string imageText = TesseractDetection.getText(imagePath);
+                string imageText = TesseractDetection.getText(fileBytes);
                 if (!String.IsNullOrEmpty(imageText))
                 {
                     imageText = TesseractDetection.removeNewLineCharacters(imageText);

@@ -1,12 +1,6 @@
-﻿using DocFingerPrinterBeta.Models;
-using DocFingerPrinterBeta.Responses;
-using System;
-using System.Collections.Generic;
+﻿using DocFingerPrinterBeta.Responses;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace DocFingerPrinterBeta.Static_Classes
 {
@@ -15,7 +9,11 @@ namespace DocFingerPrinterBeta.Static_Classes
     /// </summary>
     public static class OpenStego
     {
-        public static string OPEN_STEGO_PATH = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
+        /// <summary>Location of Open Stego application</summary>
+        public const string OPEN_STEGO_PATH = "\"C:\\Program Files (x86)\\OpenStego\\lib\\openstego.jar\"";
+
+        /// <summary>Path used to place temporary files</summary>
+        public const string WORKING_DIRECTORY = @"C:\Temp\";
 
         /// <summary>
         /// embeds param embeddedData into image
@@ -23,24 +21,22 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// <param name="embeddedData"></param>
         /// <param name="inputData"></param>
         /// <param name="inputDataName"></param>
-        /// <param name="outputFilePath"></param>
         /// <returns></returns>
-        public static byte[] EmbedData(string embeddedData, byte[] inputData, string inputDataName, string outputFilePath)
+        public static byte[] EmbedData(string embeddedData, byte[] inputData, string inputDataName)
         {
             byte[] result = null;
-            string workingDirectory = @"C:\Users\Public\";
-            string tempTextFilePath = workingDirectory + @"tempTextFile.txt";
-            string tempImageFilePath = workingDirectory + inputDataName;
+            string tempTextFilePath = WORKING_DIRECTORY + "tempTextFile.txt";
+            string tempImageFilePath = WORKING_DIRECTORY + inputDataName;
 
             File.WriteAllText(tempTextFilePath, embeddedData);
             File.WriteAllBytes(tempImageFilePath, inputData);
             string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + tempTextFilePath
-               + "\" -cf \"" + tempImageFilePath + "\" -sf \"" + outputFilePath + "\"";
+               + "\" -cf \"" + tempImageFilePath + "\" -sf \"" + tempImageFilePath + "\"";
 
-            var commandResult = CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
+            var commandResult = CommandPrompt.ExecuteCommand(embedCommand, WORKING_DIRECTORY);
             if(commandResult == ResultStatus.Success)
             {
-                result = File.ReadAllBytes(outputFilePath);
+                result = File.ReadAllBytes(tempImageFilePath);
             }
             File.Delete(tempTextFilePath);
             File.Delete(tempImageFilePath);
@@ -48,38 +44,25 @@ namespace DocFingerPrinterBeta.Static_Classes
         }
 
         /// <summary>
-        /// embeds data in embeddedDataFilePath into the image
+        /// extracts string data from the file data if the file has previously had data embedded into it
         /// </summary>
-        /// <param name="embeddedDataFilePath"></param>
-        /// <param name="inputFilePath"></param>
-        /// <param name="outputFilePath"></param>
+        /// <param name="inputData"></param>
+        /// <param name="inputDataName"></param>
         /// <returns></returns>
-        public static ResultStatus EmbedDataFromFile(string embeddedDataFilePath, string inputFilePath, string outputFilePath)
+        public static string ExtractData(byte[] inputData, string inputDataName)
         {
-            string embedCommand = "java -jar " + OPEN_STEGO_PATH + " embed -a RandomLSB -mf \"" + embeddedDataFilePath
-               + "\" -cf \"" + inputFilePath + "\" -sf \"" + outputFilePath + "\"";
-            string workingDirectory = @"C:\Users\Public";
-
-            return CommandPrompt.ExecuteCommand(embedCommand, workingDirectory);
-        }
-
-        /// <summary>
-        /// extracts data from the file if the files has previously had data embedded from it
-        /// </summary>
-        /// <param name="inputFilePath"></param>
-        /// <returns></returns>
-        public static string ExtractDataFromFile(string inputFilePath)
-        {
-            string workingDirectory = @"C:\Users\Public";
-            string extractCommand = "java -jar " + OPEN_STEGO_PATH + " extract -a RandomLSB -sf \"" + inputFilePath + "\" -xd \"" + workingDirectory + "\\data\"";
+            string tempImageFilePath = WORKING_DIRECTORY + inputDataName;
+            File.WriteAllBytes(tempImageFilePath, inputData);
+            string extractCommand = "java -jar " + OPEN_STEGO_PATH + " extract -a RandomLSB -sf \"" + tempImageFilePath + "\" -xd \"" + WORKING_DIRECTORY;
             string result = "";
 
-            ResultStatus r = CommandPrompt.ExecuteCommand(extractCommand, workingDirectory);
-            if (r == ResultStatus.Success && File.Exists(workingDirectory + "\\data\\tempTextFile.txt"))
+            ResultStatus r = CommandPrompt.ExecuteCommand(extractCommand, WORKING_DIRECTORY);
+            if (r == ResultStatus.Success && File.Exists(WORKING_DIRECTORY + "tempTextFile.txt"))
             {
-                result = System.IO.File.ReadAllText(workingDirectory + "\\data\\tempTextFile.txt");
-                File.Delete(workingDirectory + "\\data\\tempTextFile.txt");
+                result = File.ReadAllText(WORKING_DIRECTORY + "tempTextFile.txt");
+                File.Delete(WORKING_DIRECTORY + "tempTextFile.txt");
             }
+            File.Delete(tempImageFilePath);
             return result;
         }
 
@@ -88,16 +71,17 @@ namespace DocFingerPrinterBeta.Static_Classes
         /// </summary>
         /// <param name="corner"></param>
         /// <param name="mark"></param>
-        /// <param name="inputFilePath"></param>
+        /// <param name="fileBytes"></param>
+        /// <param name="transparentSignatureBackground"></param>
         /// <returns></returns>
-        public static byte[] WatermarkImage(int corner, string mark, string inputFilePath, bool box)
+        public static byte[] WatermarkImage(int corner, string mark, byte[] fileBytes, bool transparentSignatureBackground)
         {
             /*todo: accomodate for buffers on edges when placing watermark
                 accomodate for color of image/watermark            
             */
             byte[] bytes;
-
-            using (Bitmap image = (Bitmap)System.Drawing.Image.FromFile(inputFilePath))
+            using (Stream memStream = new MemoryStream(fileBytes))
+            using (Bitmap image = (Bitmap)Image.FromStream(memStream))
             using (Graphics imageGraphics = Graphics.FromImage(image))
             using (Font font = new Font("Sans", 40))
             {
@@ -112,7 +96,7 @@ namespace DocFingerPrinterBeta.Static_Classes
                 else if (corner == 3)
                     point = new Point(image.Width - (int)size.Width, image.Height - (int)size.Height);
 
-                if (box)
+                if (!transparentSignatureBackground)
                 {
                     var rect = new Rectangle(point.X, point.Y, (int)size.Width, (int)size.Height);
                     imageGraphics.FillRectangle(Brushes.White, point.X, point.Y, size.Width, size.Height);

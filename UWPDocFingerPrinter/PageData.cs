@@ -13,7 +13,8 @@ namespace UWPDocFingerPrinter
         public ApplicationTheme SettingsPageApplicationTheme { get; set; }
         public StorageFile DetectionPageStorageFile { get; private set; }
         public int DetectionPageRadioBox { get; private set; }
-
+        public int DetectionResultsPageImageNumber { get; private set; }
+        public string DetectionResultsPageUsername { get; private set; }
         private PageData()
         {
             MainPageStorageFile = DetectionPageStorageFile = null;
@@ -40,6 +41,12 @@ namespace UWPDocFingerPrinter
         {
             MainPageStorageFile = file;
             MainPageRadioBox = radioBox;
+        }
+
+        public void SetDetectionResultsPageData(string user, int imageNumber)
+        {
+            DetectionResultsPageUsername = user;
+            DetectionResultsPageImageNumber = imageNumber;
         }
     }
 }

@@ -101,6 +101,9 @@
     <Compile Include="DetectionPage.xaml.cs">
       <DependentUpon>DetectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DetectionResultsPage.xaml.cs">
+      <DependentUpon>DetectionResultsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FilesPage.xaml.cs">
       <DependentUpon>FilesPage.xaml</DependentUpon>
     </Compile>
@@ -140,6 +143,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="DetectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DetectionResultsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

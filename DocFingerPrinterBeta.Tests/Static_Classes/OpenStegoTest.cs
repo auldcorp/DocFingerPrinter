@@ -14,38 +14,18 @@ namespace DocFingerPrinterBeta.Tests.Static_Classes
     public class OpenStegoTest
     {
         [TestMethod]
-        public void EmbedDataTest()
+        public void EmbedDataAndExtractTest()
         {
             string embededData = "test";
             string inputFilePath = "C:\\Users\\Public\\small-mario.png";
-            string outputFilePath = "C:\\Users\\Public\\test.png";
-            var file = File.ReadAllBytes(inputFilePath);
+            byte[] fileBytes = File.ReadAllBytes(inputFilePath);
 
-            var osStatus = OpenStego.EmbedData(embededData, file, "small-mario.png", outputFilePath);
+            byte[] embeddedData = OpenStego.EmbedData(embededData, fileBytes, Path.GetFileName(inputFilePath));
+            Assert.IsNotNull(embeddedData);
 
-            Assert.IsNotNull(osStatus);
-        }
+            string extractedText = OpenStego.ExtractData(embeddedData, Path.GetFileName(inputFilePath));
+            Assert.AreEqual(extractedText, "test");
 
-        [TestMethod]
-        public void EmbededDataFromFileTest()
-        {
-            string embeddedDataFilePath = "C:\\Users\\Public\\secretText.txt";
-            string inputFilePath = "C:\\Users\\Public\\small-mario.png";
-            string outputFilePath = "C:\\Users\\Public\\test.png";
-
-            ResultStatus osStatus = OpenStego.EmbedDataFromFile(embeddedDataFilePath, inputFilePath, outputFilePath);
-
-            Assert.IsNotNull(osStatus);
-            Assert.AreEqual(ResultStatus.Success, osStatus);
-        }
-
-        [TestMethod]
-        public void ExtractDataTest()
-        {
-            string inputFilePath = "C:\\Users\\Public\\test.png";
-            string result = OpenStego.ExtractDataFromFile(inputFilePath);
-
-            Assert.AreEqual(result, "test");
         }
 
         [TestMethod]

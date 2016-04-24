@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -31,6 +23,15 @@ namespace UWPDocFingerPrinter
         public DetectionPage()
         {
             this.InitializeComponent();
+            SizeChanged += DetectionPage_SizeChanged;
+        }
+
+        private void DetectionPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if ((ApplicationView.GetForCurrentView().Orientation == ApplicationViewOrientation.Landscape) == smallView)
+            {
+                AlignElements();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -83,6 +84,11 @@ namespace UWPDocFingerPrinter
             Frame.Navigate(typeof(FilesPage));
         }
 
+        private void settingsIcon_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
+        }
+
         private async void imageChooserButton_Click(object sender, RoutedEventArgs e)
         {
             if ((ApplicationView.Value != ApplicationViewState.Snapped) || ApplicationView.TryUnsnap())
@@ -113,8 +119,12 @@ namespace UWPDocFingerPrinter
             {
                 int corner = getCheckedRadioButton();
                 progressRing.Visibility = Visibility.Visible;
-                //bool success = await HttpRequest.UploadFile(fileToEmbed, corner);
+                bool success = await HttpRequest.DetectSignature(fileToEmbed, corner);
                 progressRing.Visibility = Visibility.Collapsed;
+                if (success)
+                {
+                    Frame.Navigate(typeof(DetectionResultsPage));
+                }
             }
         }
 
@@ -144,6 +154,7 @@ namespace UWPDocFingerPrinter
                 Grid.SetColumn(bottomRightButton, 1);
                 chooseLocationTextbox.HorizontalAlignment = HorizontalAlignment.Center;
                 titleTextBox.HorizontalAlignment = HorizontalAlignment.Center;
+                leaveBlankIfUnknownTextbox.HorizontalAlignment = HorizontalAlignment.Center;
             }
             else if (smallView)
             {
