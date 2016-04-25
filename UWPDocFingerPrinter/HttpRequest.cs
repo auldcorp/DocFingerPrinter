@@ -147,7 +147,7 @@ namespace UWPDocFingerPrinter
             request.CookieContainer = new CookieContainer();
             if (addAuthCookie)
             {
-                authCookie.Domain = localHost;
+                authCookie.Domain = serverHost;
                 request.CookieContainer.Add(uri, authCookie);
             }
             
