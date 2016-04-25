@@ -2,9 +2,11 @@
 using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -167,12 +169,23 @@ namespace UWPDocFingerPrinter
                 Grid.SetColumn(bottomRightButton, 1);
 
                 chooseLocationTextbox.HorizontalAlignment = HorizontalAlignment.Center;
-                titleTextBox.HorizontalAlignment = HorizontalAlignment.Center;
             }
             else if (smallView)
             {
                 Frame.Navigate(typeof(MainPage));
             }
+        }
+
+        private void StackPanel_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DarkGray);
+        }
+
+        private void StackPanel_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DimGray);
         }
     }
 }

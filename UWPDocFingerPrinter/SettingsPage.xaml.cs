@@ -103,5 +103,17 @@ namespace UWPDocFingerPrinter
                 MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
             }
         }
+
+        private void StackPanel_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DarkGray);
+        }
+
+        private void StackPanel_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DimGray);
+        }
     }
 }

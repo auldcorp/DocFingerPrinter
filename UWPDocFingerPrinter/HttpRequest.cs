@@ -136,8 +136,8 @@ namespace UWPDocFingerPrinter
         {
             UriBuilder builder = new UriBuilder();
             builder.Scheme = "http";
-            builder.Host = localHost;
-            builder.Port = 51916;
+            builder.Host = serverHost;
+            //builder.Port = 51916;
             builder.Path = path;
             Uri uri = builder.Uri;
 

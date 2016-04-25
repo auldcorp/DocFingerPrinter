@@ -12,31 +12,38 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                         Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Grid.Row="0" />
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="DarkMagenta" >
+            <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                         Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Foreground="White" />
+            <TextBlock Name="titleTextBox" Text="Detect Signature in a file" FontSize="20" HorizontalAlignment="Left"
+                       FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" />
+        </StackPanel>
         <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
-                    CompactPaneLength="50" OpenPaneLength="185" Grid.Row="1">
+                    CompactPaneLength="50" OpenPaneLength="185" Grid.Row="1" >
             <SplitView.Pane>
-                <StackPanel Background="Gray">
-                    <StackPanel Name="embedPanel" Orientation="Horizontal">
+                <StackPanel Background="DimGray" >
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
-                                Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
-                        <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
+                                Height="50" Background="Transparent" Click="embedSignatureIcon_Click" Foreground="White"/>
+                        <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                     <StackPanel Background="DarkGray" Orientation="Horizontal">
                         <Button x:Name="DetectImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                                Width="50" Height="50" Background="Transparent"/>
-                        <TextBlock Text="Image Detection" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Foreground="White"/>
+                        <TextBlock Text="Image Detection" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
-                    <StackPanel Name="filesPanel" Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
-                                Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" />
-                        <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" Foreground="White" />
+                        <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
-                    <StackPanel Name="settingPanel" Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
-                                Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click"/>
-                        <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click" Foreground="White" />
+                        <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
                 </StackPanel>
             </SplitView.Pane>
@@ -48,8 +55,6 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <StackPanel Name="embedContent" Grid.Row="1" HorizontalAlignment="Center" Width="500px" >
-                        <TextBlock Name="titleTextBox" Text="Detect Signature in a file" FontSize="20" HorizontalAlignment="Left" FontWeight="Bold" />
-                        <TextBlock />
                         <Button Name="imageChooserButton" Content="Choose File" HorizontalAlignment="Stretch" Click="imageChooserButton_Click"/>
                         <TextBlock Name="fileNameTextBlock" />
                         <TextBlock />

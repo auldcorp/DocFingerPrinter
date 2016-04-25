@@ -1,6 +1,8 @@
-﻿using Windows.UI.ViewManagement;
+﻿using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -80,6 +82,18 @@ namespace UWPDocFingerPrinter
                 smallView = false;
                 MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
             }
+        }
+
+        private void StackPanel_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DarkGray);
+        }
+
+        private void StackPanel_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DimGray);
         }
     }
 }

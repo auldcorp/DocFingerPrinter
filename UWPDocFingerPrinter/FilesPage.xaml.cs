@@ -6,11 +6,13 @@ using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -252,6 +254,18 @@ namespace UWPDocFingerPrinter
                 smallView = false;
                 MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
             }
+        }
+
+        private void StackPanel_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DarkGray);
+        }
+
+        private void StackPanel_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StackPanel panel = sender as StackPanel;
+            panel.Background = new SolidColorBrush(Colors.DimGray);
         }
     }
 }

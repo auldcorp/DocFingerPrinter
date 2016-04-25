@@ -12,52 +12,50 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                         Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Grid.Row="0" />
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="DarkMagenta" >
+            <Button x:Name="CompactHamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                         Width="50" Height="50" Background="Purple" Click="HamburgerButton_Click" Foreground="White" />
+            <Button Name="backButton" FontFamily="Segoe MDL2 Assets" Content="&#xE72B;" FontWeight="Bold"
+                            Width="50" Height="50" Background="Transparent" Click="backButton_Click" Foreground="White"/>
+            <TextBlock Text="Image Signature Information" FontSize="20" HorizontalAlignment="Left"
+                       FontWeight="Bold" VerticalAlignment="Center" Foreground="White" />
+        </StackPanel>
         <SplitView Name="MySplitView" DisplayMode="CompactOverlay" IsPaneOpen="False" 
-                    CompactPaneLength="50" OpenPaneLength="185" Grid.Row="1">
+                    CompactPaneLength="50" OpenPaneLength="185" Grid.Row="1" >
             <SplitView.Pane>
-                <StackPanel Background="Gray">
-                    <StackPanel Name="embedPanel" Orientation="Horizontal">
+                <StackPanel Background="DimGray" >
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button Name="embedSignatureIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE898;" Width="50"
-                                Height="50" Background="Transparent" Click="embedSignatureIcon_Click"/>
-                        <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" />
+                                Height="50" Background="Transparent" Click="embedSignatureIcon_Click" Foreground="White"/>
+                        <TextBlock Name="embedText" Text="Embed Signature" FontSize="14" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                     <StackPanel Background="DarkGray" Orientation="Horizontal">
                         <Button x:Name="DetectImageIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE7C5;"
-                                Width="50" Height="50" Background="Transparent"/>
-                        <TextBlock Text="Image Detection" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Foreground="White"/>
+                        <TextBlock Text="Image Detection" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
-                    <StackPanel Name="filesPanel" Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button x:Name="markedFilesIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE8B7;"
-                                Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" />
-                        <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Click="markedFilesIcon_Click" Foreground="White" />
+                        <TextBlock Text="Marked files" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
-                    <StackPanel Name="settingPanel" Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" PointerEntered="StackPanel_PointerEntered"
+                                PointerExited="StackPanel_PointerExited">
                         <Button x:Name="settingsIcon" FontFamily="Segoe MDL2 Assets" Content="&#xE115;"
-                                Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click"/>
-                        <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" />
+                                Width="50" Height="50" Background="Transparent" Click="settingsIcon_Click" Foreground="White" />
+                        <TextBlock Text="User Settings" FontSize="14" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid Height="Auto" Width="Auto">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <StackPanel Margin="0" Grid.Row="0" Orientation="Horizontal" >
-                        <Button Name="backButton" FontFamily="Segoe MDL2 Assets" Content="&#xE72B;" FontWeight="Bold"
-                            Width="50" Height="50" Background="Transparent" Click="backButton_Click"/>
-                        <TextBlock Text="Image Signature Information" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Margin="10" Grid.Row="1" >
-                        <TextBlock Text="Signature registered to account: " FontWeight="Bold" Margin="0,20,0,0"/>
-                        <TextBlock Name="UserNameTextBlock" />
-                        <TextBlock Text="Image id of signature: " FontWeight="Bold" Margin="0,20,0,0"/>
-                        <TextBlock Name="ImageIdTextBlock" />
-                    </StackPanel>
-                </Grid>
+                <StackPanel Margin="10" >
+                    <TextBlock Text="Signature registered to account: " FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBlock Name="UserNameTextBlock" />
+                    <TextBlock Text="Image id of signature: " FontWeight="Bold" Margin="0,20,0,0"/>
+                    <TextBlock Name="ImageIdTextBlock" />
+                </StackPanel>
             </SplitView.Content>
         </SplitView>
     </Grid>
