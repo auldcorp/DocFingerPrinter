@@ -1,0 +1,7 @@
+{
+    "require": {
+        "silex/silex": "~2.0",
+        "twig/twig": "~1.0",
+        "jenssegers/imagehash": "^0.4.0"
+    }
+}
