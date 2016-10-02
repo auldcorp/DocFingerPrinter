@@ -10,4 +10,4 @@ Auld Corp
     - vendor *Dependency package*
     - composer.json *Dependencies for application*
     - index.php *Main cgi-bin driver*
-- docs *Documentaiton for future developers*
+- docs *Documentation for future developers*
