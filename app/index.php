@@ -19,19 +19,17 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 	'twig.path' => __DIR__.'/app/templates',
 ));
 
-$app->get('/pleasework', function() use($app) {
-	return $app['twig']->render('base.html', array(
-         'message' => 'DEAR GOD WORK',
-	 'rootLocation' => 'http://www.auld.haffner.me',
-	 'rootCaption' => 'Back to root'
-    ));
-});
-
-$app->get('/', function(){
+$app->get('/pleasework', function() {
         return 'yolo! napkins!';
 });
 
-$app->run();
+$app->get('/', function() use($app) {
+	return $app['twig']->render('base.html', array(
+         'message' => 'Welcome! ',
+    ));
 
+});
+
+$app->run();
 
 
