@@ -2,8 +2,6 @@
 date_default_timezone_set('America/New_York');
 require_once __DIR__.'/vendor/autoload.php';
 
-use Napkins;
-
 $app = new Silex\Application();
 
 $app['debug'] = TRUE;
@@ -41,8 +39,10 @@ $app->get('/pleasework', function() {
 
 $app->get('/', 'Napkins\\IndexController::defaultView');
 
-$app->before(function ($request) {
-	$request->getSession();
+$app->get('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login_view');
+
+$app->before( function ($request) {
+	$request->getSession()->start();
 });
 
 $app->run();
