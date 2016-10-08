@@ -2,6 +2,14 @@
 
 namespace Napkins;
 
+require_once(__DIR__ .'/class_template.php');
+require_once(__DIR__ .'/class_forms.php');
+
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symhony\Component\HttpFoundation\Response;
+use Napkins\WebTemplate;
+use Napkins\forms;
 
 Class LoginController
 {
@@ -40,7 +48,7 @@ private $form;
 
 	public function loginView(){
 		$template = new WebTemplate();
-		$pageContent = $template->render('login.php', ['form' => $this->form]);
+		$page_content = $template->render('login.php', ['form' => $this->form]);
 
 		$template->setTitle('Login');
 		$template->addGlobal('page_content', $page_content);
