@@ -2,8 +2,6 @@
 date_default_timezone_set('America/New_York');
 require_once __DIR__.'/vendor/autoload.php';
 
-use Napkins;
-
 $app = new Silex\Application();
 
 $app['debug'] = TRUE;
@@ -35,9 +33,10 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 
 $app->register(new Silex\Provider\SessionServiceProvider);
 
-$app->get('/pleasework','Napkins\\UploadController::uploadAction');
-
+$app->get('/import','Napkins\\UploadController::uploadView');
 $app->get('/', 'Napkins\\IndexController::defaultView');
+
+$app->post('/import','Napkins\\UploadController::uploadAction');
 
 $app->before(function ($request) {
 	$request->getSession();
