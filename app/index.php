@@ -41,6 +41,10 @@ $app->get('/', 'Napkins\\IndexController::defaultView');
 
 $app->get('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login_view');
 
+$app->get('/register', 'Napkins\\LoginController::defaultAction')->value('action', 'register');
+
+$app->post('/register','Napkins\\LoginController::defaultAction')->value('action', 'register_user');
+
 $app->before( function ($request) {
 	$request->getSession()->start();
 });

@@ -56,13 +56,13 @@ private $form;
 		return $template->renderDefault();
 	}
 
-	public function registerView(Request $request, Application $app)
+	public function registerView()
 	{
 		$templating = new WebTemplate();
 
 		$forms = new forms('register', FALSE, FALSE);
 
-		$page_content = $templating->render('register.php', array('form' => &$form));
+		$page_content = $templating->render('register.php', array('form' => &$forms));
 
 		$templating->setTitle('Register');
 		$templating->addGlobal('page_content', $page_content);
