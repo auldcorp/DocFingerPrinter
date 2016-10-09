@@ -60,7 +60,7 @@ $app->post('/register','Napkins\\LoginController::defaultAction')->value('action
 $app->get('/email', 'Napkins\\NotificationController::email');
 
 $app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login');
->>>>>>> c064ed9d072764287971b8b896fd867edec41102
+
 $app->before( function ($request) {
 	$request->getSession()->start();
 });

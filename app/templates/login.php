@@ -6,7 +6,7 @@
 	</head>
 	<body>
 	<div class="well col-md-4 col-sm-offset-4">
-		<?php $form->start('/login', 'post', 'class="form-signin" role="form"');
+		<?php $form->start('login', 'post', 'class="form-signin" role="form"');
 			if(isset($_REQUEST['return']))
 			{
 				$form->field('hidden', 'return', NULL, ['value' => $_REQUEST['return']]);
@@ -25,7 +25,7 @@
 				<input type="password" name="password" class="form-control" placeholder="Password">
 			</div>
 		</div>
-		<a class="co-sm-offset-9" href="/register">Register</a>
+		<a class="co-sm-offset-9" href="register">Register</a>
 		<div class="form-group">
 			<button class="btn btn-lg btn-primary col-md-8 col-md-offset-2" type="submit">Login</button>
 		</div>

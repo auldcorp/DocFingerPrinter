@@ -7,7 +7,7 @@ require_once(__DIR__ .'/class_forms.php');
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symhony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Napkins\WebTemplate;
 use Napkins\forms;
 

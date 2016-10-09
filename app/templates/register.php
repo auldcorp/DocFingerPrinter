@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	<body>
-<?php $form->start('/register', 'post', 'class="form-register" role="form"'); 
+<?php $form->start('register', 'post', 'class="form-register" role="form"'); 
 if(isset($_REQUEST['return']))
 			{
 				$form->field('hidden', 'return', NULL, ['value' => $_REQUEST['return']]);
@@ -19,7 +19,7 @@ if(isset($_REQUEST['return']))
 	<div id="content" class="clear row col-xs-offset-2">
 		<div class="col-md-9">
 		<h1>Register</h1>
-		<form action="/~taylor/register/submit" method="post" class="form-horizontal" id="login_form" enctype="multipart/form-data">
+		<form action="register/submit" method="post" class="form-horizontal" id="login_form" enctype="multipart/form-data">
  			<div class="form-group">
 	  			<label for="Email" class="col-md-4 control-label">Email</label>
 				<div class="col-md-8">
