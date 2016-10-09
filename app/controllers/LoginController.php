@@ -7,7 +7,7 @@ require_once(__DIR__ .'/class_forms.php');
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symhony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Napkins\WebTemplate;
 use Napkins\forms;
 
@@ -56,13 +56,13 @@ private $form;
 		return $template->renderDefault();
 	}
 
-	public function registerView(Request $request, Application $app)
+	public function registerView()
 	{
 		$templating = new WebTemplate();
 
 		$forms = new forms('register', FALSE, FALSE);
 
-		$page_content = $templating->render('register.php', array('form' => &$form));
+		$page_content = $templating->render('register.php', array('form' => &$forms));
 
 		$templating->setTitle('Register');
 		$templating->addGlobal('page_content', $page_content);
