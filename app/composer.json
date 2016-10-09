@@ -11,7 +11,8 @@
         "symfony/event-dispatcher": "~2.7",
 	"twbs/bootstrap": "~3.3",
 	"doctrine/dbal": "~2.2",		
-        "jenssegers/imagehash": "^0.4.0"
+        "jenssegers/imagehash": "^0.4.0",
+        "swiftmailer/swiftmailer": "^5.4"
     },
 
 	"autoload": {
