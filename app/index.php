@@ -25,7 +25,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'dbname' => 'nakpins',
 	'user' => 'nakpin_holder',
 	'password' => 'e7bQ47yk3nebtlAqVEp7C8I',
-	'host' => 'localhost',
+	'host' => '127.0.0.1',
 	'driver' => 'pdo_mysql',
     ),
 ));
