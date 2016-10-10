@@ -134,7 +134,7 @@ private $form;
 			$stmt = $app['db']->query('SELECT password FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
 			$stmt = $stmt->fetch();
 			$password_hash = $stmt['password'];
-			var_dump($password_given, $password_hash, $email);
+			//var_dump($password_given, $password_hash, $email);
 			if( $password_hash === FALSE || ! password_verify($password_given, $password_hash))
 			{
 				$this->form->error('password', 'The email or password was incorrect. Please try again.');

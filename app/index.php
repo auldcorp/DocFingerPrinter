@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
 
-$app['debug'] = TRUE;
+#$app['debug'] = TRUE;
+$app['debug'] = FALSE;
 
 if($app['debug'])
 {
