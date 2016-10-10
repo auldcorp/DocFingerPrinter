@@ -3,6 +3,7 @@ date_default_timezone_set('America/New_York');
 require_once __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Response;
+$app = new Silex\Application();
 
 $app = new Silex\Application();
 
@@ -46,12 +47,10 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-$app->get('/pleasework', function() {
-        return 'yolo! napkins!';
-});
-
+$app->get('/import','Napkins\\UploadController::uploadView');
 $app->get('/', 'Napkins\\IndexController::defaultView');
 
+<<<<<<< HEAD
 $app->get('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login_view');
 
 $app->get('/register', 'Napkins\\LoginController::defaultAction')->value('action', 'register');
@@ -64,6 +63,12 @@ $app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action',
 
 $app->before( function ($request) {
 	$request->getSession()->start();
+=======
+$app->post('/import','Napkins\\UploadController::uploadAction');
+
+$app->before(function ($request) {
+	$request->getSession();
+>>>>>>> 6dfdd031e9a3833fa64b3da733aa4db2039b8d23
 });
 
 $app->run();
