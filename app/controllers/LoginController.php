@@ -145,12 +145,10 @@ private $form;
 
 
 		if ($this->form->is_ready()) {
-			$stmt = $app['db']->query('SELECT id FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
+			$stmt = $app['db']->query('SELECT email FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
 			$stmt = $stmt->fetch();
-			$user_id = $stmt['id'];
 
 			$sess = $app['session'];
-			$sess->set('user_id', $user_id);
 			$sess->set('email', $email);
 			
 			return new Response('Success!');
