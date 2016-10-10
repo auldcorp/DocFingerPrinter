@@ -16,7 +16,8 @@ class MyCrawler extends PHPCrawler
         // Just detect linebreak for output ("\n" in CLI-mode, otherwise "<br>").
         if (PHP_SAPI == "cli")
             $lb = "\n";
-        else $lb = "<br />";
+        else
+            $lb = "<br />";
 
         // Print the URL and the HTTP-status-Code
         echo "Page requested: ".$DocInfo->url." (".$DocInfo->http_status_code.")".$lb;
@@ -34,12 +35,12 @@ class MyCrawler extends PHPCrawler
         // Now you should do something with the content of the actual
         // received page or file ($DocInfo->source), we skip it in this example
 
+        // If file is an image
         if(strcmp(substr($DocInfo->content_type, 0, 6), "image/") == 0) {
-            // is an image
+
+            // Generate filename and save file
             $tempfile = $this->tempdir.rand(1000, 9999);
-            echo "\n\n".$DocInfo->url."\n\n";
             copy($DocInfo->url, $tempfile);
-            //file_put_contents($tempfile, $DocInfo->source);
 
             //compare hash
 
@@ -51,7 +52,8 @@ class MyCrawler extends PHPCrawler
 
             //send notification
 
-            //unlink($tempfile);
+            // Delete File
+            unlink($tempfile);
         }
 
         echo $lb;
@@ -65,8 +67,8 @@ class MyCrawler extends PHPCrawler
 // and start the crawling-process.
 
 $crawler = new MyCrawler();
-$crawler->tempdir = "/home/kd8zev/napkin_collector/".getmypid()."";
-//$crawler->tempdir = "/tmp/napkin_collector/".getmypid().".d/";
+//$crawler->tempdir = "/home/kd8zev/napkin_collector/".getmypid()."";
+$crawler->tempdir = "/tmp/napkin_collector/".getmypid().".d/";
 if (!mkdir($crawler->tempdir, 0777, true))
     echo "Error Creating tempdir: ".$crawler->tempdir."\n";
 
@@ -91,8 +93,8 @@ $crawler->setTrafficLimit(1000 * 1024);
 // Thats enough, now here we go
 $crawler->go();
 
-//if (!rmdir($my_tempdir))
-    //echo "Error Deleting tempdir: ".$crawler->tempdir;
+if (!rmdir($crawler->tempdir))
+    echo "Error Deleting tempdir: ".$crawler->tempdir;
 
 // At the end, after the process is finished, we print a short
 // report (see method getProcessReport() for more information)
