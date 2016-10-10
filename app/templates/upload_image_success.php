@@ -8,22 +8,16 @@
 		<div id="main" class="container-fluid">
 			<div id="content" class="clear row col-xs-offset-2">
 				<div class="col-md-9">
-					<h2>Successful Files</h2>
-					<ul>
+					<h4>
 						<?php
-foreach($succeeded as $key=>$value) {
-		echo "<li>"+$value+"</li>";
+echo $file;
+if($succeeded) {
+	echo ' successfuly uploaded';
+} else {
+	echo ' faild to upload';
 }
-						?>
-					</ul>
-					<h2>Failed Files</h2>
-					<ul>
-						<?php
-foreach($failed as $fail) {
-		echo "<li>"+$fail+"</li>";
-}
-						?>
-					</ul>
+?>
+					</h4>
 				</div>
 			</div>
 		</div>

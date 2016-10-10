@@ -10,17 +10,20 @@ use Symfony\Component\HttpFoundation\Response;
 Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
 		$templating = new WebTemplate();
-		$succeeded = [];
-		$failed = [];
+		$succeeded = False;
 		foreach($request->files as $file) {
+			if($file == Null) {
+				return $this->uploadView($request, $app);
+			}
 			if(preg_match("/^image\/[a-zA-Z|\-]{2,10}/",$file->getMimeType())) {
 				$file->move("/srv/napkin/images/", $file->getClientOriginalName());
-				$succeeded[] = $file->getClientOriginalName();
+				$succeeded = True;
 			} else {
-				$failed[] = $file->getClientOriginalName();
+				$succeeded = False;
 			}
+			$fileName = $file->getClientOriginalName();
 		}
-		$return = ['succeeded'=>$succeeded,'failed'=>$failed];
+		$return = ['succeeded'=>$succeeded,'file'=>$fileName];
 		echo $return['succeeded'][0];
 		$page_content = $templating->render('upload_image_success.php',$return);
 		$templating->setTitle('Upload Image');
