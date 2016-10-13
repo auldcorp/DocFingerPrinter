@@ -11,20 +11,21 @@ Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
 		$templating = new WebTemplate();
 		$succeeded = False;
-		foreach($request->files as $file) {
+		$data = $request->files->get('form');
+		$succeeded = [];
+		$failed = [];
+		foreach($data['files'] as $file) {
 			if($file == Null) {
 				return $this->uploadView($request, $app);
 			}
 			if(preg_match("/^image\/[a-zA-Z|\-]{2,10}/",$file->getMimeType())) {
 				$file->move("/srv/napkin/images/", $file->getClientOriginalName());
-				$succeeded = True;
+				array_push($succeeded, $file->getClientOriginalName());
 			} else {
-				$succeeded = False;
+				array_push($failed, $file->getClientOriginalName());
 			}
-			$fileName = $file->getClientOriginalName();
 		}
-		$return = ['succeeded'=>$succeeded,'file'=>$fileName];
-		echo $return['succeeded'][0];
+		$return = ['succeeded'=>$succeeded,'failed'=>$failed];
 		$page_content = $templating->render('upload_image_success.php',$return);
 		$templating->setTitle('Upload Image');
 		$templating->addGlobal('page_content', $page_content);
