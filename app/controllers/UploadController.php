@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
-		$templating = new WebTemplate();
 		$succeeded = False;
 		$data = $request->files->get('form');
 		$succeeded = [];
@@ -26,16 +25,13 @@ Class UploadController {
 			}
 		}
 		$return = ['succeeded'=>$succeeded,'failed'=>$failed];
-		$page_content = $templating->render('upload_image_success.php',$return);
-		$templating->setTitle('Upload Image');
-		$templating->addGlobal('page_content', $page_content);
 
-		return $templating->renderDefault();
+		return $this->uploadView($request, $app, $return);
 	}
-	public function uploadView(Request $request, Application $app) {
+	public function uploadView(Request $request, Application $app, Array $var_content = []) {
 		$templating = new WebTemplate();
 
-		$page_content = $templating->render('upload_image.php');
+		$page_content = $templating->render('upload_image.php', $var_content);
 		
 		$templating->setTitle('Upload Image');
 		$templating->addGlobal('page_content', $page_content);

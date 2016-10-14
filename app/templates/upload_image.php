@@ -25,6 +25,27 @@
             </div>
         	</form>
 				</div>
+				<div class="col-md-9">
+						<?php
+if(isset($succeeded)&&!empty($succeeded)) {
+echo '<h2>Successful Files</h2>';
+echo '<ul>';
+foreach($succeeded as $suc) {
+		echo "<li>".$suc."</li>";
+}
+echo '</ul>';
+}
+if(isset($failed)&&!empty($failed)) {
+echo '<h2>Failed Files</h2>';
+echo '<ul>';
+foreach($failed as $fail) {
+		echo "<li>".$fail."</li>";
+}
+echo '</ul>';
+}
+						?>
+				</div>
+
 			</div>
 		</div>
 	</body>
