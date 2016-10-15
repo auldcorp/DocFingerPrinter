@@ -13,11 +13,6 @@ use Napkins\WebTemplate;
 class IndexController
 {
 
-	public function __construct()
-	{
-		//TODO?
-	}
-
 	public function defaultView(Request $request, Application $app)
 	{
 		
@@ -27,6 +22,8 @@ class IndexController
 		
 		$templating->setTitle('Welcome');
 		$templating->addGlobal('page_content', $page_content);
+
+		if(!null == $email = $app['session']->get('email')) $templating->addGlobal('login', TRUE);
 
 		return $templating->renderDefault();
 	}

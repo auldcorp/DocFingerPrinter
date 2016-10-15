@@ -21,16 +21,20 @@
 				</div>
 				<div class="collapse navbar-collapse">
 					<ul id="main-menu" class="nav navbar-nav" >
-						<li class="active"><a href="/">Image Hash</a></li>
+						<li class="active"><a href="">Image Hash</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="/import">Import</a></li>
+									<li><a href="import">Import</a></li>
 								</ul>
 						</li>
 					</ul>
 					<ul class="nav navbar-right">
-						<li><a href="/login"><i class="fa fa-user fa-2x valign-baseline"></i> User</a></li>
+						<?php if(isset($login) && $login){?>
+						<li><a href="logout"><i class="fa fa-sign-out fa-2x valign-baseline"></i>Logout</a></li>
+						<?php }else{?>
+						<li><a href="login"><i class="fa fa-user fa-2x valign-baseline"></i>User</a></li>
+						<?php }?>
 					</ul>
 				</div>
 			</div>

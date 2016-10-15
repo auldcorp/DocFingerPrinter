@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
+		if(null == $email = $app['session']->get('email'))
+		{
+			$app['session']->set('dir', 'import');
+			return $app->redirect('login');
+		}
 		$succeeded = False;
 		$data = $request->files->get('form');
 		$succeeded = [];
@@ -25,16 +30,21 @@ Class UploadController {
 			}
 		}
 		$return = ['succeeded'=>$succeeded,'failed'=>$failed];
-
 		return $this->uploadView($request, $app, $return);
 	}
 	public function uploadView(Request $request, Application $app, Array $var_content = []) {
+		if(null == $email = $app['session']->get('email'))
+		{
+			$app['session']->set('dir', 'import');
+			return $app->redirect('login');
+		}
 		$templating = new WebTemplate();
 
 		$page_content = $templating->render('upload_image.php', $var_content);
 		
 		$templating->setTitle('Upload Image');
 		$templating->addGlobal('page_content', $page_content);
+		$templating->addGlobal('login', TRUE);
 
 		return $templating->renderDefault();
 	}
