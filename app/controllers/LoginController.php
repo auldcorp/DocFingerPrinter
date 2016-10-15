@@ -29,7 +29,7 @@ private $form;
 		}
 		else if($action == 'logout')
 		{
-			return $this->logoutAction();
+			return $this->logoutAction($app);
 		}
 		else if($action == 'register')
 		{
@@ -49,11 +49,11 @@ private $form;
 	public function loginView(){
 		$template = new WebTemplate();
 		$page_content = $template->render('login.php', ['form' => $this->form]);
-
+		
 		$template->setTitle('Login');
 		$template->addGlobal('page_content', $page_content);
 
-		return $template->renderDefault();
+		return $template->renderDefault($this->form->errors);
 	}
 
 	public function registerView()
@@ -150,8 +150,15 @@ private $form;
 
 			$sess = $app['session'];
 			$sess->set('email', $email);
-			
-			return new Response('Success!');
+
+			if(!null == $dir = $sess->get('dir'))
+			{
+				return $app->redirect($dir);
+			}
+			else
+			{
+				return $app->redirect('/');
+			}	
 		} else {
 			return $this->loginView($request, $app);
 		}
@@ -164,7 +171,7 @@ private $form;
 		$sess = $app['session'];
 		$sess->invalidate();
 
-		return $app->redirect('/login');
+		return $app->redirect('login');
 	}
 
 }
