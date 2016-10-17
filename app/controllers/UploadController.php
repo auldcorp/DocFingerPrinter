@@ -9,10 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
+		$imageDir = '';
 		if(null == $email = $app['session']->get('email'))
 		{
 			$app['session']->set('dir', 'import');
 			return $app->redirect('login');
+		} else {
+			$imageDir = "/srv/napkin/images/" . $email;
 		}
 		$succeeded = False;
 		$data = $request->files->get('form');
@@ -23,7 +26,7 @@ Class UploadController {
 				return $this->uploadView($request, $app);
 			}
 			if(preg_match("/^image\/[a-zA-Z|\-]{2,10}/",$file->getMimeType())) {
-				$file->move("/srv/napkin/images/", $file->getClientOriginalName());
+				$file->move($imageDir, $file->getClientOriginalName());
 				array_push($succeeded, $file->getClientOriginalName());
 			} else {
 				array_push($failed, $file->getClientOriginalName());
