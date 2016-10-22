@@ -15,7 +15,6 @@ class IndexController
 
 	public function defaultView(Request $request, Application $app)
 	{
-		
 		$templating = new WebTemplate();
 
 		$page_content = $templating->render('welcome.php');
