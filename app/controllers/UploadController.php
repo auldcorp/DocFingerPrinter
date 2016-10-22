@@ -6,6 +6,8 @@ require_once(__DIR__ . '/class_template.php');
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+//use Jessegers\ImageHash\Implementations\DifferenceHash;
+//use Jessegers\ImageHash\ImageHash;
 
 Class UploadController {
 	public function uploadAction(Request $request, Application $app) {
@@ -34,6 +36,31 @@ Class UploadController {
 		}
 		$return = ['succeeded'=>$succeeded,'failed'=>$failed];
 		return $this->uploadView($request, $app, $return);
+
+		/*$implementaion = new DifferenceHash;
+		$hasher = new ImageHash($implementaion);
+
+		$sql = 'INSERT INTO images (hash, email, image, date) VALUES ( :hash, :email, :image, :date)';
+		foreach($succeeded as $row)
+		{
+			$stmt = $app['db']->prepare($sql);
+			$hash = $hasher->hash('path/to/image.jpg');
+			$stmt->bindValue('hash', $hash);	
+			$stmt->bindValue('email', $email);
+			$stmt->bindValue('image', 'path/to/image.jpg');
+			$stmt->bindValue('date', date(); //See php date
+
+			if($stmt->execute())
+			{
+				//Success
+			}
+			else
+			{
+				//Failure
+			}
+		}
+		*/
+
 	}
 	public function uploadView(Request $request, Application $app, Array $var_content = []) {
 		if(null == $email = $app['session']->get('email'))
