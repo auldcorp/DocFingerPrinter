@@ -4,6 +4,8 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $app = new Silex\Application();
 
+$app['imageDirBase'] = "/srv/napkin/images/"; 
+
 $app['debug'] = TRUE;
 
 if($app['debug'])

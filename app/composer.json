@@ -13,7 +13,8 @@
 	"doctrine/dbal": "~2.2",		
         "jenssegers/imagehash": "^0.4.0",
         "swiftmailer/swiftmailer": "^5.4",
-        "kartik-v/bootstrap-fileinput": "dev-master"
+        "kartik-v/bootstrap-fileinput": "dev-master",
+        "Jenssegers/ImageHash": "^0.4.0"
     },
 
 	"autoload": {
