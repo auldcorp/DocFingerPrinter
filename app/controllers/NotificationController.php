@@ -13,7 +13,18 @@ class NotificationController
 	public function email(Application $app)
 	{
 		$to = 'dejesus.21@osu.edu';
-		if(!null == $email = $app['session']->get('email')) $to = $email;
+		if(!null == $matches = $app['session']->get('matches'))
+		{
+			foreach($matches as $email => $body)
+			{
+				$message = \Swift_message::newInstance()
+					->setSubject('Image Hash: Potential Image Match')
+					->setFrom(array('noreply@auldcorporation.com'))
+					->setTo(array($email))
+					->setBody('Poetential Image matche(s) found \n')
+				$app['mailer'->send($message);
+			}
+		}
 		$message = \Swift_Message::newInstance()
 			->setSubject('Image Hash: Potential Image Match')
 			->setFrom(array('noreply@auldcorporation.com'))

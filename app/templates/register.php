@@ -33,6 +33,12 @@ if(isset($_REQUEST['return']))
 				</div>
 	 		</div>
 			<div class="form-group">
+				<label for="Password" class="col-md-4 control-label">Verify Password</label>
+				<div class="col-md-8">
+				<input type="password" name="verify" class="form-control" placeholder="Password">
+				</div>
+			</div>
+			<div class="form-group">
 	  			<label for="Full Name" class="col-md-4 control-label">Full Name</label>
 				<div class="col-md-8">
 				<input type="text" name="full_name" class="form-control" placeholder="Full Name">
