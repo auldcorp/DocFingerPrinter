@@ -96,10 +96,14 @@ private $form;
 		else {
 			$email = mb_strtolower($data['email']);
 
-			$stmt = $app['db']->query('SELECT email FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
-			$stmt = $stmt->fetch();
+			if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+				array_push($Errors, "Invalid email format");
+			} else{
+				$stmt = $app['db']->query('SELECT email FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
+				$stmt = $stmt->fetch();
 
-			if($stmt != null) array_push($Errors, 'Email already registered');
+				if($stmt != null) array_push($Errors, 'Email already registered');
+			}
 		}
 
 		if(!isset($data['full_name'])) {
@@ -126,6 +130,8 @@ private $form;
 			unset($data['password'], $data['verify']);
 
 			$forms = new forms('register', FALSE, FALSE);
+
+			$forms->values = $data;
 
 			$page_content = $templating->render('register.php', array('form' => &$forms));
 
@@ -177,6 +183,8 @@ private $form;
 				return $app->redirect('/');
 			}	
 		} else {
+			unset($data['password']);
+			$this->form->values = $data;
 			return $this->loginView($request, $app);
 		}
 	}
