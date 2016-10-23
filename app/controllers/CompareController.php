@@ -6,7 +6,7 @@ use Silex\Application;
 
 use Napkins\WebTemplate;
 
-use Jenssegers\ImageHAsh\Implementaions\DifferenceHAsh;
+use Jenssegers\ImageHAsh\Implementaions\DifferenceHash;
 use Jenssegers\ImageHash\ImageHash;
 
 class CompareController
