@@ -29,6 +29,11 @@ Vel persius cotidieque ei, an mel stet voluptaria. Vis eu agam dolorum instructi
 					Posse disputationi his in, veniam quaeque constituam no sit. Eruditi laboramus interesset et vis, mei facilisi vituperata signiferumque in. Nam malis fugit repudiandae ne, oratio placerat an vix, eos eu epicurei tractatos sadipscing. Democritum delicatissimi pro ad, ei graece accumsan eam.
 					</p>
 				</div>
+				<div class="col-md-6">
+					<div class="info-icons">
+						<i class="fa fa-file-image-o fa-6" aria-hidden="true" style="font-size: 20em"></i>
+					</div>
+				</div>
 			</div>
 		</div>
 
