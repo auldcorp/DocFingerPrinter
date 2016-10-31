@@ -6,26 +6,28 @@ use Silex\Application;
 
 use Napkins\WebTemplate;
 
-use Jenssegers\ImageHAsh\Implementaions\DifferenceHAsh;
+use Jenssegers\ImageHAsh\Implementaions\DifferenceHash;
 use Jenssegers\ImageHash\ImageHash;
 
 class CompareController
 {
-	public function comare(Application $app)
+	public function compare(Application $app)
 	{
 		$found[];
 		$implementation = new DifferenceHash;
 		$hasher = new ImageHAsh($implementation);
 		//Get Hash
-		$stmt = $app['db']->query('SELECT email, hash FROM image');
+		$stmt = $app['db']->query('SELECT email, hash, name FROM images');
 		$db_hashes = $stmt->fetchAll();
+		$hash = $app['session']->get('hash');
 
 		foreach($db_hashes as $row)
 		{
 			$distance = $hasher->distance($hash, $row['hash']);
-			if()//check interval
+			if($distance <= 3)
 			{
-			 	$found[$row['email']]= "Found image equal to image";
+				if(isset($found[$row['email']])) $found.= ", " . $row['name'];
+				else $found[$row['email']]= "Found a potential match file:" . $row['name'];
 			}
 		}
 		if($found)

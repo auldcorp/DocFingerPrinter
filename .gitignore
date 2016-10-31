@@ -3,3 +3,4 @@
 *.htaccess
 *.lock
 app/vendor/*
+webcrawler/vendor/*
