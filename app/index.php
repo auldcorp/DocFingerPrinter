@@ -57,6 +57,8 @@ $app->get('/register', 'Napkins\\LoginController::defaultAction')->value('action
 
 $app->post('/register','Napkins\\LoginController::defaultAction')->value('action', 'register_user');
 
+$app->get('/images','Napkins\\ImageController::imageView');
+
 $app->get('/email', 'Napkins\\NotificationController::email');
 
 $app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login');

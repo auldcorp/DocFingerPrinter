@@ -44,7 +44,8 @@ public function uploadAction(Request $request, Application $app) {
 			{
 				throw new \Exception("File could not be uploaded");
 			} 
-			$file->move($imageDir, $hash.".".$extension);
+			$hashList = $app["db"]->fetchall("SELECT * FROM images WHERE hash = CAST(:hash AS UNSIGNED)", array("hash" => $hash));
+			$file->move($imageDir, $hashList[0]["hash"].".".$extension);
 			array_push($succeeded, $file->getClientOriginalName());
 		} catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) { 
 			array_push($failed, $file->getClientOriginalName()." is already in the database");
