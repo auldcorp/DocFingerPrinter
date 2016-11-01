@@ -7,6 +7,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Jenssegers\ImageHash\ImageHash;
+use Imagick;
 
 Class UploadController {
 public function uploadAction(Request $request, Application $app) {
@@ -14,9 +15,11 @@ public function uploadAction(Request $request, Application $app) {
 	if(null == $email = $app["session"]->get("email")) {
 		$app["session"]->set("dir", "import");
 		return $app->redirect("login");
-	} else {
-		$imageDir = $app["imageDirBase"].$email;
-	}
+	} 
+
+	$imageDir = $app["imageDirBase"].$email;
+	$thumbnailExtension = $app["imageThumbnailExtention"];
+
 	$succeeded = False;
 	$data = $request->files->get("form");
 	$sql = "INSERT INTO images (hash, email, extension, date, orig_name) VALUES (CAST(:hash AS UNSIGNED), :email, :extension, :date, :orig_name)";
@@ -46,6 +49,7 @@ public function uploadAction(Request $request, Application $app) {
 			} 
 			$hashList = $app["db"]->fetchall("SELECT * FROM images WHERE hash = CAST(:hash AS UNSIGNED)", array("hash" => $hash));
 			$file->move($imageDir, $hashList[0]["hash"].".".$extension);
+			$this->createThumbnail($imageDir."/".$hashList[0]["hash"].".".$extension, $imageDir."/".$hashList[0]["hash"].$thumbnailExtension.".".$extension);
 			array_push($succeeded, $file->getClientOriginalName());
 		} catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) { 
 			array_push($failed, $file->getClientOriginalName()." is already in the database");
@@ -71,6 +75,12 @@ public function uploadView(Request $request, Application $app, Array $var_conten
 	$templating->addGlobal("login", TRUE);
 
 	return $templating->renderDefault();
+}
+private function createThumbnail($imageFile, $thumbNailFile) {
+	$image = new \Imagick(realpath($imageFile));
+	$image->setbackgroundcolor('rgb(64,64,64)');
+	$image->thumbnailImage(200,200,true);
+	$image->writeImage($thumbNailFile);
 }
 }
 ?>

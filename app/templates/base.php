@@ -33,6 +33,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="import">Import</a></li>
+									<li><a href="images">Images</a><li>
 								</ul>
 						</li>
 					</ul>
