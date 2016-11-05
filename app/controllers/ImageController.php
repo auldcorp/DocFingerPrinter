@@ -20,6 +20,7 @@ public function imageView(Request $request, Application $app) {
 	$thumbnailExtension = $app["imageThumbnailExtention"];
 
 	$sql = "SELECT * FROM images WHERE email = :email";
+	$foundSQL = "SELECT * FROM found WHERE hash = :hash";
 	$templating = new WebTemplate();
 
 	$userImages = $app["db"]->fetchAll($sql, Array("email" => $email));
@@ -29,6 +30,7 @@ public function imageView(Request $request, Application $app) {
 		if($userImages[$i]["imageFile"] == False) {
 			array_push($this->errors, "Image file ".$userImages[$i]["orig_name"]." was not found");
 		}
+		$userImages[$i]["found"] = $app["db"]->fetchAll($foundSQL,["hash" => $userImages[$i]["hash"]]);
 		//		var_dump($imageFile);
 	}
 	//	var_dump($userImages);
