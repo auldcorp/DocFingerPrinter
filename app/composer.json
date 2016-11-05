@@ -20,5 +20,9 @@
                 "psr-4": {
 			"Napkins\\": "controllers/"
                 }
-	}
+	},
+    "require-dev": {
+        "symfony/browser-kit": "^3.1",
+        "symfony/css-selector": "^3.1"
+    }
 }
