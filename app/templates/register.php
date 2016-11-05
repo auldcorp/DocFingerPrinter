@@ -23,7 +23,7 @@ if(isset($_REQUEST['return']))
  			<div class="form-group">
 	  			<label for="Email" class="col-md-4 control-label">Email</label>
 				<div class="col-md-8">
-				<input type="text" name="email" class="form-control" placeholder="you@email.com">
+				<input type="text" name="email" class="form-control" <?php if(isset($form->values['email'])) echo 'value="' . $form->values['email'] . '"'; ?> placeholder="you@email.com">
 				</div>
 	 		</div>
 	 		<div class="form-group">
@@ -33,9 +33,15 @@ if(isset($_REQUEST['return']))
 				</div>
 	 		</div>
 			<div class="form-group">
+				<label for="Password" class="col-md-4 control-label">Verify Password</label>
+				<div class="col-md-8">
+				<input type="password" name="verify" class="form-control" placeholder="Password">
+				</div>
+			</div>
+			<div class="form-group">
 	  			<label for="Full Name" class="col-md-4 control-label">Full Name</label>
 				<div class="col-md-8">
-				<input type="text" name="full_name" class="form-control" placeholder="Full Name">
+				<input type="text" name="full_name" class="form-control" <?php if(isset($form->values['full_name'])) echo 'value="' . $form->values['full_name'] . '"'; ?> placeholder="Full Name">
 				</div>
 	 		</div>
 	 	<div class="form-group">

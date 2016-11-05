@@ -16,7 +16,7 @@
 		<div class="form-group row">
 			<label for="Email" class="col-md-2 control-label">Email</label>
 			<div class="col-md-8">
-				<input type="text" name="email" class="form-control" placeholder="Email">
+			<input type="text" name="email" class="form-control" <?php if(isset($form->values['email'])) echo 'value="' . $form->values['email'] . '"'; ?>  placeholder="Email">
 			</div>
 		</div>
 		<div class="form-group row">

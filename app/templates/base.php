@@ -7,8 +7,15 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-
-
+	<style>
+		#footer {
+			background-color: #2a2730;
+			color: #99979C;
+		}
+		#content {
+			padding-bottom: 70px;
+		}
+	</style>
 
 	</head>
 	<body>
@@ -26,6 +33,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="import">Import</a></li>
+									<li><a href="images">Images</a><li>
 								</ul>
 						</li>
 					</ul>
@@ -63,8 +71,10 @@
 
 
 	</div>
-	<div id="footer" class="clear">
+	<div id="footer" class="clear navbar navbar-fixed-bottom">
+		<div class="container">
 		<p>Capstone</p>
+		</div>
 	</div>
 </div>
 	</body>

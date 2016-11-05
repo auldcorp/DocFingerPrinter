@@ -77,14 +77,33 @@ private $form;
 
 		if(!isset($data['password'])) {
 			array_push($Errors, 'Password must be entered');
-		} else {
+		}
+		else if(!isset($data['verify']))
+		{
+			array_push($Errors, 'Please enter the password twice');
+		}	
+		else if($data['verify'] != $data['password'])
+		{
+			array_push($Errors, 'Password does not match');
+		}
+		else {
 			$password_given = $data['password'];
 		}
 
 		if(!isset($data['email'])) {	
 			array_push($Errors, 'Email address must be entered');
-		} else {
+		} 
+		else {
 			$email = mb_strtolower($data['email']);
+
+			if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+				array_push($Errors, "Invalid email format");
+			} else{
+				$stmt = $app['db']->query('SELECT email FROM users WHERE email=' . $app['db']->quote($email) . ' LIMIT 1');
+				$stmt = $stmt->fetch();
+
+				if($stmt != null) array_push($Errors, 'Email already registered');
+			}
 		}
 
 		if(!isset($data['full_name'])) {
@@ -108,9 +127,13 @@ private $form;
 		} else {
 			$templating = new WebTemplate();
 
-			unset($data['password']);
+			unset($data['password'], $data['verify']);
 
-			$page_content = $templating->render('register.php', array('form_data' => $data));
+			$forms = new forms('register', FALSE, FALSE);
+
+			$forms->values = $data;
+
+			$page_content = $templating->render('register.php', array('form' => &$forms));
 
 			$templating->setTitle('Register');
 			$templating->addGlobal('page_content', $page_content);
@@ -160,6 +183,8 @@ private $form;
 				return $app->redirect('/');
 			}	
 		} else {
+			unset($data['password']);
+			$this->form->values = $data;
 			return $this->loginView($request, $app);
 		}
 	}
