@@ -61,6 +61,8 @@ $app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action',
 
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
+$app->get('/fingerprint', 'Napkins\\FingerprintController::newFingerprint');
+
 $app->before( function ($request) {
 	$request->getSession()->start();
 });
