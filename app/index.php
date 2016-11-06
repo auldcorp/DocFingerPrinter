@@ -2,7 +2,12 @@
 date_default_timezone_set('America/New_York');
 require __DIR__.'/bootstrap.php';
 
-$app['debug'] = FALSE;
+$app = new Silex\Application();
+
+$app['imageDirBase'] = "/srv/napkin/images/"; 
+$app["imageThumbnailExtention"] = "_thumb";
+
+$app['debug'] = TRUE;
 
 if($app['debug'])
 {
@@ -42,22 +47,22 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-$app->get('/import','Napkins\\UploadController::uploadView');
-
 $app->get('/', 'Napkins\\IndexController::defaultView');
 
 $app->get('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login_view');
+$app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login');
 
 $app->get('/logout', 'Napkins\\LoginController::defaultAction')->value('action', 'logout');
 
 $app->get('/register', 'Napkins\\LoginController::defaultAction')->value('action', 'register');
-
 $app->post('/register','Napkins\\LoginController::defaultAction')->value('action', 'register_user');
+
+$app->get('/images','Napkins\\ImageController::imageView');
+$app->post("/processImages","Napkins\\ImageController::processImages");
 
 $app->get('/email', 'Napkins\\NotificationController::email');
 
-$app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action', 'login');
-
+$app->get('/import','Napkins\\UploadController::uploadView');
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
 
