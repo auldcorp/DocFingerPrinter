@@ -47,7 +47,6 @@ class WebTemplate extends PhpEngine
 		$this->addGlobal('page_title', $this->page_title);
 		$this->addGlobal('page_heading', $this->page_heading);
 		$this->addGlobal('page_subheading', $this->page_subheading);
-//		$this->addGlobal('page_content', $page_content);
 		return $this->render('base.php', array('errors' => $errors));
 
 	}

@@ -1,10 +1,8 @@
 <?php
 date_default_timezone_set('America/New_York');
-require_once __DIR__.'/vendor/autoload.php';
+require __DIR__.'/bootstrap.php';
 
-$app = new Silex\Application();
-
-$app['debug'] = TRUE;
+$app['debug'] = FALSE;
 
 if($app['debug'])
 {
@@ -19,6 +17,7 @@ else
 	ini_set('display_errors', 'Off');
 	ini_set('og_errors', 'On');
 }
+
 
 $app['swiftmailer.options'] = array(
 	'host' => 'localhost',
@@ -61,10 +60,14 @@ $app->post('/login', 'Napkins\\LoginController::defaultAction')->value('action',
 
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
+
+if($app['env'] == 'test'){
+	return $app;
+}
+else{
 $app->before( function ($request) {
 	$request->getSession()->start();
 });
 
-$app->run();
-
-
+	$app->run();
+}
