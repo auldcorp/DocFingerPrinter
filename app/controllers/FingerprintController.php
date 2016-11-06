@@ -1,7 +1,7 @@
 <?php
 namespace Napkins;
 
-require_once(__DIR__ . '/class_template.php');
+require_once(__DIR__ . "/class_template.php");
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,35 +10,51 @@ use Symfony\Component\HttpFoundation\Response;
 Class FingerprintController {
 	//creates a png image with ellipses on it
 	//TODO this should do other shapes. only ellipses for now for simplicity
-	function newFingerprint(){
+	function newFingerprint(Request $request, Application $app){
+		$imageDir = "";
+		$folder = "/fingerprints";
+		if (Null == $email = $app["session"]->get("email")) {
+			$app["session"]->set("dir", "images");
+			return $app->redirect("login");
+		}
+		$imageDir = $app["imageDirBase"].$email.$folder;
+
+ 	// integer starts at 0 before counting
+	$i = 0;
+	if ($handle = opendir($imageDir)) {
+        	while (($file = readdir($handle)) !== false) {
+            		if (!in_array($file, array('.', '..')) && !is_dir($imageDir.$file)) {
+                		$i++;
+			}
+        	}
+    	}
+
+
+		$fileName = "".$i;
 		$width = 300;
 		$height = 300;
-		$numShapes = 7;
-		header('Content-type: image/png');
-		$fingerprint = imagecreatetruecolor($width, $height);//returns false on error or image identifier on success
+		$numShapes = 13;
 
-		if (!$fingerprint) {
-print("ERROR");
-			return(false);
-		} else {
+		header ('Content-Type: image/png');
+		$fingerprint = @imagecreatetruecolor($width, $height)
+			or die('Cannot create fingerprint');
+
+		$trans = imagecolorallocatealpha($fingerprint, 250, 250, 250, 127);
+		imagefill($fingerprint, 0, 0, $trans);
 
 		//loop over  with different shapes and coordinates
-
+		for ($i=0; $i<$numShapes; $i++) {
 			$xCoord = rand(1, $width);
 			$yCoord = rand(1, $height);
 
-			$shapeWidth = rand(1,100);
-			$shapeHeight = rand(1,100);
+			$shapeWidth = rand(1, 20);
+			$shapeHeight = rand(1, 20);
 			$color = imagecolorallocate($fingerprint, rand(0,255), rand(0,255), rand(0,255)); //random color
 
 			imagefilledellipse($fingerprint, $xCoord, $yCoord, $shapeWidth, $shapeHeight, $color);
-
-
-		
-		imagepng($fingerprint);
 		}
 
-		
+		imagepng($fingerprint, $imageDir);
 		return($fingerprint);
 	}
 
@@ -58,8 +74,7 @@ print("ERROR");
 				$img = @imagecreatefrompng($file);
 				break;
 			default:
-				$img = false;
-				break;
+				return false;
 		}
 
 		$fingerprint = @imagecreatefrompng($fingerP);
