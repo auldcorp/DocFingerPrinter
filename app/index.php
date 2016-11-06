@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-require_once __DIR__.'/vendor/autoload.php';
+require __DIR__.'/bootstrap.php';
 
 $app = new Silex\Application();
 
@@ -22,6 +22,7 @@ else
 	ini_set('display_errors', 'Off');
 	ini_set('og_errors', 'On');
 }
+
 
 $app['swiftmailer.options'] = array(
 	'host' => 'localhost',
@@ -64,12 +65,19 @@ $app->get('/email', 'Napkins\\NotificationController::email');
 $app->get('/import','Napkins\\UploadController::uploadView');
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
+<<<<<<< HEAD
 $app->get('/fingerprint', 'Napkins\\FingerprintController::newFingerprint');
 
+=======
+
+if($app['env'] == 'test'){
+	return $app;
+}
+else{
+>>>>>>> 385afbcf7fdbe304a2a6f5b688733f915e5db9dc
 $app->before( function ($request) {
 	$request->getSession()->start();
 });
 
-$app->run();
-
-
+	$app->run();
+}
