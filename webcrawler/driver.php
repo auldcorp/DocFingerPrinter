@@ -54,7 +54,7 @@ class MyCrawler extends PHPCrawler
             echo $temp_hash.$lb;
 
             //Search for all similar hashes
-            $sql = "SELECT hash, email, orig_name, extension FROM napkins.images WHERE BIT_COUNT(hash ^ CAST( :temp_hash AS UNSIGNED)) < 3";
+            $sql = "SELECT images.email, users.name, images.date, images.orig_name, images.hash FROM images INNER JOIN users ON (images.email = users.email) WHERE BIT_COUNT(hash ^ CAST( :temp_hash AS UNSIGNED)) < 3";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue('temp_hash', $temp_hash);
 
@@ -73,37 +73,70 @@ class MyCrawler extends PHPCrawler
             $db_hashes = $stmt->fetchAll();
 
             // send notification for each hash
-            $match = FALSE;
+            $first = TRUE;
             foreach($db_hashes as $row) {
-                echo $row['orig_name'];
-                // TODO - notify owners
-                // TODO - Register match to user account
-                $match = TRUE;
-            }
+                //store in database
+                if ($first)
+                {
+                    $sql = "INSERT INTO napkins.found (address_hash, hash, address, date) VALUES (:address_hash, CAST(:temp_hash AS UNSIGNED), :address, :date)";
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
+                    $stmt->bindValue('temp_hash', $temp_hash);
+                    $stmt->bindValue('address', $DocInfo->url);
+                    $stmt->bindValue('date', date('Y/m/d'));
 
-            //store in database
-            if ($match)
-            {
-                $sql = "INSERT INTO napkins.found (address_hash, hash, address, date) VALUES (:address_hash, CAST(:temp_hash AS UNSIGNED), :address, :date)";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
-                $stmt->bindValue('temp_hash', $temp_hash);
-                $stmt->bindValue('address', $DocInfo->url);
-                $stmt->bindValue('date', date('Y/m/d'));
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $exception) {
+                        echo 'There was an error connecting to the database!\n';
+                        if ($pdoDebug) {
+                            echo $exception->getMessage();
+                        }
+                    }
+                }
 
+                $sql = "SELECT hash FROM napkins.found WHERE address_hash like :address_hash";
                 try {
                     $stmt->execute();
                 } catch (PDOException $exception) {
-                    // unlike mysql/mysqli, pdo throws an exception when it is unable to connect
                     echo 'There was an error connecting to the database!\n';
                     if ($pdoDebug) {
-                        // pdo's exception provides more information than just a message
-                        // including getFile() and getLine()
                         echo $exception->getMessage();
                     }
                 }
-            }
+                $db_hashes = $stmt->fetchAll();
 
+                // Calculate Grade
+                $grades = array('A', 'B', 'C', 'D');
+                $distance = $hasher->distance($row['hash'], $db_hashes[0]['hash']);
+                echo "\r\n".$distance."\r\n";
+
+
+                // notify owners
+                $to      = $row['email'];
+                $subject = 'Potential Image Match';
+                $headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+                $message = "Hello ".$row['name'].","."\r\n".
+                    "\r\n".
+                    "We have found a potential image match for your image:"."\r\n".
+                    "\r\n".
+                    $row['orig_name']."\r\n".
+                    "\r\n".
+                    "With a match grade of ".$grades[$distance].$distance."\r\n".
+                    "\r\n".
+                    "Best regards,"."\r\n".
+                    "The Auld Corporation"."\r\n";
+
+                echo $message;
+
+
+
+
+                //mail($to, $subject, $message, $headers);
+
+                $first = FALSE;
+            }
 
 
             // Delete File
@@ -147,7 +180,7 @@ function spawn_crawler($url, $db)
     $crawler->setTrafficLimit(1000 * 1024);
 
     // Go crawler Go!!
-    //$crawler->goMultiProcessed(5);  
+    //$crawler->goMultiProcessed(5);
     $crawler->go();
 
     if (!rmdir($crawler->tempdir))
@@ -168,6 +201,7 @@ function spawn_crawler($url, $db)
 
     return $report->links_followed;
 }
+
 
 
 // Get URLs from config
