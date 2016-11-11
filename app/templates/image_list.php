@@ -1,41 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Uploaded Image</title>
+	<title>Uploaded Image</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	</head>
 	<body>
 		<div id="main" class="container-fluid">
-			<div id="content" class="clear row col-xs-offset-2">
-				<div class="col-md-9">
+			<div id="content" class="clear col-xs-offset-2">
 						<h2>Uploaded Images</h2>
 						<form method="post" action="processImages">
-					<?php
+<?php
 if(isset($images)&&!empty($images)) {
-echo '<table style="width:100%">';
-echo '<tr>';
-echo    '<th>Image</th>';
-echo    '<th>Name</th>';
-echo  '</tr>';
-foreach($images as $image) {
-	echo "<tr>";
-	echo "<th>";
-	echo "<img src='data:image/".$image["extension"].";base64,".$image["imageFile"]."' style='width:128px;height:128px;'>";
-	echo "</th>";
-	echo "<th>".$image["orig_name"]."</th>";
-	echo "<th>"."<label><input type='checkbox' value=delete id='".$image["hash"]."' name= '".$image["hash"]."'> Delete</label>"."</th>";
-	echo "</tr>";
+	echo  '<div class="panel-group">';
+	foreach($images as $image) {
+		echo '<div class="panel panel-default row">';
+		echo '<div class="panel-heading">';
+		echo "<div class='col-md-3'><img src='data:image/".$image["extension"].";base64,".$image["imageFile"]."' style='width:128px;height:128px;'></div>";
+		echo "<div class='col-md-5'>";
+		if(count($image["found"])) {
+			echo "<a class='glyphicon glyphicon-warning-sign' data-toggle='collapse' href='#found".$image["hash"]."'>".$image["orig_name"]."</a>";
+		} else {
+			echo $image["orig_name"]; 
+		}
+		echo "</div>";
+		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["hash"]."' name= '".$image["hash"]."'> Delete</label>"."</div>";
+		echo '</div>';
+		echo '</div>';
+		echo '<div id="found'.$image["hash"].'" class="nav-collapse collapse">';
+		if(count($image["found"])==0) {
+			echo '<div class="panel-footer">No matches found</div>';
+		} else {
+			echo '<div class="panel-footer">'.count($image["found"])." match found".'</div>';
+		}
+		echo '<div class="panel-body">';
+		foreach($image["found"] as $found) {
+			echo '<div class="row">';
+			echo '<div class="col-md-2">'.$found["date"].'</div>';
+			echo '<div class="col-md-10">'.$found["address"]."</div>";
+			echo '</div>';
+		}
+		echo '</div>';
+		echo '</div>';
+	}
+	echo '</div>';
 }
-echo '</table>';
-}
-						?>
-						<div class="col-md-9" align="right">
-							<button class="btn btn-lg btn-primary col-md-8 col-md-offset-2" type="submit">Process Images</button>
-						</div>
+?>
+						<button class="btn btn-lg btn-primary col-md-3" type="submit">Process Images</button>
 					</form>
-				</div>
 			</div>
 		</div>
+
 	</body>
 </html>
-
