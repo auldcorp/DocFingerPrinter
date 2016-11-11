@@ -31,6 +31,17 @@ Class FingerprintController {
 
 
 		$fileName = "".$i;
+		//add name to database
+		$succeed = False;
+		$sql = "INSERT INTO fingerprints (fingerprint, email) VALUES (:i, :email)";
+		$stmt = $app["db"]->prepare($sql);
+		$stmt->bindValue("i", $i);
+		$stmt->bindvalue("email", $email);
+		if (!$stmt->execute()){
+			throw new \Exception("Failed to create fingerprint");
+		}
+
+
 		$width = 300;
 		$height = 300;
 		$numShapes = 13;
