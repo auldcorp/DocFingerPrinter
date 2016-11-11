@@ -54,7 +54,7 @@ class MyCrawler extends PHPCrawler
             echo $temp_hash.$lb;
 
             //Search for all similar hashes
-            $sql = "SELECT images.email, users.name, images.date, images.orig_name, images.hash FROM images INNER JOIN users ON (images.email = users.email) WHERE BIT_COUNT(hash ^ CAST( :temp_hash AS UNSIGNED)) < 3";
+            $sql = "SELECT images.email, users.name, images.date, images.orig_name, images.hash FROM images INNER JOIN users ON (images.email = users.email) WHERE BIT_COUNT(hash ^  :temp_hash) < 2";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue('temp_hash', $temp_hash);
 
@@ -78,7 +78,7 @@ class MyCrawler extends PHPCrawler
                 //store in database
                 if ($first)
                 {
-                    $sql = "INSERT INTO napkins.found (address_hash, hash, address, date) VALUES (:address_hash, CAST(:temp_hash AS UNSIGNED), :address, :date)";
+                    $sql = "INSERT INTO napkins.found (address_hash, hash, address, date) VALUES (:address_hash, :temp_hash , :address, :date)";
                     $stmt = $this->db->prepare($sql);
                     $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
                     $stmt->bindValue('temp_hash', $temp_hash);
@@ -108,9 +108,10 @@ class MyCrawler extends PHPCrawler
 
                 // Calculate Grade
                 $grades = array('A', 'B', 'C', 'D');
+                echo "\r\n".$row['hash']." ".$db_hashes[0]['hash']."\r\n";
                 $distance = $hasher->distance($row['hash'], $db_hashes[0]['hash']);
                 echo "\r\n".$distance."\r\n";
-
+                echo "\r\n".gmp_hamdist($row['hash'], $db_hashes[0]['hash'])."\r\n";
 
                 // notify owners
                 $to      = $row['email'];
@@ -119,11 +120,11 @@ class MyCrawler extends PHPCrawler
                     'X-Mailer: PHP/' . phpversion();
                 $message = "Hello ".$row['name'].","."\r\n".
                     "\r\n".
-                    "We have found a potential image match for your image:"."\r\n".
+                    "We have found a potential image match for your image \"".$row['orig_name']."\" at:\r\n".
                     "\r\n".
-                    $row['orig_name']."\r\n".
+                    $DocInfo->url."\r\n".
                     "\r\n".
-                    "With a match grade of ".$grades[$distance].$distance."\r\n".
+                    "With a match grade of ".$grades[$distance]"\r\n".
                     "\r\n".
                     "Best regards,"."\r\n".
                     "The Auld Corporation"."\r\n";

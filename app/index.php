@@ -2,8 +2,6 @@
 date_default_timezone_set('America/New_York');
 require __DIR__.'/bootstrap.php';
 
-$app = new Silex\Application();
-
 $app['imageDirBase'] = "/srv/napkin/images/"; 
 $app["imageThumbnailExtention"] = "_thumb";
 
