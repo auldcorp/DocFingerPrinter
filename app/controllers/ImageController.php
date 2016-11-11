@@ -67,13 +67,13 @@ public function deleteImage($email, $hash, $app) {
 	$imageDir = $app["imageDirBase"].$email;
 	$thumbnailExtension = $app["imageThumbnailExtention"];
 
-	$sql = "SELECT * FROM images WHERE hash = CAST(:hash AS UNSIGNED) AND email = :email";
+	$sql = "SELECT * FROM images WHERE hash = :hash AND email = :email";
 	$image = $app["db"]->fetchAll($sql, ["email" => $email, "hash" => $hash]);
 	try {
 		if(count($image) != 1) {
 			throw new \Exception("Image not found");
 		}
-		$sqlDeleteImage = "DELETE FROM images WHERE hash = CAST(:hash AS UNSIGNED) AND email = :email";
+		$sqlDeleteImage = "DELETE FROM images WHERE hash = :hash AND email = :email";
 
 		$stmt = $app["db"]->prepare($sqlDeleteImage);
 		$stmt->bindValue("hash", $hash);
