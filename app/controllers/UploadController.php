@@ -22,7 +22,7 @@ public function uploadAction(Request $request, Application $app) {
 
 	$succeeded = False;
 	$data = $request->files->get("form");
-	$sql = "INSERT INTO images (hash, email, extension, date, orig_name) VALUES (CAST(:hash AS UNSIGNED), :email, :extension, :date, :orig_name)";
+	$sql = "INSERT INTO images (hash, email, extension, date, orig_name) VALUES (:hash, :email, :extension, :date, :orig_name)";
 	$succeeded = [];
 	$failed = [];
 	foreach($data["files"] as $file) {
@@ -36,20 +36,20 @@ public function uploadAction(Request $request, Application $app) {
 			$extension = $file->guessExtension();
 			$hasher = new ImageHash(Null, ImageHash::DECIMAL);
 			$hash = $hasher->hash($file->getPath()."/".$file->getFilename());
-
+			
 			$stmt = $app["db"]->prepare($sql);
 			$stmt->bindValue("hash", $hash);
 			$stmt->bindValue("email", $email);
 			$stmt->bindValue("extension",$extension);
 			$stmt->bindValue("date", date("y-m-d H:i")); //See php date
 			$stmt->bindValue("orig_name", $file->getClientOriginalName());
+
 			if(!$stmt->execute())
 			{
 				throw new \Exception("File could not be uploaded");
 			} 
-			$hashList = $app["db"]->fetchall("SELECT * FROM images WHERE hash = CAST(:hash AS UNSIGNED)", array("hash" => $hash));
-			$file->move($imageDir, $hashList[0]["hash"].".".$extension);
-			$this->createThumbnail($imageDir."/".$hashList[0]["hash"].".".$extension, $imageDir."/".$hashList[0]["hash"].$thumbnailExtension.".".$extension);
+			$file->move($imageDir, $hash.".".$extension);
+			$this->createThumbnail($imageDir."/".$hash.".".$extension, $imageDir."/".$hash.$thumbnailExtension.".".$extension);
 			array_push($succeeded, $file->getClientOriginalName());
 		} catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) { 
 			array_push($failed, $file->getClientOriginalName()." is already in the database");

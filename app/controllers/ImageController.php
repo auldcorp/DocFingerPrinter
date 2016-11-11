@@ -21,7 +21,9 @@ public function imageView(Request $request, Application $app) {
 
 	$sql = "SELECT * FROM images WHERE email = :email";
 	$foundSQL = "SELECT * FROM found WHERE hash = :hash";
+	$grades = ['A', 'B', 'C', 'D'];
 	$templating = new WebTemplate();
+	$hasher = new ImageHash(NULL, ImageHash::DECIMAL);
 
 	$userImages = $app["db"]->fetchAll($sql, Array("email" => $email));
 	for($i = 0; $i < count($userImages); ++$i) {
@@ -31,6 +33,9 @@ public function imageView(Request $request, Application $app) {
 			array_push($this->errors, "Image file ".$userImages[$i]["orig_name"]." was not found");
 		}
 		$userImages[$i]["found"] = $app["db"]->fetchAll($foundSQL,["hash" => $userImages[$i]["hash"]]);
+		for($j = 0; $j < count($userImages[$i]["found"]); ++$j) {
+			$userImages[$i]["found"][$j]["grade"] = $hasher->distance($userImages[$i]['hash'], $userImages[$i]["found"][$j]['hash']);
+		}
 		//		var_dump($imageFile);
 	}
 	//	var_dump($userImages);
@@ -40,11 +45,11 @@ public function imageView(Request $request, Application $app) {
 	$templating->setTitle("Upload Image");
 	$templating->addGlobal("page_content", $page_content);
 	$templating->addGlobal("login", TRUE);
-//	$retErr = [];
-//	if(isSet($this->errors)) {
-//		$retErr = $this->errors;
-//		$this->errors = [];
-//	}
+	//	$retErr = [];
+	//	if(isSet($this->errors)) {
+	//		$retErr = $this->errors;
+	//		$this->errors = [];
+	//	}
 	return $templating->renderDefault($this->errors);
 }
 public function processImages(Request $request, Application $app) {
@@ -67,13 +72,13 @@ public function deleteImage($email, $hash, $app) {
 	$imageDir = $app["imageDirBase"].$email;
 	$thumbnailExtension = $app["imageThumbnailExtention"];
 
-	$sql = "SELECT * FROM images WHERE hash = CAST(:hash AS UNSIGNED) AND email = :email";
+	$sql = "SELECT * FROM images WHERE hash = :hash AND email = :email";
 	$image = $app["db"]->fetchAll($sql, ["email" => $email, "hash" => $hash]);
 	try {
 		if(count($image) != 1) {
 			throw new \Exception("Image not found");
 		}
-		$sqlDeleteImage = "DELETE FROM images WHERE hash = CAST(:hash AS UNSIGNED) AND email = :email";
+		$sqlDeleteImage = "DELETE FROM images WHERE hash = :hash AND email = :email";
 
 		$stmt = $app["db"]->prepare($sqlDeleteImage);
 		$stmt->bindValue("hash", $hash);
