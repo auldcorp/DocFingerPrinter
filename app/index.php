@@ -1,6 +1,8 @@
 <?php
 date_default_timezone_set('America/New_York');
-require __DIR__.'/bootstrap.php';
+require_once __DIR__.'/vendor/autoload.php';
+
+$app = new Silex\Application();
 
 $app['imageDirBase'] = "/srv/napkin/images/"; 
 $app["imageThumbnailExtention"] = "_thumb";
@@ -20,7 +22,6 @@ else
 	ini_set('display_errors', 'Off');
 	ini_set('og_errors', 'On');
 }
-
 
 $app['swiftmailer.options'] = array(
 	'host' => 'localhost',
@@ -63,14 +64,12 @@ $app->get('/email', 'Napkins\\NotificationController::email');
 $app->get('/import','Napkins\\UploadController::uploadView');
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
+$app->get('/fingerprints','Napkins\\FingerprintController::fingerprintView');
 
-if($app['env'] == 'test'){
-	return $app;
-}
-else{
 $app->before( function ($request) {
 	$request->getSession()->start();
 });
 
-	$app->run();
-}
+$app->run();
+
+
