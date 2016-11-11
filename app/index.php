@@ -9,7 +9,7 @@ $app['debug'] = TRUE;
 
 if($app['debug'])
 {
-	define('DEBUG', TRUE);
+	if(!defined('DEBUG')) define('DEBUG', TRUE);
 	ini_set('display_errors', 'On');
 	ini_set('html_errors', 'On');
 	ini_set('log_errors', 'Off');

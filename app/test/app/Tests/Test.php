@@ -12,19 +12,19 @@ class TestController extends WebTestCase{
 		return require __DIR__ .'/../../../index.php';
 	}
 
-	public function setUp(){
-		parent::setUp();
-	}
-
+	/* Requirements:
+	 * Every GET request is successfull ie gives a 200 status code
+	 */
 	public function testStatusCode(){
 		$client = $this->createClient();
+
 		$crawler = $client->request('GET', '/ajksgdyfjasdfuyash');
 
 		$this->assertEquals(404, $client->getResponse()->getStatusCode(), 'Unwanted page');
 
 		$crawler = $client->request('GET', '/');
 
-		//if(!$client->getResponse()->isSuccessful()) var_dump($crawler->text());
+		if(!$client->getResponse()->isSuccessful()) var_dump($crawler->text());
 		$this->assertEquals(200,$client->getResponse()->getStatusCode(), 'Welcome page down');
 	}
 
