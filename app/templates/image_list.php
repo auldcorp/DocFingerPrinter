@@ -8,19 +8,6 @@
 	</head>
 	<body>
 		<div id="main" class="container-fluid">
-<div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Dropdown
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
 			<div id="content" class="clear col-xs-offset-2">
 						<h2>Uploaded Images</h2>
 						<form method="post" action="processImages">
@@ -48,11 +35,13 @@ if(isset($images)&&!empty($images)) {
 			echo '<div class="panel-footer">'.count($image["found"])." match found".'</div>';
 		}
 		echo '<div class="panel-body">';
-		foreach($image["found"] as $found) {
+        foreach($image["found"] as $found) {
+            $grades = array('A', 'B', 'C', 'D');
 			echo '<div class="row">';
 			echo '<div class="col-md-2">'.$found["date"].'</div>';
-			echo '<div class="col-md-8">'.$found["address"]."</div>";
-			echo '<div class="col-md-8">'.$found["grade"]."</div>";
+			echo '<div class="col-md-4">'."<a href='".$found["address"]."'>".$found["address"]."</a></div>";
+			echo '<div class="col-md-2">'."Grade: ".$grades[$found["grade"]]."</div>";
+            echo "<button class='btn btn-sm col-md-2' type='submit'>"."Notify"."</button>";
 			echo '</div>';
 		}
 		echo '</div>';
