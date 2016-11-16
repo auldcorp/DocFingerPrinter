@@ -34,6 +34,7 @@
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="import">Import</a></li>
 									<li><a href="images">Images</a><li>
+									<li><a href="fingerprint">Fingerprints</a></li>
 								</ul>
 						</li>
 					</ul>
@@ -49,7 +50,7 @@
 		</nav>
 	</div>
 	<div id="content" class="clear row">
-		
+
 		<?php
 		if(isset($errors))
 		{
