@@ -19,23 +19,16 @@ Class FingerprintController {
 		}
 		$imageDir = $app["imageDirBase"].$email.$folder;
 
- 	// integer starts at 0 before counting
-	$i = 0;
-	if ($handle = opendir($imageDir)) {
-        	while (($file = readdir($handle)) !== false) {
-            		if (!in_array($file, array('.', '..')) && !is_dir($imageDir.$file)) {
-                		$i++;
-			}
-        	}
-    	}
-
-
-		$fileName = "".$i;
+ 		// integer starts at 0 before counting
+		$num = 0;
+		if(NULL != $var = $app["db"]->query("SELECT MAX(fingerprint) AS num FROM fingerprints WHERE email='".$email."'")) {
+			$num = $var->fetch()["num"] +1;
+		}
 		//add name to database
 		$succeed = False;
 		$sql = "INSERT INTO fingerprints (fingerprint, email) VALUES (:i, :email)";
 		$stmt = $app["db"]->prepare($sql);
-		$stmt->bindValue("i", $i);
+		$stmt->bindValue("i", $num);
 		$stmt->bindvalue("email", $email);
 		if (!$stmt->execute()){
 			throw new \Exception("Failed to create fingerprint");
@@ -64,8 +57,10 @@ Class FingerprintController {
 
 			imagefilledellipse($fingerprint, $xCoord, $yCoord, $shapeWidth, $shapeHeight, $color);
 		}
-
-		imagepng($fingerprint, $imageDir);
+		if(!file_exists($imageDir)) {
+			mkdir($imageDir);
+		}
+		imagepng($fingerprint, $imageDir."/".$num);
 		return($fingerprint);
 	}
 
