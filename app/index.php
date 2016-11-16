@@ -63,11 +63,14 @@ $app->get('/email', 'Napkins\\NotificationController::email');
 $app->get('/import','Napkins\\UploadController::uploadView');
 $app->post('/import','Napkins\\UploadController::uploadAction');
 
+$app->get('/fingerprint', 'Napkins\\FingerprintController::newFingerprint');
+
 
 if($app['env'] == 'test'){
 	return $app;
 }
 else{
+
 $app->before( function ($request) {
 	$request->getSession()->start();
 });
