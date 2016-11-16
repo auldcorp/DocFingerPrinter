@@ -10,22 +10,21 @@
 		<div id="main" class="container-fluid">
 			<div id="content" class="clear col-xs-offset-2">
 						<h2>Fingerprints</h2>
-						<form method="post" action="processImages">
+						<div class="row">
+						<a href="fingerprint" class="btn btn-lg btn-primary col-md-3">Create</a>
+						</div>
+						<form method="post" action="processFingerprints">
 <?php
 if(isset($images)&&!empty($images)) {
 	echo  '<div class="panel-group">';
 	foreach($images as $image) {
 		echo '<div class="panel panel-default row">';
 		echo '<div class="panel-heading">';
-		echo "<div class='col-md-3'><img src='data:image/".$image["extension"].";base64,".$image["imageFile"]."' style='width:128px;height:128px;'></div>";
+		echo "<div class='col-md-3'><img src='data:image/png;base64,".$image["imageFile"]."' style='width:128px;height:128px;'></div>";
 		echo "<div class='col-md-5'>";
-		if(count($image["found"])) {
-			echo "<a class='glyphicon glyphicon-warning-sign' data-toggle='collapse' href='#found".$image["hash"]."'>".$image["orig_name"]."</a>";
-		} else {
-			echo $image["orig_name"]; 
-		}
+		echo $image["fingerprint"]; 
 		echo "</div>";
-		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["hash"]."' name= '".$image["hash"]."'> Delete</label>"."</div>";
+		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["fingerprint"]."' name= '".$image["fingerprint"]."'> Delete</label>"."</div>";
 		echo '</div>';
 		echo '</div>';
 	}
