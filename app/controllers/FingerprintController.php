@@ -24,11 +24,10 @@ public function fingerprintView(Request $request, Application $app) {
 
 	$userImages = $app["db"]->fetchAll($sql, Array("email" => $email));
 	for($i = 0; $i < count($userImages); ++$i) {
-		//THIS NEEDS CHANGED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		$imageFile = $imageDir."/".$userImages[$i]["name"].".".$userImages[$i]["extension"];
+		$imageFile = $fingerprintDir."/".$userImages[$i]["fingerprint"];
 		$userImages[$i]["imageFile"] = base64_encode(file_get_contents($imageFile));
 		if($userImages[$i]["imageFile"] == False) {
-			array_push($this->errors, "Finger print file ".$userImages[$i]["orig_name"]." was not found");
+			array_push($this->errors, "Finger print file ".$userImages[$i]["fingerprint"]." was not found");
 		}
 	}
 	//	var_dump($userImages);
