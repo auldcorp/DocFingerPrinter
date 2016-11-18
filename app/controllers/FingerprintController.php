@@ -99,7 +99,7 @@ function newFingerprint(Request $request, Application $app){
 		mkdir($imageDir);
 	}
 	imagepng($fingerprint, $imageDir."/".$num);
-	return($fingerprint);
+	return $app->redirect("fingerprints");
 }
 
 //TODO function to apply previously created fingerprints to a given image
@@ -128,5 +128,54 @@ function addFingerprint($file, $fingerP){
 	imagepng($img);
 
 }
+
+function fingerprintListAction(Request $request, Application $app) {
+	if(null == $email = $app["session"]->get("email"))
+	{
+		$app["session"]->set("dir", "import");
+		return $app->redirect("fingerprintss");
+	}
+	$data = $request->request->all();
+	$this->errors = [];
+	//	var_dump($data);
+	foreach($data as $key => $value) {
+		if($value == "delete") {
+			$temp = $this->deleteFingerprint($email, $key, $app);
+			if(!empty($temp)) {
+				array_push($this->errors,$temp);
+			}
+		}
+	}
+	return $this->fingerprintView($request, $app);
+}
+
+function deleteFingerprint($email, $fingerprint, $app) {
+	$imageDir = $app["imageDirBase"].$email;
+	$folder = "/fingerprints";
+
+	$sql = "SELECT * FROM fingerprints WHERE fingerprint = :fingerprint AND email = :email";
+	$image = $app["db"]->fetchAll($sql, ["email" => $email, "fingerprint" => $fingerprint]);
+	try {
+		if(count($image) != 1) {
+			throw new \Exception("Fingerprint not found");
+		}
+		$sqlDeleteImage = "DELETE FROM fingerprints WHERE fingerprint = :fingerprint AND email = :email";
+
+		$stmt = $app["db"]->prepare($sqlDeleteImage);
+		$stmt->bindValue("fingerprint", $fingerprint);
+		$stmt->bindValue("email", $email);
+		//need to delete image
+		if(!$stmt->execute())
+		{
+			throw new \Exception("Fingerprint ".$fingerprint." could not be deleted from database");
+		}
+		if(!unlink($imageDir.$folder."/".$fingerprint)) {
+			throw new \Exception("Fingerprint ".$fingerprint." file could not be deleted");
+		}
+	} catch(\Exception $e) {
+		return $e->getMessage();
+	}
+}
+
 }
 ?>

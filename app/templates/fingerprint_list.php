@@ -13,7 +13,7 @@
 						<div class="row">
 						<a href="fingerprint" class="btn btn-lg btn-primary col-md-3">Create</a>
 						</div>
-						<form method="post" action="processFingerprints">
+						<form method="post" action="fingerprintAction">
 <?php
 if(isset($images)&&!empty($images)) {
 	echo  '<div class="panel-group">';

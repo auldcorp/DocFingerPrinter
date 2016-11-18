@@ -67,6 +67,7 @@ $app->post('/import','Napkins\\UploadController::uploadAction');
 $app->get('/fingerprints','Napkins\\FingerprintController::fingerprintView');
 
 $app->get('/fingerprint', 'Napkins\\FingerprintController::newFingerprint');
+$app->post('/fingerprintAction', 'Napkins\\FingerprintController::fingerprintListAction');
 
 
 #if($app['env'] == 'test'){
