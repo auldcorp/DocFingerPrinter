@@ -28,15 +28,9 @@
 				</div>
 				<div class="collapse navbar-collapse">
 					<ul id="main-menu" class="nav navbar-nav" >
-						<li class="active"><a href="">Image Hash</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="import">Import</a></li>
-									<li><a href="images">Images</a><li>
-									<li><a href="fingerprint">Fingerprints</a></li>
-								</ul>
-						</li>
+						<li><a href="import">Import</a></li>
+						<li><a href="images">Images</a><li>
+						<li><a href="fingerprint">Fingerprints</a></li>
 					</ul>
 					<ul class="nav navbar-right">
 						<?php if(isset($login) && $login){?>
