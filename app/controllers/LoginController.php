@@ -123,7 +123,13 @@ private $form;
 
 			$stmt->execute();
 
-			return new Response('Success!');
+			$templating = new WebTemplate();
+
+			$page_content = $templating->render('welcome.php');
+			$templating->addGlobal('success', array('success'=>'Successfuly Registered!'));
+			$templating->addGlobal('page_content', $page_content);
+
+			return $templating->renderDefault();
 		} else {
 			$templating = new WebTemplate();
 

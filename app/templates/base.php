@@ -52,6 +52,18 @@
 	<div id="content" class="clear row">
 
 		<?php
+		if(isset($success))
+		{
+			foreach($success as $message)
+			{
+				echo '<div class="alert alert-success alert-dismissible fade in" role="alert">';
+					echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+						echo '<span aria-hidden="true">x</span>';
+					echo '</button>';
+					echo $message;
+				echo '</div>';
+			}
+		}
 		if(isset($errors))
 		{
 			foreach($errors as $error)
