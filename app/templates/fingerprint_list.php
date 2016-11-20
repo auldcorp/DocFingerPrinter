@@ -19,13 +19,12 @@ if(isset($images)&&!empty($images)) {
 	echo  '<div class="panel-group">';
 	foreach($images as $image) {
 		echo '<div class="panel panel-default row">';
-		echo '<div class="panel-heading">';
+		echo '<div class="panel-heading"></div>';
 		echo "<div class='col-md-3'><img src='data:image/png;base64,".$image["imageFile"]."' style='width:128px;height:128px;'></div>";
 		echo "<div class='col-md-5'>";
 		echo $image["fingerprint"]; 
 		echo "</div>";
 		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["fingerprint"]."' name= '".$image["fingerprint"]."'> Delete</label>"."</div>";
-		echo '</div>';
 		echo '</div>';
 	}
 	echo '</div>';

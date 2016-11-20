@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Jenssegers\ImageHash\ImageHash;
 
 Class ImageController {
-private $errors = [];
+private $errors;
 public function imageView(Request $request, Application $app) {
 	if(null == $email = $app["session"]->get("email"))
 	{
