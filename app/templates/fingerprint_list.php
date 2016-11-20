@@ -5,6 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script>
+	$(document).ready(function () {
+		$("input").change(function () { 
+			if(this.checked){ 
+				if($("button").hasClass("disabled")) $("button").toggleClass("disabled"); 
+			}
+			var boxes = $("input");
+			var emptyBoxes = [].filter.call(boxes, function(el) {
+				return !el.checked;
+			});
+
+			if(boxes.length == emptyBoxes.length) {
+				if(!$("button").hasClass("disabled")) $("button").toggleClass("disabled");
+			}
+	});
+	});
+	</script>
+
 	</head>
 	<body>
 		<div id="main" class="container-fluid">
@@ -30,7 +48,7 @@ if(isset($images)&&!empty($images)) {
 	echo '</div>';
 }
 ?>
-						<button class="btn btn-lg btn-primary col-md-3" type="submit">Process Fingerprints</button>
+						<button class="btn btn-lg btn-primary col-md-3 disabled" type="submit">Delete Fingerprints</button>
 					</form>
 			</div>
 		</div>
