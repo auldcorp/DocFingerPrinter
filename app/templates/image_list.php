@@ -41,10 +41,9 @@ if(isset($images)&&!empty($images)) {
 		} else {
 			echo $image["orig_name"]; 
 		}
-		echo "</div>";
+		echo "</div>\n";
 		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["hash"]."' name= '".$image["hash"]."'> Delete</label>"."</div>";
-		echo '</div>';
-		echo '</div>';
+		echo '</div>'."\n";
 		echo '<div id="found'.$image["hash"].'" class="nav-collapse collapse">';
 		if(count($image["found"])==0) {
 			echo '<div class="panel-footer">No matches found</div>';
@@ -58,9 +57,10 @@ if(isset($images)&&!empty($images)) {
 			echo '<div class="col-md-2">'.$found["date"].'</div>';
 			echo '<div class="col-md-4">'."<a href='".$found["address"]."'>".$found["address"]."</a></div>";
 			echo '<div class="col-md-2">'."Grade: ".$grades[$found["grade"]]."</div>";
-			echo '<a href="notify?Addr='.$found["address"].'" class="btn btn-lg btn-primary col-md-3">Notify</a>';
+			echo '<div class="col-md-3">'.'<a href="notify?Addr='.$found["address"].'" class="btn-secondary">Notify</a>'."</div>";
 			echo '</div>';
 		}
+		echo '</div>';
 		echo '</div>';
 	}
 	echo '</div>';
