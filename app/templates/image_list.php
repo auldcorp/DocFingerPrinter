@@ -58,7 +58,7 @@ if(isset($images)&&!empty($images)) {
 			echo '<div class="col-md-2">'.$found["date"].'</div>';
 			echo '<div class="col-md-4">'."<a href='".$found["address"]."'>".$found["address"]."</a></div>";
 			echo '<div class="col-md-2">'."Grade: ".$grades[$found["grade"]]."</div>";
-            echo "<button class='btn btn-sm col-md-2' type='submit'>"."Notify"."</button>";
+			echo '<a href="notify?Addr='.$found["address"].'" class="btn btn-lg btn-primary col-md-3">Notify</a>';
 			echo '</div>';
 		}
 		echo '</div>';
