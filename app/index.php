@@ -58,6 +58,7 @@ $app->post('/register','Napkins\\LoginController::defaultAction')->value('action
 
 $app->get('/images','Napkins\\ImageController::imageView');
 $app->post("/processImages","Napkins\\ImageController::processImages");
+$app->get('/notify','Napkins\\ImageController::notifyFound');
 
 $app->get('/email', 'Napkins\\NotificationController::email');
 
