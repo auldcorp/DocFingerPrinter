@@ -31,6 +31,8 @@ class MyCrawler extends PHPCrawler
 
         // Print the URL and the HTTP-status-Code
         echo "Page requested: ".$DocInfo->url." (".$DocInfo->http_status_code.")".$lb;
+        echo "Content type: ".$DocInfo->content_type.$lb;
+        echo "Error string: ".$DocInfo->error_string.$lb;
 
         // Print the refering URL
         echo "Referer-page: ".$DocInfo->referer_url.$lb;
@@ -124,7 +126,7 @@ class MyCrawler extends PHPCrawler
                     "\r\n".
                     $DocInfo->url."\r\n".
                     "\r\n".
-                    "With a match grade of ".$grades[$distance]"\r\n".
+                    "With a match grade of ".$grades[$distance]."\r\n".
                     "\r\n".
                     "Best regards,"."\r\n".
                     "The Auld Corporation"."\r\n";
@@ -159,26 +161,26 @@ class MyCrawler extends PHPCrawler
 function spawn_crawler($url, $db)
 {
     $crawler = new MyCrawler();
+    $crawler->setURL($url);
+    $crawler->setFollowRedirects(TRUE);
+    $crawler->setFollowRedirectsTillContent(TRUE);
+    $crawler->setConnectionTimeout(5);
+    $crawler->setStreamTimeout(5);
+    $crawler->enableAggressiveLinkSearch(TRUE);
+    $crawler->setFollowMode(0);
+    $crawler->requestGzipContent(TRUE);
+    $crawler->enableCookieHandling(TRUE);
+    $crawler->setCrawlingDepthLimit(25);
+    $crawler->setUserAgentString("ELinks/0.12pre6 (textmode; Linux; 194x47-2)");
+    //$crawler->setUserAgentString("Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0");
+    $crawler->addContentTypeReceiveRule("#text/html#");
+    $crawler->addContentTypeReceiveRule("#image/[a-zA-Z\-]{2,10}#");
+    $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);
+    $crawler->setTrafficLimit(1000 * 1024);
     $crawler->db = $db;
     $crawler->tempdir = "/tmp/napkin_collector/".getmypid().".d/";
     if (!mkdir($crawler->tempdir, 0777, true))
         echo "Error Creating tempdir: ".$crawler->tempdir."\n";
-
-    // URL to crawl
-    $crawler->setURL($url);
-
-    // Receive content of files with content-type "text/html" so we can find links
-    $crawler->addContentTypeReceiveRule("#text/html#");
-
-    // Recieve images so we can try to fingerprint them
-    $crawler->addContentTypeReceiveRule("#image/[a-zA-Z\-]{2,10}#");
-    // Store and send cookie-data like a browser does
-    $crawler->enableCookieHandling(true);
-    $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);
-    $crawler->setFollowMode(0);
-    // Set the traffic-limit to 1 MB (in bytes,
-    // for testing we dont want to "suck" the whole site)
-    $crawler->setTrafficLimit(1000 * 1024);
 
     // Go crawler Go!!
     //$crawler->goMultiProcessed(5);
