@@ -11,7 +11,7 @@ $app['debug'] = TRUE;
 
 if($app['debug'])
 {
-	define('DEBUG', TRUE);
+	if(!defined('DEBUG')) define('DEBUG', TRUE);
 	ini_set('display_errors', 'On');
 	ini_set('html_errors', 'On');
 	ini_set('log_errors', 'Off');
@@ -58,6 +58,7 @@ $app->post('/register','Napkins\\LoginController::defaultAction')->value('action
 
 $app->get('/images','Napkins\\ImageController::imageView');
 $app->post("/processImages","Napkins\\ImageController::processImages");
+$app->get('/notify','Napkins\\ImageController::notifyFound');
 
 $app->get('/email', 'Napkins\\NotificationController::email');
 

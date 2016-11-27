@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Jenssegers\ImageHash\ImageHash;
 
 Class ImageController {
-private $errors = [];
+private $errors;
 public function imageView(Request $request, Application $app) {
 	if(null == $email = $app["session"]->get("email"))
 	{
@@ -97,6 +97,62 @@ public function deleteImage($email, $hash, $app) {
 	} catch(\Exception $e) {
 		return $e->getMessage();
 	}
+}
+public function notifyFound(Request $request, Application $app) {
+	if(null == $email = $app["session"]->get("email"))
+	{
+		$app["session"]->set("dir", "import");
+		return $app->redirect("notify");
+	}
+	$url = $request->query->get("Addr");
+	$parsedUrl = parse_url($url);
+	$sql = "SELECT * FROM crawler WHERE config_key = 'url' AND config_value = :host";
+	$entry = $app["db"]->fetchAll($sql, ["host" => $parsedUrl["host"]]);
+	$emailAddr = '';
+	if(count($entry) <= 0) {
+		$allInfo = explode("\n",shell_exec("whois ".$parsedUrl["host"]));
+		$infoList = [];
+		foreach($allInfo as $value) {
+			$lineInfo = explode(":", $value, 2);
+			if(count($lineInfo) == 2) {
+				$infoList[$lineInfo[0]] = $lineInfo[1];
+			}
+		}
+		if(isset($infoList["Admin Email"])&&strlen($infoList["Admin Email"]) > 0) {
+			$emailAddr = $infoList["Admin Email"];
+			break;
+		}
+		if(isset($infoList["Registrant Email"])&&strlen($infoList["Registrant Email"])) {
+			$emailAddr = $infoList["Registrant Email"];
+			break;
+		}
+		if(isset($infoList["Tech Email"])&&strlen($infoList["Tech Email"])) {
+			$emailAddr = $infoList["Tech Email"];
+			break;
+		}
+	} else {
+		$emailAddr = $entry[0]["value2"];
+	}
+
+	$subject = 'Use of Copywrited Image';
+	$headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
+	$message = "To whom it may concern,"."\r\n".
+		"\r\n".
+		"The service _______ has found a copywrited image belonging to one of our users on your website\r\n".
+		"\r\n".
+		"Domain: ".$parsedUrl["host"]."\r\n".
+		"\r\n".
+		"Image Url: ".$url."\r\n".
+		"\r\n".
+		"Please remove the conflicting image from your site\r\n".
+		"\r\n".
+		"Best regards,"."\r\n".
+		"The Auld Corporation"."\r\n";
+
+	mail($emailAddr, $subject, $message, $headers);
+
+	return $this->imageView($request, $app);
 }
 }
 ?>
