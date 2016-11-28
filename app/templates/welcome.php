@@ -11,21 +11,21 @@
 					<h2>Welcome</h2>
 					<p>
 TrackIt is a dynamic solution to the problems associated with the internet and the serious loss of control of media, photographs and documents.
- 
+<br> 
 By way of unique image identification and creative media "fingerprinting" TrackIt stores an image fingerprint with unnoticeable or low profile fingerprints that enables our users to track and trace their photographs, artwork and media on the internet and provides an option for proactive notification of instances of use of your photographs and media.
- 
+<br> 
 TrackIt also provides a solution to directly contact hosing web sites of unauthorized use of images and media to request the removal of these items.
- 
+<br> 
 TrackIt solves serious problems for parents and children such as:
- 
+<br> 
 The unwanted and unauthorized use of child and young adult photographs or media becoming distributed across the internet without consent.
- 
+<br> 
 Helps resolve situations now and in the future when poor judgement allows personal images to be shared online that perhaps should not have been shared for one reason or another.
- 
+<br> 
 The reproduction and unauthorized use of artwork and other commercial media on the internet.
- 
+<br> 
 Helps identify and locate unauthorized use and the removal of these items.
- 
+<br> 
 The unwanted re-distribution of confidential information and images within industry and government entities.
 					</p>
 				</div>
@@ -33,10 +33,10 @@ The unwanted re-distribution of confidential information and images within indus
 					<h2>About and Contact</h2>
 					<p>
 TrackIt is a product of Auld Corporation and speaks to Auld Corporations social impact core philosophy. We believe TrackIt will provide a valuable service that will help our users protect their private images and media and in doing so will improve the safety of the world we live in. In addition, we believe X will provide a valuable resource to industry and governments.
- 
+<br> 
 For more information or inquires please contact:
- 
-Auld Corporation @ TrackIt@AuldCorporation.com
+<br> 
+Auld Corporation @ <a href="mailto:TrackIt@AuldCorporation.com">TrackIt@AulCorporation.com</a>
 Thank you!
 					</p>
 				</div>
