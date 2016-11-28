@@ -8,7 +8,7 @@ use Symfony\Component\Templating\Loader\FilesystemLoader;
 
 class WebTemplate extends PhpEngine
 {
-	public $page_title = 'Image Hash';
+	public $page_title = 'TrackIt';
 	public $page_heading = '';
 	public $page_subheading = '';
 
