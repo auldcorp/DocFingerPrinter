@@ -53,7 +53,6 @@ class MyCrawler extends PHPCrawler
             //Get Hash
             $hasher = new ImageHash(NULL, ImageHash::DECIMAL);
             $temp_hash = $hasher->hash($tempfile);
-            echo $temp_hash.$lb;
 
             //Search for all similar hashes
             $sql = "SELECT images.email, users.name, images.date, images.orig_name, images.hash FROM images INNER JOIN users ON (images.email = users.email) WHERE BIT_COUNT(hash ^  :temp_hash) < 2";
@@ -63,13 +62,8 @@ class MyCrawler extends PHPCrawler
             try {
                 $stmt->execute();
             } catch (PDOException $exception) {
-                // unlike mysql/mysqli, pdo throws an exception when it is unable to connect
                 echo 'There was an error connecting to the database!\n';
-                if ($pdoDebug) {
-                    // pdo's exception provides more information than just a message
-                    // including getFile() and getLine()
-                    echo $exception->getMessage();
-                }
+                if ($pdoDebug) { echo $exception->getMessage(); }
             }
 
             $db_hashes = $stmt->fetchAll();
@@ -91,53 +85,76 @@ class MyCrawler extends PHPCrawler
                         $stmt->execute();
                     } catch (PDOException $exception) {
                         echo 'There was an error connecting to the database!\n';
-                        if ($pdoDebug) {
-                            echo $exception->getMessage();
-                        }
+                        if ($pdoDebug) { echo $exception->getMessage(); }
                     }
                 }
 
                 $sql = "SELECT hash FROM napkins.found WHERE address_hash like :address_hash";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
                 try {
                     $stmt->execute();
                 } catch (PDOException $exception) {
                     echo 'There was an error connecting to the database!\n';
-                    if ($pdoDebug) {
-                        echo $exception->getMessage();
-                    }
+                    if ($pdoDebug) { echo $exception->getMessage(); }
                 }
                 $db_hashes = $stmt->fetchAll();
 
                 // Calculate Grade
                 $grades = array('A', 'B', 'C', 'D');
-                echo "\r\n".$row['hash']." ".$db_hashes[0]['hash']."\r\n";
                 $distance = $hasher->distance($row['hash'], $db_hashes[0]['hash']);
-                echo "\r\n".$distance."\r\n";
-                echo "\r\n".gmp_hamdist($row['hash'], $db_hashes[0]['hash'])."\r\n";
 
-                // notify owners
-                $to      = $row['email'];
-                $subject = 'Potential Image Match';
-                $headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
-                    'X-Mailer: PHP/' . phpversion();
-                $message = "Hello ".$row['name'].","."\r\n".
-                    "\r\n".
-                    "We have found a potential image match for your image \"".$row['orig_name']."\" at:\r\n".
-                    "\r\n".
-                    $DocInfo->url."\r\n".
-                    "\r\n".
-                    "With a match grade of ".$grades[$distance]."\r\n".
-                    "\r\n".
-                    "Best regards,"."\r\n".
-                    "The Auld Corporation"."\r\n";
+                // Check to see if user has been notified about this hit already
+                $sql = "SELECT url_hash FROM napkins.hit_notify WHERE url_hash like :address_hash AND email like :email";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
+                $stmt->bindValue('email', $row['email']);
+                try {
+                    $stmt->execute();
+                } catch (PDOException $exception) {
+                    echo 'There was an error connecting to the database!\n';
+                    if ($pdoDebug) { echo $exception->getMessage(); }
+                }
+                $user_hits = $stmt->fetchAll();
+                echo "FetchedAll\n\n";
 
-                echo $message;
+                if (count($user_hits) == 0) {
+                    echo "Zero\n\n";
+                    // notify owners
+                    $to      = $row['email'];
+                    $subject = 'Potential Image Match';
+                    $headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+                    $message = "Hello ".$row['name'].","."\r\n".
+                        "\r\n".
+                        "We have found a potential image match for your image \"".$row['orig_name']."\" at:\r\n".
+                        "\r\n".
+                        $DocInfo->url."\r\n".
+                        "\r\n".
+                        "With a match grade of ".$grades[$distance]."\r\n".
+                        "\r\n".
+                        "Best regards,"."\r\n".
+                        "The Auld Corporation"."\r\n";
 
 
+                    echo $message;
+                    //mail($to, $subject, $message, $headers);
 
-
-                //mail($to, $subject, $message, $headers);
-
+                    // Register hit
+                    $sql = "INSERT INTO napkins.hit_notify (url_hash, email, date) VALUES (:address_hash, :email, :date)";
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->bindValue('address_hash', hash('md5', $DocInfo->url));
+                    $stmt->bindValue('email', $row['email']);
+                    $stmt->bindValue('date', date('Y/m/d'));
+                    try {
+                        $stmt->execute();
+                        $arr = $stmt->errorInfo();
+                        print_r($arr);
+                    } catch (PDOException $exception) {
+                        echo 'There was an error connecting to the database!\n';
+                        if ($pdoDebug) { echo $exception->getMessage(); }
+                    }
+                }
                 $first = FALSE;
             }
 
