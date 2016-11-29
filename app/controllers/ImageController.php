@@ -122,12 +122,12 @@ public function notifyFound(Request $request, Application $app) {
 			$emailAddr = $infoList["Admin Email"];
 			break;
 		}
-		if(isset($infoList["Registrant Email"])&&strlen($infoList["Registrant Email"])) {
-			$emailAddr = $infoList["Registrant Email"];
-			break;
-		}
 		if(isset($infoList["Tech Email"])&&strlen($infoList["Tech Email"])) {
 			$emailAddr = $infoList["Tech Email"];
+			break;
+		}
+		if(isset($infoList["Registrant Email"])&&strlen($infoList["Registrant Email"])) {
+			$emailAddr = $infoList["Registrant Email"];
 			break;
 		}
 	} else {
@@ -137,15 +137,14 @@ public function notifyFound(Request $request, Application $app) {
 	$subject = 'Use of Copywrited Image';
 	$headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
 		'X-Mailer: PHP/' . phpversion();
-	$message = "To whom it may concern,"."\r\n".
+	$message = "To whom it may concern:"."\r\n".
 		"\r\n".
-		"The service _______ has found a copywrited image belonging to one of our users on your website\r\n".
+        "We have found a copywrited image belonging to one of our users on your"."\r\n".
+		"website. Please remove the following image:\r\n".
 		"\r\n".
 		"Domain: ".$parsedUrl["host"]."\r\n".
 		"\r\n".
 		"Image Url: ".$url."\r\n".
-		"\r\n".
-		"Please remove the conflicting image from your site\r\n".
 		"\r\n".
 		"Best regards,"."\r\n".
 		"The Auld Corporation"."\r\n";
