@@ -33,7 +33,7 @@ if(isset($images)&&!empty($images)) {
 	foreach($images as $image) {
 		echo '<div class="panel panel-default row">';
 		echo '<div class="panel-heading"></div>';
-		echo "<div class='col-md-3'><img src='data:image/".$image["extension"].";base64,".$image["imageFile"]."' style='width:128px;height:128px;'></div>";
+		echo "<div class='col-md-3'><a href='data:image/".$image['extension'].";base64,".$image['imageFileFull']."'><img src='data:image/".$image["extension"].";base64,".$image["imageFile"]."' style='width:128px;height:128px;'></a></div>";
 		echo "<div class='col-md-5'>";
 		if(count($image["found"])) {
 			echo "<a class='glyphicon glyphicon-warning-sign' data-toggle='collapse' href='#found".$image["hash"]."'>".$image["orig_name"]."</a>";

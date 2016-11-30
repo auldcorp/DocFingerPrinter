@@ -29,7 +29,9 @@ public function imageView(Request $request, Application $app) {
 	$userImages = $app["db"]->fetchAll($sql, Array("email" => $email));
 	for($i = 0; $i < count($userImages); ++$i) {
 		$imageFile = $imageDir."/".$userImages[$i]["hash"].$thumbnailExtension.".".$userImages[$i]["extension"];
+		$imageFileFull = $imageDir."/".$userImages[$i]["hash"].".".$userImages[$i]["extension"];
 		$userImages[$i]["imageFile"] = base64_encode(file_get_contents($imageFile));
+		$userImages[$i]["imageFileFull"] = base64_encode(file_get_contents($imageFileFull));
 		if($userImages[$i]["imageFile"] == False) {
 			array_push($this->errors, "Image file ".$userImages[$i]["orig_name"]." was not found");
 		}
