@@ -73,15 +73,15 @@ function newFingerprint(Request $request, Application $app){
 	}
 
 
-	$width = 300;
-	$height = 300;
-	$numShapes = 13;
+	$width = 1000;
+	$height = 1000;
+	$numShapes = 11;
 
 	header ('Content-Type: image/png');
 	$fingerprint = @imagecreatetruecolor($width, $height)
 		or die('Cannot create fingerprint');
 
-	$trans = imagecolorallocatealpha($fingerprint, 250, 250, 250, 127);
+	$trans = imagecolorallocate($fingerprint, 250, 250, 250);
 	imagefill($fingerprint, 0, 0, $trans);
 
 	//loop over  with different shapes and coordinates
@@ -89,8 +89,8 @@ function newFingerprint(Request $request, Application $app){
 		$xCoord = rand(1, $width);
 		$yCoord = rand(1, $height);
 
-		$shapeWidth = rand(1, 20);
-		$shapeHeight = rand(1, 20);
+		$shapeWidth = rand(10, 50);
+		$shapeHeight = rand(10, 50);
 		$color = imagecolorallocate($fingerprint, rand(0,255), rand(0,255), rand(0,255)); //random color
 
 		imagefilledellipse($fingerprint, $xCoord, $yCoord, $shapeWidth, $shapeHeight, $color);
@@ -98,6 +98,7 @@ function newFingerprint(Request $request, Application $app){
 	if(!file_exists($imageDir)) {
 		mkdir($imageDir);
 	}
+	imagecolortransparent($fingerprint, $trans);
 	imagepng($fingerprint, $imageDir."/".$num);
 	return $app->redirect("fingerprints");
 }

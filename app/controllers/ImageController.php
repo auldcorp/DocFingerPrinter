@@ -7,6 +7,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Jenssegers\ImageHash\ImageHash;
+use Imagick;
 
 Class ImageController {
 private $errors;
@@ -63,11 +64,86 @@ public function processImages(Request $request, Application $app) {
 	//	var_dump($data);
 	foreach($data as $key => $value) {
 		if($value == "delete") {
+
 			array_push($this->errors,$this->deleteImage($email, $key, $app));
+		} else if($value == "merge") {
+
+			$sqlFinger = "SELECT fingerprint FROM fingerprints WHERE email = :email";
+			$mark = $app["db"]->fetchAll($sqlFinger, ["email" => $email]);
+
+			if(count($mark) == 0) {
+				array_push($this->errors, "No Mark found");
+			} else {
+				$this->mergeFingerprint($app, $key, $mark[0]["fingerprint"], $email);
+			}
 		}
 	}
+
+
+
 	return $this->imageView($request, $app);
 }
+
+function mergeFingerprint($app, $hash, $mark, $email){
+	$imageDir = $app["imageDirBase"].$email;
+	$thumbnailExtension = $app["imageThumbnailExtention"];
+	$sql = "SELECT * FROM images WHERE hash = :hash AND email = :email";
+	$res = $app["db"]->fetchAll($sql, ["email" => $email, "hash" => $hash]);
+	$ext = $res[0]["extension"];
+	$name = $res[0]["orig_name"];
+	$image = $imageDir."/".$hash.".".$ext;
+	$markfile = $imageDir."/fingerprints/".$mark;
+
+	//take $image image and merge with fingerprint $fingerP
+
+	switch ($ext) {
+	case 'jpg':
+	case 'jpeg':
+		$img = @imagecreatefromjpeg($image);
+		break;
+	case 'gif':
+		$img = @imagecreatefromgif($image);
+		break;
+	case 'png':
+		$img = @imagecreatefrompng($image);
+		break;
+	default:
+		return false;
+	}
+	$hasher = new ImageHash(NULL, ImageHash::DECIMAL);
+	$fingerprint = @imagecreatefrompng($markfile);
+
+	$width = imagesx($img);
+	$height = imagesy($img);
+	$fingerprint = imagescale($fingerprint,$width,$height);
+	imagecopymerge($img, $fingerprint, 0, 0, 0, 0, $width, $height, 20); 
+	$hash = $hasher->hash($img);
+	imagepng($img, $imageDir."/".$hash.".".$ext);
+	header('Content-type: image/png');
+//	imagepng($img);
+	$this->createThumbnail($imageDir."/".$hash.".".$ext, $imageDir."/".$hash.$thumbnailExtension.".".$ext);
+
+	//add name to database images (hash, email, image, date)
+	$sql = "INSERT INTO images (hash, email, date, orig_name, extension, min_grade) VALUES (:hash, :email, :date, :name, :ext, 'C')";
+	$stmt = $app["db"]->prepare($sql);
+	$stmt->bindValue("hash", $hash);
+	$stmt->bindValue("email", $email);
+	$stmt->bindValue("date", date("y-m-d H:i"));
+	$stmt->bindValue("name", "fingerprint ".$mark." ".$name);
+	$stmt->bindValue("ext", $ext);
+	if(!$stmt->execute()){
+		throw new \Exception("Failed to merge image with fingerprint");
+	}
+
+}
+
+private function createThumbnail($imageFile, $thumbNailFile) {
+	$image = new \Imagick(realpath($imageFile));
+	$image->setbackgroundcolor('rgb(64,64,64)');
+	$image->thumbnailImage(200,200,true);
+	$image->writeImage($thumbNailFile);
+}
+
 public function deleteImage($email, $hash, $app) {
 	$imageDir = $app["imageDirBase"].$email;
 	$thumbnailExtension = $app["imageThumbnailExtention"];

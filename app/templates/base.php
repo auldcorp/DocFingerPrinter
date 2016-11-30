@@ -30,7 +30,7 @@
 					<ul id="main-menu" class="nav navbar-nav" >
 						<li><a href="import">Import</a></li>
 						<li><a href="images">Images</a><li>
-						<li><a href="fingerprint">Fingerprints</a></li>
+						<li><a href="fingerprints">Fingerprints</a></li>
 					</ul>
 					<ul class="nav navbar-right">
 						<?php if(isset($login) && $login){?>
