@@ -230,8 +230,6 @@ public function notifyFound(Request $request, Application $app) {
 
     mail($emailAddr, $subject, $message, $headers);
 
-    echo "\n\nBLARGL\n".$emailAddr."\n\n";
-
 	return $this->imageView($request, $app);
 }
 }

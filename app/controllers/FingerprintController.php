@@ -17,7 +17,10 @@ public function fingerprintView(Request $request, Application $app) {
 		$app["session"]->set("dir", "fingerprints");
 		return $app->redirect("login");
 	}
-	$fingerprintDir = $app["imageDirBase"].$email."/fingerprints";
+    $fingerprintDir = $app["imageDirBase"].$email."/fingerprints";
+    if (!file_exists($fingerprintDir)) {
+        mkdir($fingerprintDir, 0777, TRUE);
+    }
 
 	$sql = "SELECT * FROM fingerprints WHERE email = :email";
 	$templating = new WebTemplate();
