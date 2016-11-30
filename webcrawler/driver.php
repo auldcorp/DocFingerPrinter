@@ -184,6 +184,7 @@ function spawn_crawler($url, $db)
     $crawler->setConnectionTimeout(5);
     $crawler->setStreamTimeout(5);
     $crawler->enableAggressiveLinkSearch(TRUE);
+    $crawler->setLinkExtractionTags(array("href","src","url","location","codebase","background","data","profile","action","open","value"));
     $crawler->setFollowMode(0);
     $crawler->requestGzipContent(TRUE);
     $crawler->enableCookieHandling(TRUE);
