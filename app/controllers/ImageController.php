@@ -21,7 +21,7 @@ public function imageView(Request $request, Application $app) {
 	$thumbnailExtension = $app["imageThumbnailExtention"];
 
 	$sql = "SELECT * FROM images WHERE email = :email";
-	$foundSQL = "SELECT * FROM found WHERE hash = :hash";
+	$foundSQL = "SELECT * FROM found WHERE BIT_COUNT(hash ^ :hash) < 4";
 	$grades = ['A', 'B', 'C', 'D'];
 	$templating = new WebTemplate();
 	$hasher = new ImageHash(NULL, ImageHash::DECIMAL);
