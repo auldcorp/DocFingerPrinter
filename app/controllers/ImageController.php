@@ -182,7 +182,7 @@ public function notifyFound(Request $request, Application $app) {
 	}
 	$url = $request->query->get("Addr");
 	$parsedUrl = parse_url($url);
-	$sql = "SELECT * FROM crawler WHERE config_key = 'url' AND config_value = :host";
+	$sql = "SELECT * FROM crawler WHERE config_key LIKE 'url' AND config_value LIKE :host";
 	$entry = $app["db"]->fetchAll($sql, ["host" => $parsedUrl["host"]]);
 	$emailAddr = '';
 	if(count($entry) <= 0) {
@@ -211,7 +211,8 @@ public function notifyFound(Request $request, Application $app) {
 	}
 
 	$subject = 'Use of Copywrited Image';
-	$headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
+    $headers = 'From: Auld Corp <do-not-reply@auldcorporation.com>' . "\r\n" .
+        'To: '.$emailAddr."\r\n" .
 		'X-Mailer: PHP/' . phpversion();
 	$message = "To whom it may concern:"."\r\n".
 		"\r\n".
