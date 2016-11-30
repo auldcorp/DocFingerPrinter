@@ -62,17 +62,17 @@
 		{
 			foreach($errors as $error)
 			{
-				echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">'; 
+				echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
 					echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
 						echo '<span aria-hidden="true">×</span>';
 					echo '</button>';
 					echo $error;
- 				echo '</div>';	
+ 				echo '</div>';
 			}
 		}
 
 		?>
-		
+
 
 			<?php echo $page_content; ?>
 
@@ -80,7 +80,7 @@
 	</div>
 	<div id="footer" class="clear navbar navbar-fixed-bottom">
 		<div class="container">
-		<p>Capstone</p>
+		<p>&#169; 2016 Auld Coporation</p>
 		</div>
 	</div>
 </div>
