@@ -544,7 +544,8 @@ class PHPCrawlerHTTPRequest
       // If ssl -> perform Server name indication
       if ($this->url_parts["protocol"] == "https://")
       {
-        $context = stream_context_create(array('ssl' => array('SNI_server_name' => $this->url_parts["host"])));
+        //$context = stream_context_create(array('ssl' => array('SNI_server_name' => $this->url_parts["host"])));
+        $context = stream_context_create(array('ssl' => array('peer_name' => $this->url_parts["host"])));
         $this->socket = @stream_socket_client($protocol_prefix.$ip_address.":".$this->url_parts["port"], $error_code, $error_str,
                                               $this->socketConnectTimeout, STREAM_CLIENT_CONNECT, $context);
       }

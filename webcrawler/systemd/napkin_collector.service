@@ -1,0 +1,6 @@
+[Unit]
+Description=Launch the napkin collector webcrawler
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/php56 /var/www/webcrawler/driver.php

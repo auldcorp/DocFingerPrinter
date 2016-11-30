@@ -138,7 +138,7 @@ class MyCrawler extends PHPCrawler
 
 
                     echo $message;
-                    //mail($to, $subject, $message, $headers);
+                    mail($to, $subject, $message, $headers);
 
                     // Register hit
                     $sql = "INSERT INTO napkins.hit_notify (url_hash, email, date) VALUES (:address_hash, :email, :date)";
