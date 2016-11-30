@@ -29,7 +29,9 @@
 			<div id="content" class="clear col-xs-offset-2">
 						<h2>Fingerprints</h2>
 						<div class="row">
-						<a href="fingerprint" class="btn btn-lg btn-primary col-md-3">Create</a>
+						<form method="post" action="fingerprint">
+							<button class="btn btn-lg btn-primary col-md-3" type="submit">Create</button>
+						</form>
 						</div>
 						<form method="post" action="fingerprintAction">
 <?php

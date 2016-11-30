@@ -15,7 +15,6 @@
 			var emptyBoxes = [].filter.call(boxes, function(el) {
 				return !el.checked;
 			});
-
 			if(boxes.length == emptyBoxes.length) {
 				if(!$("button").hasClass("disabled")) $("button").toggleClass("disabled");
 			}
@@ -42,6 +41,11 @@ if(isset($images)&&!empty($images)) {
 			echo $image["orig_name"]; 
 		}
 		echo "</div>\n";
+
+                //merge fingerprint option
+                echo "<div class='col-md-1'>"."<label><input type='checkbox' value=merge id='".$image["hash"]."' name= '".$image["hash"]."'>Merge with fingerprint</label></div>";
+
+
 		echo "<div class='col-md-1'>"."<label><input type='checkbox' value=delete id='".$image["hash"]."' name= '".$image["hash"]."'> Delete</label>"."</div>";
 		echo '</div>'."\n";
 		echo '<div id="found'.$image["hash"].'" class="nav-collapse collapse">';
@@ -66,7 +70,7 @@ if(isset($images)&&!empty($images)) {
 	echo '</div>';
 }
 ?>
-						<button class="disabled btn btn-lg btn-primary col-md-3" type="submit">Delete Images</button>
+						<button class="disabled btn btn-lg btn-primary col-md-3" type="submit">Submit</button>
 					</form>
 			</div>
 		</div>

@@ -15,7 +15,7 @@ public function uploadAction(Request $request, Application $app) {
 	if(null == $email = $app["session"]->get("email")) {
 		$app["session"]->set("dir", "import");
 		return $app->redirect("login");
-	} 
+	}
 
 	$imageDir = $app["imageDirBase"].$email;
 	$thumbnailExtension = $app["imageThumbnailExtention"];
@@ -36,7 +36,7 @@ public function uploadAction(Request $request, Application $app) {
 			$extension = $file->guessExtension();
 			$hasher = new ImageHash(Null, ImageHash::DECIMAL);
 			$hash = $hasher->hash($file->getPath()."/".$file->getFilename());
-			
+
 			$stmt = $app["db"]->prepare($sql);
 			$stmt->bindValue("hash", $hash);
 			$stmt->bindValue("email", $email);
@@ -76,6 +76,48 @@ public function uploadView(Request $request, Application $app, Array $var_conten
 
 	return $templating->renderDefault();
 }
+
+//TODO function to apply previously created fingerprints to a given image
+function mergeFingerprint($file, $fingerP){
+
+        //take $file image and merge with fingerprint $fingerP
+        $extension = strtolower(strrchr($file, '.'));
+
+        switch ($extension) {
+        case '.jpg':
+        case '.jpeg':
+                $img = @imagecreatefromjpeg($file);
+                break;
+        case '.gif':
+                $img = @imagecreatefromgif($file);
+                break;
+        case '.png':
+                $img = @imagecreatefrompng($file);
+                break;
+        default:
+                return false;
+        }
+
+	$fingerprint = @imagecreatefrompng($fingerP);
+
+        imagecopymerge($img, $fingerprint, 0, 0, 0, 0, $width, $height); 
+        header('Content-type: image/png');
+        imagepng($img);
+
+//TODO fix this. very bad.
+//add name to database images (hash, email, image, date)
+        $succeed = False;
+        $sql = "INSERT INTO images (hash, email, image, date) VALUES (, :email)";
+        $stmt = $app["db"]->prepare($sql);
+        $stmt->bindValue("i", $num);
+        $stmt->bindvalue("email", $email);
+        if (!$stmt->execute()){
+                throw new \Exception("Failed to merge image with fingerprint");
+        }
+
+
+}
+
 private function createThumbnail($imageFile, $thumbNailFile) {
 	$image = new \Imagick(realpath($imageFile));
 	$image->setbackgroundcolor('rgb(64,64,64)');
