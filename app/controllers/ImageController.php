@@ -182,7 +182,7 @@ public function notifyFound(Request $request, Application $app) {
 	}
 	$url = $request->query->get("Addr");
 	$parsedUrl = parse_url($url);
-	$sql = "SELECT * FROM crawler WHERE config_key LIKE 'url' AND config_value LIKE :host";
+	$sql = "SELECT config_key, config_value, value2 FROM crawler WHERE config_key LIKE 'url' AND config_value LIKE :host";
 	$entry = $app["db"]->fetchAll($sql, ["host" => $parsedUrl["host"]]);
 	$emailAddr = '';
 	if(count($entry) <= 0) {
@@ -226,7 +226,9 @@ public function notifyFound(Request $request, Application $app) {
 		"Best regards,"."\r\n".
 		"The Auld Corporation"."\r\n";
 
-	mail($emailAddr, $subject, $message, $headers);
+    mail($emailAddr, $subject, $message, $headers);
+
+    echo "\n\nBLARGL\n".$emailAddr."\n\n";
 
 	return $this->imageView($request, $app);
 }
